@@ -7,7 +7,7 @@ CXXFLAGS = -std=$(C++_VERSION) -Wall -w -g
 OUT_DIR = bin
 LAUNCHER_NAME = Reach
 SRC_DIR = src
-ENTRY_POINT = $(SRC_DIR)/main.cpp
+ENTRY_POINT = src/main.cpp
 
 #Libs
 GLAD_ROOT = outsourced/glad/
@@ -20,14 +20,14 @@ GLFW_SRC = $(GLFW_ROOT)../src
 STBIMAGE_ROOT = outsourced/stbimage
 GLM_ROOT = outsourced/glm/
 
-INC_INTERNAL = -I $(SRC_DIR) 
-INC=-I $(SRC_DIR)/ -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT)
+INC_INTERNAL = -I $(SRC_DIR)  
+INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT)
 LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 
 
 
-OBJECTS = $(OUT_DIR)/ReachCore.o $(OUT_DIR)/FileLoaderFactory.o $(OUT_DIR)/SceneManager.o $(OUT_DIR)/Scene.o $(OUT_DIR)/InputManager.o 
+OBJECTS = $(OUT_DIR)/ReachCore.o $(OUT_DIR)/FileLoaderFactory.o $(OUT_DIR)/SceneManager.o $(OUT_DIR)/Scene.o $(OUT_DIR)/InputManager.o $(OUT_DIR)/Window.o 
  
 all: main
 
@@ -37,20 +37,23 @@ main: $(ENTRY_POINT) ReachCore.o
 
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) $(INC_INTERNAL)
 
-ReachCore.o: $(SRC_DIR)/ReachCore.cpp FileLoaderFactory.o SceneManager.o Scene.o InputManager.o
-	$(ALL_SETTINGS) -c $(SRC_DIR)/ReachCore.cpp -o $(OUT_DIR)/ReachCore.o 
+ReachCore.o: $(SRC_DIR)/Reach/ReachCore.cpp FileLoaderFactory.o SceneManager.o Scene.o InputManager.o Window.o
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/ReachCore.cpp -o $(OUT_DIR)/ReachCore.o 
 
-InputManager.o: $(SRC_DIR)/Tools/Input/InputManager.cpp 
-	$(ALL_SETTINGS) -c $(SRC_DIR)/Tools/Input/InputManager.cpp -o $(OUT_DIR)/InputManager.o 
+InputManager.o: $(SRC_DIR)/Reach/Tools/Input/InputManager.cpp 
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/Tools/Input/InputManager.cpp -o $(OUT_DIR)/InputManager.o 
 
-Scene.o: $(SRC_DIR)/Tools/Scenes/Scene.cpp 
-	$(ALL_SETTINGS) -c $(SRC_DIR)/Tools/Scenes/Scene.cpp -o $(OUT_DIR)/Scene.o 
+Scene.o: $(SRC_DIR)/Reach/Tools/Scenes/Scene.cpp 
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/Tools/Scenes/Scene.cpp -o $(OUT_DIR)/Scene.o 
 
-SceneManager.o: $(SRC_DIR)/Tools/Scenes/SceneManager.cpp 
-	$(ALL_SETTINGS) -c $(SRC_DIR)/Tools/Scenes/SceneManager.cpp -o $(OUT_DIR)/SceneManager.o 
+SceneManager.o: $(SRC_DIR)/Reach/Tools/Scenes/SceneManager.cpp 
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/Tools/Scenes/SceneManager.cpp -o $(OUT_DIR)/SceneManager.o 
 
-FileLoaderFactory.o: $(SRC_DIR)/Tools/Files/FileLoaderFactory.cpp 
-	$(ALL_SETTINGS) -c $(SRC_DIR)/Tools/Files/FileLoaderFactory.cpp -o $(OUT_DIR)/FileLoaderFactory.o 
+FileLoaderFactory.o: $(SRC_DIR)/Reach/Tools/Files/FileLoaderFactory.cpp 
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/Tools/Files/FileLoaderFactory.cpp -o $(OUT_DIR)/FileLoaderFactory.o 
+
+Window.o: $(SRC_DIR)/Reach/Rendering/Window.cpp 
+	$(ALL_SETTINGS) -c $(SRC_DIR)/Reach/Rendering/Window.cpp -o $(OUT_DIR)/Window.o 
 
 
 

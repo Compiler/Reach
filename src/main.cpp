@@ -1,7 +1,9 @@
-#include "ReachCore.h"
-
+#include <Reach/ReachCore.h>
+#include <iostream>
 int main(){
 
+
+    std::cout <<"Beginning\n";
     reach::ReachCore core;
     core.load();
 
