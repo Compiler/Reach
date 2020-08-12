@@ -32,7 +32,7 @@ OBJECTS = $(OUT_DIR)/ReachCore.o $(OUT_DIR)/FileLoaderFactory.o $(OUT_DIR)/Scene
 all: main
 
 main: $(ENTRY_POINT) ReachCore.o 
-	$(CXX) $(CXXFLAGS) $(LIBS) $(INC) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OBJECTS) $(ENTRY_POINT) $(GLAD_SRC)/glad.c $(LINKS)
+	$(CXX) $(CXXFLAGS) $(LIBS) $(INC) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_DIR)/ReachCore.o $(ENTRY_POINT) $(GLAD_SRC)/glad.c $(LINKS)
 
 
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) $(INC_INTERNAL)
