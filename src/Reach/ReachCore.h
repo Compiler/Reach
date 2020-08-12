@@ -1,7 +1,7 @@
 #pragma once
-#include <Reach/Rendering/Window.h>
-#include <GLFW/glfw3.h>
-#include <glm/vec3.hpp>
+//#include <Reach/Rendering/Window.h>
+//#include <GLFW/glfw3.h>
+//#include <glm/vec3.hpp>
 namespace reach{
 
 
@@ -9,7 +9,7 @@ namespace reach{
 
         private:
 
-            reach::Window* _windowRef;
+           //reach::Window* _windowRef;
 
 
 
