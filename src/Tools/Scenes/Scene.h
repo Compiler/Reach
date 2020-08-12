@@ -1,19 +1,29 @@
 #pragma once
 
 
-
 namespace reach{
 
 
     class Scene{
 
 
-        public:
+        private:
+		static uint8_t _COUNT;
+		const char* _sceneName;
 
-            virtual void load() = 0;
-            virtual void update() = 0;
-            virtual void render() = 0;
-            virtual void unload() = 0;
+        protected:
+
+        public:
+            Scene();
+            Scene(const char* name);
+
+
+            virtual void load();
+            virtual void update();
+            virtual void render();
+            virtual void unload();
+
+            inline const char* getName()const { return _sceneName; }
 
     };
 
