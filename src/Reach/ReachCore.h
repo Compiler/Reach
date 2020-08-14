@@ -1,8 +1,11 @@
 #pragma once
+#include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/Window.h>
+#include <entt/entity/registry.hpp>
+#define ENTT_STANDALONE
 #include <Reach/Tools/Startup/StartupSystems.h>
-//#include <GLFW/glfw3.h>
-//#include <glm/vec3.hpp>
+#include <glm/vec3.hpp>
+#include <Reach/ECS/Components.h>
 namespace reach{
 
 
