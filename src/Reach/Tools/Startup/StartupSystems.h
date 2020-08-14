@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <Reach/Tools/Logging/Logger.h>
 namespace reach{
     //static class
     class StartupSystems{

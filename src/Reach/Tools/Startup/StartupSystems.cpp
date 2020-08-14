@@ -6,8 +6,8 @@ namespace reach{
 
 
 	void StartupSystems::_initGLFW(){
-		if(!glfwInit()) printf("Failed to init glfw\n");
-		else { printf("GLFW initialized.\n"); }
+		if(!glfwInit()){ REACH_DEBUG("Failed to init glfw");}
+		else { REACH_DEBUG("GLFW initialized."); }
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);//version 4.6 Core profile
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -15,8 +15,8 @@ namespace reach{
 
 	}
 	void StartupSystems::_initGlad(){
-		if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))  printf("Failed to init glad\n");
-		else { printf("Glad initialized.\n"); }
+		if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) REACH_DEBUG("Failed to init glad");
+		else { REACH_DEBUG("Glad initialized."); }
 	
 
 	}
