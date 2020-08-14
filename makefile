@@ -17,8 +17,9 @@ GLFW_LIB = $(GLFW_ROOT)lib
 GLFW_SRC = $(GLFW_ROOT)../src
 STBIMAGE_ROOT = outsourced/stbimage
 GLM_ROOT = outsourced/glm/
-
-INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT)
+ENTT_ROOT = outsourced/entt
+ENTT_SRC = $(ENTT_ROOT)
+INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC)
 LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 

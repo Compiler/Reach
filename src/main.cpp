@@ -1,6 +1,7 @@
 #include <Reach/ReachCore.h>
 #include <Reach/Tools/Logging/Logger.h>
 #include <iostream>
+#include <entt/entity/registry.hpp>
 int main(){
 
     REACH_LOG("Hello");
