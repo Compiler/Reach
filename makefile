@@ -24,7 +24,7 @@ LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 
 OUT_DIR = bin
-RENDERING_OBJS = Window.o
+RENDERING_OBJS = Window.o BatchRenderer.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
 OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS)

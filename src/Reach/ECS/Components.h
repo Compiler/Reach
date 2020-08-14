@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 namespace reach{
@@ -11,9 +12,9 @@ namespace reach{
 
     struct TransformComponent{
 
-        glm::vec3 position;
-        glm::vec3 rotation;
-        glm::vec3 scale;
+        glm::vec2 position;
+        glm::vec2 rotation;
+        glm::vec2 scale;
 
     };
 

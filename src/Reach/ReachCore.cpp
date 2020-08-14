@@ -14,9 +14,9 @@ namespace reach{
         auto entity = registry.create();
         registry.emplace<TransformComponent>(entity, TransformComponent());
         auto pos = registry.get<TransformComponent>(entity);
-        REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ", "<< pos.position.z << ")");
+        REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
         pos.position.x = 4;
-        REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ", "<< pos.position.z << ")");
+        REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
 
     }
     void ReachCore::update(){
