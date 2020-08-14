@@ -43,13 +43,12 @@ namespace reach{
         _dataBuffer->color     =    data.color;
         _dataBuffer->texCoords =    data.texCoords;
         _dataBuffer++;
-        auto registry = entt::registry();
-        //todo check if registry is global or local and get components with renderable component        
+           
     }
 
-    void BatchRenderer::submit(){
-
-
+    void BatchRenderer::submit(entt::basic_registry<entt::entity>& registry){
+        //todo check if registry is global or local and get components with renderable component   
+        entt::basic_view<entt::entity, entt::exclude_t<>, reach::TransformComponent, reach::RenderableComponent> renderables = registry.view<TransformComponent, RenderableComponent>(); 
     }
 
     void BatchRenderer::end(){

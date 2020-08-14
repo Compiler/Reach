@@ -40,7 +40,7 @@ namespace reach{
 
             void init();
             void begin();
-            void submit();
+            void submit(entt::basic_registry<entt::entity>& registry);
             void end();
             void flush();
 

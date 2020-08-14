@@ -18,6 +18,10 @@ namespace reach{
         pos.position.x = 4;
         REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
 
+        registry.visit([](const auto component) {
+            
+        });
+
     }
     void ReachCore::update(){
         
