@@ -26,31 +26,31 @@ LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 
 OUT_DIR = bin
-OBJ =
+OBJ = 
 RENDERING_OBJS = Window.o
 REACH_OBJS = ReachCore.o
 
-
-OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(RENDERING_OBJS) $(OBJ) $(REACH_OBJS))
+REACH_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(REACH_OBJS))
+OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(RENDERING_OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) $(INC_INTERNAL)
 
 all: main
 
 main: $(REACH_OBJS) 
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(ENTRY_POINT) $(REACH_OBJS) $(GLAD_SRC)/glad.c $(LINKS)
-
-ReachCore.o: 
-	$(ALL_SETTINGS) -o  $(OBJ) 
+	$(info !    $@: $<    !)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(ENTRY_POINT) $(REACH_OUT_OBJS) $(GLAD_SRC)/glad.c $(LINKS)
 
 $(OBJ): %.o: src/%.cpp
-	$(ALL_SETTINGS) -c -o $(OUT_DIR)/$@ $< 
+	$(info !    $@: $<    !)
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(RENDERING_OBJS): %.o: src/Reach/Rendering/%.cpp
-	$(ALL_SETTINGS) -c -o $(OUT_DIR)/$@ $< 
+	$(info !    $@: $<    !)
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(REACH_OBJS): %.o: src/Reach/%.cpp
-	$(ALL_SETTINGS) -c -o $(OUT_DIR)/$@ $< 
-
+	$(info !    $@: $<    !)
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
 run: $(OUT_DIR)/$(LAUNCHER_NAME).exe

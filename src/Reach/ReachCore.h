@@ -9,7 +9,7 @@ namespace reach{
 
         private:
 
-           //reach::Window* _windowRef;
+          // reach::Window* _windowRef;
 
 
 
