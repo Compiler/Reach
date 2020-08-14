@@ -1,4 +1,5 @@
 #pragma once
+#include <Reach/Tools/Logging/Logger.h>
 #include <stdint.h>
 
 namespace reach{

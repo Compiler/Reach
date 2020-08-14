@@ -4,7 +4,9 @@ namespace reach{
 
 
     void ReachCore::load(){
-       //_windowRef = new reach::Window(1920, 1080, "Reach", false);
+        StartupSystems::_initGLFW();
+       _windowRef = new reach::Window(1920, 1080, "Reach", false);
+        StartupSystems::_initGlad();
         
     }
     void ReachCore::update(){

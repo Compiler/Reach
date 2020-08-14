@@ -1,24 +1,24 @@
 #pragma once
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
-#include <string>
+#include <Reach/Tools/Logging/Logger.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace reach{
 
     class Window{
 
         private:
-            std::string _windowName;
-           // GLFWwindow* _window;
+            const char* _windowName;
+            GLFWwindow* _window;
         public:
             static float SCREEN_WIDTH;
             static float SCREEN_HEIGHT;
 
             Window() = default;
-            Window(float width, float height, const char name[], bool fullscreen = false);
+            Window(float width, float height, const char* name, bool fullscreen = false);
 
 
-           // GLFWwindow* getWindow()const{return _window;}
+            GLFWwindow* getWindow()const{return _window;}
 
     };
 

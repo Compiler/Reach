@@ -1,5 +1,3 @@
-
-
 CXX = g++
 C++_VERSION = c++17
 CXXFLAGS = -std=$(C++_VERSION) -Wall -w -g
@@ -20,36 +18,32 @@ GLFW_SRC = $(GLFW_ROOT)../src
 STBIMAGE_ROOT = outsourced/stbimage
 GLM_ROOT = outsourced/glm/
 
-INC_INTERNAL = -I $(SRC_DIR)
 INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT)
 LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 
 OUT_DIR = bin
-OBJ = 
 RENDERING_OBJS = Window.o
 REACH_OBJS = ReachCore.o
+STARTUP_OBJS = StartupSystems.o
+OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS)
 
-REACH_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(REACH_OBJS))
-OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(RENDERING_OBJS))
-ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) $(INC_INTERNAL)
+OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
+ALL_SETTINGS = $(CXX) $(CXXFLAGS) -pthread $(LIBS) $(INC) 
 
 all: main
 
-main: $(REACH_OBJS) 
-	$(info !    $@: $<    !)
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(ENTRY_POINT) $(REACH_OUT_OBJS) $(GLAD_SRC)/glad.c $(LINKS)
 
-$(OBJ): %.o: src/%.cpp
-	$(info !    $@: $<    !)
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+main: $(ENTRY_POINT) $(OBJS)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
 $(RENDERING_OBJS): %.o: src/Reach/Rendering/%.cpp
-	$(info !    $@: $<    !)
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(REACH_OBJS): %.o: src/Reach/%.cpp
-	$(info !    $@: $<    !)
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(STARTUP_OBJS): %.o: src/Reach/Tools/Startup/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 

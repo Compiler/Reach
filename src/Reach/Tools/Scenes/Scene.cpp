@@ -8,6 +8,7 @@ namespace reach{
 
 
 	void Scene::load() {
+			REACH_LOG("Scene Loaded");
 	}
 	void Scene::update(){
 	}
