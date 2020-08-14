@@ -21,10 +21,10 @@ namespace reach{
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, REACH_VERTEXDATA_SIZE, (const void*) (6 * sizeof(float)) ); // TEXTURE COORDINATES
             
             
-           // glGenBuffers(1, &_indexBufferID);
-           // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-            // for(int i = 0; i < FAR_INDEX_BUFFER_SIZE; i++) _ind[i] = i;
-            //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
+            glGenBuffers(1, &_indexBufferID);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
+            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE; i++) _ind[i] = i;
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
 
             glBindVertexArray(0);
             //assert(FAR_BUFFER_SIZE % 8 == 0);
@@ -33,8 +33,18 @@ namespace reach{
     }
 
     void BatchRenderer::begin(){
+        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+        _dataBuffer = (reach::VertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
+    }
 
+    void reach::BatchRenderer::_setBuffer(VertexData data){
+        _dataBuffer->position  =    data.position;
+        _dataBuffer->color     =    data.color;
+        _dataBuffer->texCoords =    data.texCoords;
+        _dataBuffer++;
+        auto registry = entt::registry();
+        //todo check if registry is global or local and get components with renderable component        
     }
 
     void BatchRenderer::submit(){

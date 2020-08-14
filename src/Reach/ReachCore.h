@@ -2,10 +2,11 @@
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/Window.h>
 #include <entt/entity/registry.hpp>
+#include <Reach/ECS/Components.h>
 #define ENTT_STANDALONE
 #include <Reach/Tools/Startup/StartupSystems.h>
 #include <glm/vec3.hpp>
-#include <Reach/ECS/Components.h>
+
 namespace reach{
 
 
