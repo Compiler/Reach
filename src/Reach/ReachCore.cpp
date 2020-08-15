@@ -88,6 +88,8 @@ namespace reach{
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(0.2, 0.2, 0.4, 1.0);
 
+
+        glUseProgram(_shaderProgram);
         _renderer->begin();
         _renderer->submit(_registry);
         _renderer->end();
