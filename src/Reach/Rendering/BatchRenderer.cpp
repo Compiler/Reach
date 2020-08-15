@@ -48,16 +48,44 @@ namespace reach{
 
     void BatchRenderer::submit(entt::basic_registry<entt::entity>& registry){
         //todo check if registry is global or local and get components with renderable component   
-        entt::basic_view<entt::entity, entt::exclude_t<>, reach::TransformComponent, reach::RenderableComponent> renderables = registry.view<TransformComponent, RenderableComponent>(); 
+        auto renderables = registry.view<TransformComponent, RenderableComponent>();
+        for(auto entity: renderables) {
+            auto &transform = renderables.get<TransformComponent>(entity);
+            auto &renderable = renderables.get<RenderableComponent>(entity);
+            static glm::vec2 initScale = glm::vec2(1,1);
+
+            VertexData t1, t2, t3;
+            t1.position = transform.position;
+            t1.color = renderable.color;
+            t1.texCoords = glm::vec2(0,0);
+
+            t2.position = transform.position;
+            t2.position.x += + (initScale.x * transform.scale.x);
+            t2.color = renderable.color;
+            t2.texCoords = glm::vec2(0,0);
+
+            t3.position = transform.position;
+            t3.position.x += + (initScale.y * transform.scale.y);
+            t3.color = renderable.color;
+            t3.texCoords = glm::vec2(0,0);
+
+            _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
+            _amountSubmitted+=3;
+        }
     }
 
     void BatchRenderer::end(){
 
+        glUnmapBuffer(GL_ARRAY_BUFFER);
 
     }
 
     void BatchRenderer::flush(){
-
+            glBindVertexArray(_vertexArrayID);
+            glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
+            glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, 0);
+            _amountSubmitted = 0;
 
     }
 
