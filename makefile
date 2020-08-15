@@ -25,9 +25,10 @@ LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 
 OUT_DIR = bin
 RENDERING_OBJS = Window.o BatchRenderer.o
+FILE_OBJS = FileLoaderFactory.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
-OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS)
+OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) -pthread $(LIBS) $(INC) 
@@ -45,6 +46,9 @@ $(REACH_OBJS): %.o: src/Reach/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(STARTUP_OBJS): %.o: src/Reach/Tools/Startup/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@ 
+
+$(FILE_OBJS): %.o: src/Reach/Tools/Files/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
