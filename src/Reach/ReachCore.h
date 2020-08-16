@@ -3,6 +3,8 @@
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/Window.h>
 #include <entt/entity/registry.hpp>
+#include <entt/entity/runtime_view.hpp>
+#include <vector>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
 #define ENTT_STANDALONE

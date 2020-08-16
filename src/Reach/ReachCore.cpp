@@ -54,7 +54,7 @@ namespace reach{
 
 }
 
-
+entt::entity e;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
        _windowRef = new reach::Window(1920, 1080, "Reach", false);
@@ -66,22 +66,34 @@ namespace reach{
 
         
         _registry = entt::registry();
-        auto entity = _registry.create();
-        _registry.emplace<TransformComponent>(entity, TransformComponent());
-        auto pos = _registry.get<TransformComponent>(entity);
+        e = _registry.create();
+        auto &pos = _registry.emplace<TransformComponent>(e, TransformComponent());
+		pos.position = glm::vec2(-0.5f, -0.5f);
+		pos.scale = glm::vec2(1, 1);
         REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
         pos.position.x = -0.25;
         pos.scale = glm::vec2(1,1);
         REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
 
-        _registry.emplace<RenderableComponent>(entity, RenderableComponent());
-
+        auto &rend = _registry.emplace<RenderableComponent>(e, RenderableComponent());
+		rend.color = glm::vec4(1,0,1,1);
         loadShaders(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
     }
     void ReachCore::update(){
         glfwPollEvents();
-            
+
+
+		// auto renderables = _registry.view<TransformComponent, RenderableComponent>();
+        // for(auto entity: renderables) {
+        //     auto &transform = renderables.get<TransformComponent>(entity);
+        //     auto &renderable = renderables.get<RenderableComponent>(entity);
+
+		// 	REACH_DEBUG("Available:\n\t\t\tPosition: (" << transform.position.x << ", "<< transform.position.y << ")\n\t\t\tColor: ("
+        // << renderable.color.x << ", "<< renderable.color.y << ", "<< renderable.color.z << ", "<< renderable.color.w<< ")");
+		// }
+
+	
     }
     void ReachCore::render(){
 
@@ -91,7 +103,7 @@ namespace reach{
 
         glUseProgram(_shaderProgram);
         _renderer->begin();
-        _renderer->submit(_registry);
+        _renderer->submit(&_registry);
         _renderer->end();
         _renderer->flush();
 

@@ -39,6 +39,8 @@ namespace reach{
     }
 
     void reach::BatchRenderer::_setBuffer(VertexData data){
+         REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
+         << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
         _dataBuffer->position  =    data.position;
         _dataBuffer->color     =    data.color;
         _dataBuffer->texCoords =    data.texCoords;
@@ -46,9 +48,9 @@ namespace reach{
            
     }
 
-    void BatchRenderer::submit(entt::basic_registry<entt::entity>& registry){
+    void BatchRenderer::submit(entt::basic_registry<entt::entity>* registry){
         //todo check if registry is global or local and get components with renderable component   
-        auto renderables = registry.view<TransformComponent, RenderableComponent>();
+        auto renderables = registry->view<TransformComponent, RenderableComponent>();
         for(auto entity: renderables) {
             auto &transform = renderables.get<TransformComponent>(entity);
             auto &renderable = renderables.get<RenderableComponent>(entity);
@@ -65,7 +67,7 @@ namespace reach{
             t2.texCoords = glm::vec2(0,0);
 
             t3.position = transform.position;
-            t3.position.x += + (initScale.y * transform.scale.y);
+            t3.position.y += + (initScale.y * transform.scale.y);
             t3.color = renderable.color;
             t3.texCoords = glm::vec2(0,0);
 
@@ -81,11 +83,10 @@ namespace reach{
     }
 
     void BatchRenderer::flush(){
-            glBindVertexArray(_vertexArrayID);
-            glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-            glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, 0);
-            _amountSubmitted = 0;
+        glBindVertexArray(_vertexArrayID);
+        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+        glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, 0);
+        _amountSubmitted = 0;
 
     }
 

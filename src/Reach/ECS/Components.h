@@ -16,6 +16,9 @@ namespace reach{
         glm::vec2 rotation;
         glm::vec2 scale;
 
+        TransformComponent(){}
+        TransformComponent(float x, float y): position(glm::vec2(x,y)){}
+
     };
 
     struct RenderableComponent{
