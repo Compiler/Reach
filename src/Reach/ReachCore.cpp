@@ -76,11 +76,11 @@ namespace reach{
 
         _registry.emplace<RenderableComponent>(entity, RenderableComponent());
 
-        loadShaders("pass.vert", "pass.frag");
+        loadShaders(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
     }
     void ReachCore::update(){
-        
+        glfwPollEvents();
             
     }
     void ReachCore::render(){

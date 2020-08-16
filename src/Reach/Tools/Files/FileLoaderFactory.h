@@ -2,12 +2,12 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
-
+#include <Reach/Tools/Logging/Logger.h>
 #define REACH_INTERNAL(x)         "src/Resources/" x
 #define REACH_INTERNAL_SHADER(x)  REACH_INTERNAL("Shaders/") x
 #define REACH_INTERNAL_TEXTURE(x) REACH_INTERNAL("Textures/") x
 #define REACH_INTERNAL_MODEL(x)   REACH_INTERNAL("Models/") x
-#define REACH_INTERNAL_SOUNDS(x)   REACH_INTERNAL("Sounds/") x
+#define REACH_INTERNAL_SOUNDS(x)  REACH_INTERNAL("Sounds/") x
 
 
 namespace reach {
