@@ -7,7 +7,7 @@ int main(){
     reach::ReachCore core;
     core.load();
     REACH_LOG("Beginning Render loop");
-    while(true){
+    while(core.isRunning()){
         core.update();
         core.render();
     }

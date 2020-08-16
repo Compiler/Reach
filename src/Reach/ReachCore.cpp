@@ -54,11 +54,14 @@ namespace reach{
 
 }
 
-entt::entity e;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
        _windowRef = new reach::Window(1920, 1080, "Reach", false);
         StartupSystems::_initGlad();
+		glfwSetWindowUserPointer(_windowRef->getWindow(), this);
+		glfwSetKeyCallback(_windowRef->getWindow(), GLFWCallbacks::keyCallback);
+		glfwSetCursorPosCallback(_windowRef->getWindow(), GLFWCallbacks::cursorPositionCallback);
+		glfwSetMouseButtonCallback(_windowRef->getWindow(), GLFWCallbacks::mouseClickCallback);
 
         _renderer = new BatchRenderer();
         _renderer->init();
@@ -66,7 +69,7 @@ entt::entity e;
 
         
         _registry = entt::registry();
-        e = _registry.create();
+    	auto e = _registry.create();
         auto &pos = _registry.emplace<TransformComponent>(e, TransformComponent());
 		pos.position = glm::vec2(-0.5f, -0.5f);
 		pos.scale = glm::vec2(1, 1);
@@ -84,16 +87,9 @@ entt::entity e;
         glfwPollEvents();
 
 
-		// auto renderables = _registry.view<TransformComponent, RenderableComponent>();
-        // for(auto entity: renderables) {
-        //     auto &transform = renderables.get<TransformComponent>(entity);
-        //     auto &renderable = renderables.get<RenderableComponent>(entity);
+		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
+		InputManager::clear();
 
-		// 	REACH_DEBUG("Available:\n\t\t\tPosition: (" << transform.position.x << ", "<< transform.position.y << ")\n\t\t\tColor: ("
-        // << renderable.color.x << ", "<< renderable.color.y << ", "<< renderable.color.z << ", "<< renderable.color.w<< ")");
-		// }
-
-	
     }
     void ReachCore::render(){
 

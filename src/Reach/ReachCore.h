@@ -11,6 +11,7 @@
 #include <Reach/Tools/Startup/StartupSystems.h>
 #include <glm/vec3.hpp>
 #include <Reach/Rendering/BatchRenderer.h>
+#include <Reach/Tools/Callbacks/GLFWCallbacks.h>
 
 namespace reach{
 
@@ -23,6 +24,7 @@ namespace reach{
             reach::BatchRenderer* _renderer;
             entt::basic_registry<entt::entity> _registry;
             unsigned int _shaderProgram;
+            bool _running = true;
 
             void loadShaders(const char* vertexFile, const char* fragmentFile);
 
@@ -33,7 +35,7 @@ namespace reach{
             void update();
             void render();
             void unload();
-            bool isRunning() { return 1;}
+            bool isRunning() { return _running;}
 
     };
 
