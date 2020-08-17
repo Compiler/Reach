@@ -60,20 +60,21 @@ namespace reach{
             VertexData t1, t2, t3;
             t1.position = transform.position;
             t1.color = renderable.color;
-            t1.texCoords = glm::vec3(0);
+            t1.texCoords = glm::vec3(0, 0, 1);
 
             t2.position = transform.position;
             t2.position.x += + (initScale.x * transform.scale.x);
             t2.color = renderable.color;
-            t2.texCoords = glm::vec3(0);
+            t2.texCoords = glm::vec3(1, 0, 1);
 
             t3.position = transform.position;
             t3.position.y += + (initScale.y * transform.scale.y);
             t3.color = renderable.color;
-            t3.texCoords = glm::vec3(0);
+            t3.texCoords = glm::vec3(0, 1, 1);
 
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
             _amountSubmitted+=3;
+            glBindTextureUnit(GL_TEXTURE0 + 1, texture.id);
         }
     }
 
