@@ -23,6 +23,8 @@ namespace reach{
         private:
             SceneManager _sceneManager;
             reach::Window* _windowRef;
+            float msPerFrame = 0, previousMSPerFrame = 0, accumMSFPS = 0;
+            float framesPerSecond = 0;
             bool _running = true;
 
             void loadShaders(const char* vertexFile, const char* fragmentFile);

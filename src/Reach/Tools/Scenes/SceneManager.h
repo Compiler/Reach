@@ -30,6 +30,7 @@ namespace reach{
 
 		void setCurrentScene(Scene scene);
 		void setCurrentScene(const Scene& scene);
+		void setCurrentScene(Scene* scene);
 		void setCurrentScene(const char* name);
 		void setCurrentScene(uint8_t sceneIndex);
 

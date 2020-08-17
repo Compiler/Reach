@@ -45,6 +45,12 @@ namespace reach{
 			if (name == _scenes[i]->getName()) _nextScene = i;
 		}
 	}
+	void SceneManager::setCurrentScene(Scene* scene) {
+		auto name = scene->getName();
+		for (int i = 0; i < _scenes.size(); i++) {
+			if (name == _scenes[i]->getName()) _nextScene = i;
+		}
+	}
 	void SceneManager::setCurrentScene(uint8_t sceneIndex) {
 		if (sceneIndex >= 0 && sceneIndex < _scenes.size()) _currentScene = sceneIndex;
 	}

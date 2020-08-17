@@ -17,7 +17,7 @@ namespace reach{
             Window() = default;
             Window(float width, float height, const char* name, bool fullscreen = false);
 
-
+            void setTitle(const char* title){glfwSetWindowTitle(_window, title);}
             GLFWwindow* getWindow()const{return _window;}
 
     };

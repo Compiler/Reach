@@ -17,10 +17,6 @@ namespace reach{
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos.position = glm::vec2(-0.5f, -0.5f);
                 pos.scale = glm::vec2(1, 1);
-                REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
-                pos.position.x = -0.25;
-                pos.scale = glm::vec2(1,1);
-                REACH_LOG("Pos: (" << pos.position.x << ", "<< pos.position.y << ")");
 
                 auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
                 rend.color = glm::vec4(1,0,1,1);
@@ -28,8 +24,17 @@ namespace reach{
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
             }
+            void addEntity(float x, float y, float r = 1, float g = 1, float b = 1){
+                auto e = m_registry.create();
+                auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
+                pos.position = glm::vec2(x, y);
+                pos.scale = glm::vec2(1, 1);
 
-            void _set_color_(float r, float g, float b, float a){}
+                auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
+                rend.color = glm::vec4(r,g,b,1.0f);
+
+            }
+            void _set_color_(float r, float g, float b, float a){col = glm::vec4(r,g,b,a);}
 
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");
