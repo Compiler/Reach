@@ -4,6 +4,7 @@
 #include <glm/vec4.hpp>
 namespace reach{
 
+
     struct NameComponent{
 
         const char* name;
@@ -24,6 +25,13 @@ namespace reach{
     struct RenderableComponent{
 
         glm::vec4 color;
+
+    };
+    struct TextureComponent{
+
+        unsigned int id = -1;
+        unsigned int bitsPerPixel = 0;
+        const char* fileName;
 
     };
 }

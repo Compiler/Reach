@@ -1,12 +1,16 @@
 #pragma once 
 #include <Reach/Tools/Scenes/Scene.h>
+#include <Reach/Tools/Files/FileLoaderFactory.h>
+#include <Reach/Tools/Files/FileLoaderFactory.h>
+#include <Reach/ECS/Components.h>
+
 
 namespace reach{
 
     class DebugScene : public Scene{
-
+        private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
-
+            TextureComponent* comp;
         public:
             
             explicit DebugScene(){
@@ -22,6 +26,12 @@ namespace reach{
                 rend.color = glm::vec4(1,0,1,1);
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
+
+                auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
+
+                texComp.fileName = REACH_INTERNAL_TEXTURE("wall.jpg");
+                texComp.bitsPerPixel = 3;
+                FileLoaderFactory::loadOpenGLTexture(&texComp);
 
             }
             void addEntity(float x, float y, float r = 1, float g = 1, float b = 1){

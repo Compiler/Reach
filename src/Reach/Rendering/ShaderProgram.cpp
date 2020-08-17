@@ -52,7 +52,26 @@ namespace reach{
 			}
 		}
 
+
+
+		GLint textureUnits;
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &textureUnits);
+		for(int i = 0; i < textureUnits; i++){
+			this->uniform_set1Integer(std::string(std::string("u_textures[") + std::to_string(i) + "]").c_str(), i);
+		}
+
     }
+
+
+    void ShaderProgram::uniform_set1Integer(const char* name, int32_t value){
+        int id = _check_uniform_(name);
+        glUniform1i(id, value);
+        GLenum error = glGetError();
+		if(error != GL_NO_ERROR)
+			REACH_ERROR("OpenGL Error 'uniform_set1Integer' : " << error);
+        
+    }
+
 
 
 }

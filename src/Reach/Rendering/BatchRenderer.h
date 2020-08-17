@@ -19,7 +19,7 @@ namespace reach{
         
         glm::vec2 position;
         glm::vec4 color;
-        glm::vec2 texCoords;
+        glm::vec3 texCoords;
 
     };
 

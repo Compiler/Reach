@@ -26,7 +26,6 @@ namespace reach{
 		msPerFrame = (glfwGetTime() * 1000.0f) - previousMSPerFrame;
 		previousMSPerFrame = glfwGetTime() * 1000.0f;
 		accumMSFPS += msPerFrame;
-		REACH_LOG(accumMSFPS);
 		if(accumMSFPS >= 1000){
 			static std::string title;
 			_windowRef->setTitle(std::string("Reach - fps " + std::to_string((int)framesPerSecond) + " - ms " + std::to_string(msPerFrame)).c_str());
