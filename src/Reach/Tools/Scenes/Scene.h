@@ -31,6 +31,7 @@ namespace reach{
             virtual void render();
             virtual void unload();
 
+            void setName(const char* name) {m_sceneName = name;};
             inline const char* getName()const { return m_sceneName; }
 
     };

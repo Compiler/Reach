@@ -13,6 +13,9 @@ namespace reach{
 			_scenes[_currentScene]->load();
 		}
 	}
+	void SceneManager::render(){
+		_scenes[_currentScene]->render();
+	}
 
 	void SceneManager::addScene(Scene* scene) {
 		_scenes.push_back(scene);

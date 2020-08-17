@@ -5,7 +5,7 @@ namespace reach{
 
     class DebugScene : public Scene{
 
-
+            glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
 
         public:
             
@@ -29,6 +29,8 @@ namespace reach{
 
             }
 
+            void _set_color_(float r, float g, float b, float a){}
+
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");
             
@@ -39,7 +41,7 @@ namespace reach{
             void update()override{}
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-                glClearColor(0.6, 0.2, 0.4, 1.0);
+                glClearColor(col.r, col.g, col.b, col.a);
 
                 _shaderProgram->use();
                 m_renderer->begin();

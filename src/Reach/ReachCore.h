@@ -8,6 +8,7 @@
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
 #include <Reach/Tools/Scenes/DebugScene.h>
+#include <Reach/Tools/Scenes/SceneManager.h>
 #define ENTT_STANDALONE
 #include <Reach/Tools/Startup/StartupSystems.h>
 #include <glm/vec3.hpp>
@@ -20,11 +21,8 @@ namespace reach{
     class ReachCore{
 
         private:
-            DebugScene* debugScene;
+            SceneManager _sceneManager;
             reach::Window* _windowRef;
-            reach::BatchRenderer* _renderer;
-            entt::basic_registry<entt::entity> _registry;
-            unsigned int _shaderProgram;
             bool _running = true;
 
             void loadShaders(const char* vertexFile, const char* fragmentFile);

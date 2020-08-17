@@ -3,18 +3,18 @@
 #include <iostream>
 int main(){
 
-    REACH_LOG("Initializing Gerl...");
+    REACH_BGREEN("Initializing Reach...");
     reach::ReachCore core;
     core.load();
-    REACH_LOG("Beginning Render loop");
+    REACH_BGREEN("Beginning Render loop");
     while(core.isRunning()){
         core.update();
         core.render();
     }
-    REACH_LOG("Unloading Gerl...");
+    REACH_BGREEN("Unloading Reach...");
     core.unload();
 
-    REACH_MAGENTA("Gerl Closed.");
+    REACH_BGREEN("Reach Closed.");
     return 0;
 
 }

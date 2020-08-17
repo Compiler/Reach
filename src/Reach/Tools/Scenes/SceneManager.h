@@ -18,8 +18,8 @@ namespace reach{
 
 		SceneManager() = default;
 
-
 		void update();
+		void render();
 
 
 		Scene* getSceneByName(const char* name) {
