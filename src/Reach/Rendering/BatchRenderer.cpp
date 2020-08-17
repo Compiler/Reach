@@ -39,8 +39,8 @@ namespace reach{
     }
 
     void reach::BatchRenderer::_setBuffer(VertexData data){
-         REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
-         << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
+        //  REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
+        //  << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
         _dataBuffer->position  =    data.position;
         _dataBuffer->color     =    data.color;
         _dataBuffer->texCoords =    data.texCoords;

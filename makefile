@@ -26,11 +26,12 @@ LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 OUT_DIR = bin
 CALLBACK_OBJS = GLFWCallbacks.o
 INPUT_OBJS = InputManager.o
-RENDERING_OBJS = Window.o BatchRenderer.o
+SCENE_OBJS = SceneManager.o Scene.o 
+RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o
 FILE_OBJS = FileLoaderFactory.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
-OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS)
+OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) -pthread $(LIBS) $(INC) 
@@ -57,6 +58,9 @@ $(CALLBACK_OBJS): %.o: src/Reach/Tools/Callbacks/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(INPUT_OBJS): %.o: src/Reach/Tools/Input/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(SCENE_OBJS): %.o: src/Reach/Tools/Scenes/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 

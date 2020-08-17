@@ -22,9 +22,9 @@ namespace reach{
 		void update();
 
 
-		Scene getSceneByName(const char* name) {
+		Scene* getSceneByName(const char* name) {
 			for (int i = 0; i < _scenes.size(); i++) {
-				if (name == _scenes[i]->getName()) return *_scenes[i];
+				if (name == _scenes[i]->getName()) return _scenes[i];
 			}
 		}
 
@@ -37,9 +37,16 @@ namespace reach{
 		void addScene(Scene* scene);
 		void addSceneRef(const Scene& scene);
 		void addScene(Scene scene);
+
+
+		template<typename T>
+		T* emplaceScene(){
+			T* t = new T();
+			_scenes.push_back(t);
+			return t;
+		}
 		
 		inline Scene& getCurrentScene() { return *_scenes[_currentScene]; }
-		inline Scene getCurrentSceneIndex(){ return *_scenes[_currentScene]; }
 		inline uint8_t getCurrentSceneIndex()const { return _currentScene; }
 	};
 

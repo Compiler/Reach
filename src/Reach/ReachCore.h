@@ -7,6 +7,7 @@
 #include <vector>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
+#include <Reach/Tools/Scenes/DebugScene.h>
 #define ENTT_STANDALONE
 #include <Reach/Tools/Startup/StartupSystems.h>
 #include <glm/vec3.hpp>
@@ -19,7 +20,7 @@ namespace reach{
     class ReachCore{
 
         private:
-
+            DebugScene* debugScene;
             reach::Window* _windowRef;
             reach::BatchRenderer* _renderer;
             entt::basic_registry<entt::entity> _registry;

@@ -3,8 +3,16 @@
 namespace reach{
     uint8_t Scene::_COUNT = 0;
 
-	Scene::Scene() :_sceneName((std::string("Scene") + std::to_string(_COUNT++)).c_str()) {}
-	Scene::Scene(const char* name) : _sceneName(name) { _COUNT++; }
+	Scene::Scene() :m_sceneName((std::string("Scene") + std::to_string(_COUNT++)).c_str()) {
+		m_renderer = new reach::BatchRenderer();
+        m_renderer->init();
+        m_registry = entt::registry();}
+	Scene::Scene(const char* name) : m_sceneName(name) {
+		_COUNT++;
+		m_renderer = new reach::BatchRenderer();
+		m_renderer->init();
+       	m_registry = entt::registry();	 
+	}
 
 
 	void Scene::load() {

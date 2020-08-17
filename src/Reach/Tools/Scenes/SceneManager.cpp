@@ -18,16 +18,16 @@ namespace reach{
 		_scenes.push_back(scene);
 		if (_currentScene == 255) _currentScene = 0;
 	}
-	void SceneManager::addSceneRef(const Scene& scene) {
-        Scene* ptr = new Scene(scene);
-		_scenes.emplace_back(ptr);
-		if (_currentScene == 255) _currentScene = 0;
-	}
-	void SceneManager::addScene(Scene scene) {
-        Scene* ptr = new Scene(scene);
-        _scenes.emplace_back(ptr);
-		if (_currentScene == 255) _currentScene = 0;
-	}
+	// void SceneManager::addSceneRef(const Scene& scene) {
+    //     Scene* ptr = new Scene(scene);
+	// 	_scenes.emplace_back(ptr);
+	// 	if (_currentScene == 255) _currentScene = 0;
+	// }
+	// void SceneManager::addScene(Scene scene) {
+    //     Scene* ptr = new Scene(scene);
+    //     _scenes.emplace_back(ptr);
+	// 	if (_currentScene == 255) _currentScene = 0;
+	// }
 
 
 	void SceneManager::setCurrentScene(Scene scene) {
