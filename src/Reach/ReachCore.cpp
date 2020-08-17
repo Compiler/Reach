@@ -12,7 +12,9 @@ namespace reach{
 		glfwSetCursorPosCallback(_windowRef->getWindow(), GLFWCallbacks::cursorPositionCallback);
 		glfwSetMouseButtonCallback(_windowRef->getWindow(), GLFWCallbacks::mouseClickCallback);
 		glfwSwapInterval(0);
-
+		// glEnable(GL_CULL_FACE);
+		// glCullFace(GL_BACK);
+		// glFrontFace(GL_CW);
 
 		DebugScene* a = _sceneManager.emplaceScene<DebugScene>();
 		a->setName("scene 1");

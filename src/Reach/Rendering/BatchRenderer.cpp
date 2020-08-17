@@ -23,12 +23,21 @@ namespace reach{
             
             glGenBuffers(1, &_indexBufferID);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE; i++) _ind[i] = i;
+            uint32_t offset = 0;
+            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE; i+= 6){
+                _ind[i + 0] = offset + 0;
+                _ind[i + 1] = offset + 1;
+                _ind[i + 2] = offset + 2;
+                _ind[i + 3] = offset + 3;
+                _ind[i + 4] = offset + 1;
+                _ind[i + 5] = offset + 2;
+                offset+=4;
+            }
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
 
             glBindVertexArray(0);
             //assert(FAR_BUFFER_SIZE % 8 == 0);
-
+            _amountSubmitted = 0;
 
     }
 
@@ -57,23 +66,31 @@ namespace reach{
             reach::TextureComponent &texture = renderables.get<TextureComponent>(entity);
             static glm::vec2 initScale = glm::vec2(1,1);
 
-            VertexData t1, t2, t3;
+            VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;
             t1.texCoords = glm::vec3(0, 0, 1);
 
             t2.position = transform.position;
-            t2.position.x += + (initScale.x * transform.scale.x);
+            t2.position.x += (initScale.x * transform.scale.x);
             t2.color = renderable.color;
             t2.texCoords = glm::vec3(1, 0, 1);
 
             t3.position = transform.position;
-            t3.position.y += + (initScale.y * transform.scale.y);
+            t3.position.y += (initScale.y * transform.scale.y);
             t3.color = renderable.color;
             t3.texCoords = glm::vec3(0, 1, 1);
+            
+            t4.position = transform.position;
+            t4.position.x += (initScale.x * transform.scale.x);
+            t4.position.y += (initScale.y * transform.scale.y);
+            t4.color = renderable.color;
+            t4.texCoords = glm::vec3(1, 1, 1);
 
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
-            _amountSubmitted+=3;
+            _setBuffer(t4);_setBuffer(t2);_setBuffer(t3);
+
+            _amountSubmitted+=6;
             glBindTextureUnit(GL_TEXTURE0 + 1, texture.id);
         }
     }

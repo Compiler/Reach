@@ -11,6 +11,12 @@ namespace reach{
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             TextureComponent* comp;
+
+
+            void _loadChunk(int id){
+
+
+            }
         public:
             
             explicit DebugScene(){
@@ -19,7 +25,7 @@ namespace reach{
 
                 auto e = m_registry.create();
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
-                pos.position = glm::vec2(-0.5f, -0.5f);
+                pos.position = glm::vec2(-0.75f, -0.5f);
                 pos.scale = glm::vec2(1, 1);
 
                 auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
@@ -29,8 +35,8 @@ namespace reach{
 
                 auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
 
-                texComp.fileName = REACH_INTERNAL_TEXTURE("wall.jpg");
-                texComp.bitsPerPixel = 3;
+                texComp.fileName = REACH_INTERNAL_TEXTURE("tdirt.png");
+                texComp.bitsPerPixel = 4;
                 FileLoaderFactory::loadOpenGLTexture(&texComp);
 
             }
