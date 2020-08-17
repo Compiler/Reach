@@ -14,7 +14,13 @@ namespace reach{
 
 
             void _loadChunk(int id){
-
+                static int C_SZ = 25;
+                for(int x = 0; x < C_SZ; x++){
+                    for(int y = 0; y < C_SZ; y++){
+                        int initOffset = id*C_SZ;
+                        addEntity(initOffset + x, initOffset + y, 0.25f);
+                    }
+                }
 
             }
         public:
@@ -39,8 +45,12 @@ namespace reach{
                 texComp.bitsPerPixel = 4;
                 FileLoaderFactory::loadOpenGLTexture(&texComp);
 
+                _loadChunk(0);
+                _loadChunk(2);
+                _loadChunk(-2);
+
             }
-            void addEntity(float x, float y, float r = 1, float g = 1, float b = 1){
+            void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1){
                 auto e = m_registry.create();
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos.position = glm::vec2(x, y);
@@ -48,6 +58,14 @@ namespace reach{
 
                 auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
                 rend.color = glm::vec4(r,g,b,1.0f);
+
+                auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
+
+                texComp.fileName = REACH_INTERNAL_TEXTURE("tdirt.png");
+                texComp.bitsPerPixel = 4;
+                FileLoaderFactory::loadOpenGLTexture(&texComp);
+
+
 
             }
             void _set_color_(float r, float g, float b, float a){col = glm::vec4(r,g,b,a);}

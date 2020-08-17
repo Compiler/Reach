@@ -102,6 +102,11 @@ namespace reach{
     }
 
     void BatchRenderer::flush(){
+        static bool flag = 1;
+        if(flag){
+            REACH_WARN(_amountSubmitted << " entities submitted");
+            flag = 0;
+        }
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
         glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, 0);
