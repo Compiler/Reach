@@ -70,7 +70,6 @@ namespace reach{
 
             static glm::vec2 initScale = glm::vec2(1,1);
             unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
-            REACH_WARN("Mapped '" << texture.fileName << "' to slot " << textureID << " for id " << texture.id);
             VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;

@@ -54,6 +54,7 @@ namespace reach{
 
 
 
+		use();
 		GLint textureUnits;
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &textureUnits);
 		for(int i = 0; i < textureUnits; i++){
@@ -65,6 +66,7 @@ namespace reach{
 
     void ShaderProgram::uniform_set1Integer(const char* name, int32_t value){
         int id = _check_uniform_(name);
+		REACH_LOG("setting uniform '" << name << "' to value " << value << " at uniform id " << id);
         glUniform1i(id, value);
         GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
