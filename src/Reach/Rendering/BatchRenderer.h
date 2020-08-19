@@ -9,6 +9,7 @@
 #include <entt/entity/registry.hpp>
 #include <Reach/ECS/Components.h>
 #include <Reach/Tools/Input/InputManager.h>
+#include <Reach/Rendering/TextureManager.h>
 #include <unordered_map>
 #define REACH_MAX_RENDERABLE 65536
 #define REACH_VERTEXDATA_SIZE sizeof(reach::VertexData)

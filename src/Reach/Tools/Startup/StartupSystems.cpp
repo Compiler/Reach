@@ -4,6 +4,7 @@
 
 namespace reach{
 
+	void StartupSystems::_initTextureManager(){TextureManager::__init();}
 
 	void StartupSystems::_initGLFW(){
 		if(!glfwInit()){ REACH_DEBUG("Failed to init glfw");}
@@ -23,6 +24,7 @@ namespace reach{
 	void StartupSystems::initSubSystems(){
 			_initGLFW();
 			_initGlad();
+			_initTextureManager();
 
 	}
 

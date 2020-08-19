@@ -66,8 +66,11 @@ namespace reach{
             reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
             reach::TextureComponent &texture = renderables.get<TextureComponent>(entity);
+            
+
             static glm::vec2 initScale = glm::vec2(1,1);
-            unsigned int textureID = 1;
+            unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
+            REACH_WARN("Mapped '" << texture.fileName << "' to slot " << textureID << " for id " << texture.id);
             VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;
@@ -89,7 +92,7 @@ namespace reach{
             t4.color = renderable.color;
             t4.texCoords = glm::vec3(1, 1, textureID);
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
-
+            glBindTextureUnit(textureID, texture.id);
             _amountSubmitted+=6;
             
         }

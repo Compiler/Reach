@@ -33,8 +33,8 @@ namespace reach{
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
-                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
                 
                 
@@ -59,7 +59,6 @@ namespace reach{
                 texComp.bitsPerPixel = bpp;
                 texComp.fileName = str;
                 flip = !flip;
-                FileLoaderFactory::loadOpenGLTexture(&texComp);
                 TextureManager::_dbg_printTextureSlots();
                 TextureManager::registerTexture(texComp);
                 TextureManager::_dbg_printTextureSlots();
