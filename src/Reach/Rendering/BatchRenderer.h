@@ -28,15 +28,16 @@ namespace reach{
 
         private:
             VertexData* _dataBuffer;
-            unsigned int _vertexArrayID, _bufferID, _indexBufferID;
-            uint32_t _amountSubmitted;
+            uint32_t _vertexArrayID, _bufferID, _indexBufferID;
+            uint16_t _amountSubmitted;
 
             void _setBuffer(VertexData data);
-            unsigned short _ind[REACH_INDEX_BUFFER_SIZE];
+            uint16_t _ind[REACH_INDEX_BUFFER_SIZE];
+
 
         public:
 
-            BatchRenderer(){init();};
+            BatchRenderer() = default;
 
             void init();
             void begin();

@@ -24,13 +24,13 @@ namespace reach{
             glGenBuffers(1, &_indexBufferID);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             uint32_t offset = 0;
-            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE; i+= 6){
-                _ind[i + 0] = offset + 0;
-                _ind[i + 1] = offset + 1;
-                _ind[i + 2] = offset + 2;
-                _ind[i + 3] = offset + 3;
-                _ind[i + 4] = offset + 1;
-                _ind[i + 5] = offset + 2;
+            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE;){
+                _ind[i++] = offset + 0;
+                _ind[i++] = offset + 1;
+                _ind[i++] = offset + 2;
+                _ind[i++] = offset + 3;
+                _ind[i++] = offset + 1;
+                _ind[i++] = offset + 2;
                 offset+=4;
             }
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
@@ -103,8 +103,8 @@ namespace reach{
 
     void BatchRenderer::flush(){
         static bool flag = 1;
-        if(flag){
-            REACH_WARN(_amountSubmitted << " entities submitted");
+        if(flag){ 
+            REACH_WARN(_amountSubmitted / 6 << " entities submitted");
             flag = 0;
         }
         glBindVertexArray(_vertexArrayID);

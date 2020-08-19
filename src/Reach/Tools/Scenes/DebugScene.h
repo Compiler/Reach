@@ -14,10 +14,11 @@ namespace reach{
 
 
             void _loadChunk(int id){
-                static int C_SZ = 25;
-                for(int x = 0; x < C_SZ; x++){
-                    for(int y = 0; y < C_SZ; y++){
-                        int initOffset = id*C_SZ;
+                static float C_SZ = 1;
+                static float offset = 0.25f;
+                for(float x = 0; x < C_SZ; x+=offset){
+                    for(float y = -1; y < C_SZ - 1; y+=offset){
+                        float initOffset = id*C_SZ;
                         addEntity(initOffset + x, initOffset + y, 0.25f);
                     }
                 }
@@ -26,32 +27,21 @@ namespace reach{
         public:
             
             explicit DebugScene(){
-                Scene();
                 m_sceneName = "Debug Scene";
 
-                auto e = m_registry.create();
-                auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
-                pos.position = glm::vec2(-0.75f, -0.5f);
-                pos.scale = glm::vec2(1, 1);
-
-                auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
-                rend.color = glm::vec4(1,0,1,1);
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
-                auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
-
-                texComp.fileName = REACH_INTERNAL_TEXTURE("tdirt.png");
-                texComp.bitsPerPixel = 4;
-                FileLoaderFactory::loadOpenGLTexture(&texComp);
-
-                _loadChunk(0);
-                _loadChunk(2);
-                _loadChunk(-2);
+                addEntity(-1, -1, 1, 1, 0, 0);
+                addEntity(0 , -1, 1, 1, 0, 0);
+               // _loadChunk(0);
+               // _loadChunk(2);
+               //_loadChunk(-2);
 
             }
             void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1){
                 auto e = m_registry.create();
+                REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos.position = glm::vec2(x, y);
                 pos.scale = glm::vec2(1, 1);

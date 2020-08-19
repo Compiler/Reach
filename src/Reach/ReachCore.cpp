@@ -16,12 +16,11 @@ namespace reach{
 		// glCullFace(GL_BACK);
 		// glFrontFace(GL_CW);
 
-		DebugScene* a = _sceneManager.emplaceScene<DebugScene>();
-		a->setName("scene 1");
-		a->_set_color_(0,0,1,1);
+		//DebugScene* a = _sceneManager.emplaceScene<DebugScene>();
+		//a->setName("scene 1");
+		//a->_set_color_(0,0,1,1);
 		auto b = _sceneManager.emplaceScene<DebugScene>();
-		b->_set_color_(0,1,0,1);
-		b->addEntity(-0.5, 0, 1, 0, 0);
+		b->_set_color_(0.2,0,0.2,1);
 		_sceneManager.setCurrentScene(b);
     }
     void ReachCore::update(){

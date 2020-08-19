@@ -5,7 +5,7 @@ namespace reach{
 
 	Scene::Scene() :m_sceneName((std::string("Scene") + std::to_string(_COUNT++)).c_str()) {
 		m_renderer = new reach::BatchRenderer();
-        m_renderer->init();
+		m_renderer->init();
         m_registry = entt::registry();}
 	Scene::Scene(const char* name) : m_sceneName(name) {
 		_COUNT++;
