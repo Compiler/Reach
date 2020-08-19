@@ -3,6 +3,7 @@
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
+#include <Reach/Rendering/TextureManager.h>
 
 
 namespace reach{
@@ -33,8 +34,11 @@ namespace reach{
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
                 addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
-                addEntity(-0.9, -0.9, 0.25f, 0, 1, 0, "src/Resources/Textures/wall.jpg", 3);
                 addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+
+                
+                
+                
                 //_loadChunk(0);
                 //_loadChunk(1);
                 //_loadChunk(3);
@@ -56,6 +60,9 @@ namespace reach{
                 texComp.fileName = str;
                 flip = !flip;
                 FileLoaderFactory::loadOpenGLTexture(&texComp);
+                TextureManager::_dbg_printTextureSlots();
+                TextureManager::registerTexture(texComp);
+                TextureManager::_dbg_printTextureSlots();
 
 
 

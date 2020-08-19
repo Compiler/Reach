@@ -41,11 +41,6 @@ namespace reach{
 
             GLint availSlots;
 		    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &availSlots);
-            //if(_textureSlotsAvailable <= 0) REACH_ERROR("0 Texture Slots Available");
-            //_textureSlots = new uint32_t[_textureSlotsAvailable];
-            //for(int i = 0; i < _textureSlotsAvailable; i++)_textureSlots[i] = 2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2;
-            _textureSlots = new uint64_t[4];
-            for(int i = 0; i < 4; i++)_textureSlots[i] = _EMPTY_KEY_;
 
     }
 
@@ -72,30 +67,7 @@ namespace reach{
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
             reach::TextureComponent &texture = renderables.get<TextureComponent>(entity);
             static glm::vec2 initScale = glm::vec2(1,1);
-            int textureID = -1;
-            int lastEmpty = -1;
-            for(int i = 0; i < 4; i++){
-                if(_textureSlots[i] == _EMPTY_KEY_){
-                    //REACH_WARN("Slot " << i << " is empty");
-                    lastEmpty = i;
-                    continue;
-                }
-                if(_textureSlots[i] == texture.keyFileName){
-                    REACH_DEBUG("Slot " << i << " used as textureID for " << texture.fileName);
-                    textureID = i;
-                    break;
-                }
-
-            }
-            if(textureID == -1){
-                if(lastEmpty == -1){REACH_ERROR("No slots left");}
-                else{
-                    //REACH_LOG("Slot " << lastEmpty << " was empty but now being used as textureID");
-                    _textureSlots[lastEmpty] = texture.keyFileName;
-                    textureID = lastEmpty;
-                }
-            }
-
+            unsigned int textureID = 1;
             VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;
@@ -119,7 +91,7 @@ namespace reach{
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
 
             _amountSubmitted+=6;
-            glBindTextureUnit(GL_TEXTURE0 + textureID, texture.id);
+            
         }
     }
 
@@ -133,6 +105,8 @@ namespace reach{
         //static int count = 0;
         //if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)) count = (count + 3 ) % _amountSubmitted;
         glBindVertexArray(_vertexArrayID);
+        glBindTextureUnit(GL_TEXTURE1, 1);
+        glBindTextureUnit(GL_TEXTURE2, 2);
         glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
         glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, (const void*)0);
