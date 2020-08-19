@@ -36,7 +36,7 @@ namespace reach{
             glGenBuffers(1, &_indexBufferID);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
-            //glBindVertexArray(0);
+            glBindVertexArray(0);
 
     }
 
@@ -57,7 +57,6 @@ namespace reach{
     }
 
     void BatchRenderer::submit(entt::basic_registry<entt::entity>* registry){
-        //todo check if registry is global or local and get components with renderable component   
         auto renderables = registry->view<TransformComponent, RenderableComponent, TextureComponent>();
         int count = 1;
         for(auto entity: renderables) {
@@ -86,8 +85,7 @@ namespace reach{
             t4.position.y += (initScale.y * transform.scale.y);
             t4.color = renderable.color;
             t4.texCoords = glm::vec3(1, 1, count);
-            _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
-            _setBuffer(t4);_setBuffer(t2);_setBuffer(t3);
+            _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
 
             _amountSubmitted+=6;
             glBindTextureUnit(GL_TEXTURE0 + count, texture.id);
@@ -101,13 +99,9 @@ namespace reach{
     }
 
     void BatchRenderer::flush(){
-        REACH_WARN(_amountSubmitted << " :::: " << _amountSubmitted / 6);
-        for(int i = 0; i < _amountSubmitted; i++)REACH_LOG(i << " -> " << _ind[i]);
-        REACH_WARN("!");
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, (const void*)0);
         _amountSubmitted = 0;
 

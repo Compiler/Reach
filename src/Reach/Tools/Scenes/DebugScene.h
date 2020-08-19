@@ -34,7 +34,7 @@ namespace reach{
 
                 addEntity(0.1 , -0.9, 0.25f, 1, 0, 0);
                 addEntity(-0.9, -0.9, 0.25f, 0, 1, 0);
-                //addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
+                addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
                // _loadChunk(0);
                // _loadChunk(2);
                //_loadChunk(-2);
@@ -64,9 +64,6 @@ namespace reach{
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");
             
-                //loadShaders(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
-
-
             }
             void update()override{}
             void render()override{
