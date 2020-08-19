@@ -5,6 +5,8 @@
 namespace reach{
 
 
+    uint64_t hash_name(const char* str);
+
     struct NameComponent{
 
         const char* name;
@@ -29,8 +31,9 @@ namespace reach{
     };
     struct TextureComponent{
 
-        unsigned int id = -1;
-        unsigned int bitsPerPixel = 0;
+        uint32_t id = -1;
+        uint64_t keyFileName = -1;
+        uint32_t bitsPerPixel = 0;
         const char* fileName;
 
     };

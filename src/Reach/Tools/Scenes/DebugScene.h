@@ -32,15 +32,15 @@ namespace reach{
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
-                //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0);
-                //addEntity(-0.9, -0.9, 0.25f, 0, 1, 0);
-                //addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
-                _loadChunk(0);
-                _loadChunk(1);
-                _loadChunk(3);
+                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
+                addEntity(-0.9, -0.9, 0.25f, 0, 1, 0, "src/Resources/Textures/wall.jpg", 3);
+                addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                //_loadChunk(0);
+                //_loadChunk(1);
+                //_loadChunk(3);
 
             }
-            void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1){
+            void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
                 auto e = m_registry.create();
                 REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
@@ -51,9 +51,10 @@ namespace reach{
                 rend.color = glm::vec4(r,g,b,1.0f);
 
                 auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
-
-                texComp.fileName = REACH_INTERNAL_TEXTURE("tdirt.png");
-                texComp.bitsPerPixel = 4;
+                static bool flip = true;
+                texComp.bitsPerPixel = bpp;
+                texComp.fileName = str;
+                flip = !flip;
                 FileLoaderFactory::loadOpenGLTexture(&texComp);
 
 

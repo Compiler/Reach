@@ -38,12 +38,12 @@ namespace reach{
 
 		if(InputManager::isKeyPressed(reach::KeyCodes::KEY_A)) REACH_WARN("A");
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
-		InputManager::clear();
     }
     void ReachCore::render(){
 		_sceneManager.render();
         glfwSwapBuffers(_windowRef->getWindow());
         
+		InputManager::clear();
 		framesPerSecond ++;
     }
     void ReachCore::unload(){

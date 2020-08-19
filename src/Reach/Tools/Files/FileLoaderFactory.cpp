@@ -37,6 +37,7 @@ namespace reach { namespace FileLoaderFactory{
                 
             glGenerateMipmap(GL_TEXTURE_2D);
         }else REACH_ERROR("Failed to load texture : '" << comp->fileName << "'");
+        comp->keyFileName = hash_name(comp->fileName);
         free(data);
     }
 

@@ -38,6 +38,15 @@ namespace reach{
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
             glBindVertexArray(0);
 
+
+            GLint availSlots;
+		    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &availSlots);
+            //if(_textureSlotsAvailable <= 0) REACH_ERROR("0 Texture Slots Available");
+            //_textureSlots = new uint32_t[_textureSlotsAvailable];
+            //for(int i = 0; i < _textureSlotsAvailable; i++)_textureSlots[i] = 2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2;
+            _textureSlots = new uint64_t[4];
+            for(int i = 0; i < 4; i++)_textureSlots[i] = _EMPTY_KEY_;
+
     }
 
     void BatchRenderer::begin(){
@@ -58,37 +67,59 @@ namespace reach{
 
     void BatchRenderer::submit(entt::basic_registry<entt::entity>* registry){
         auto renderables = registry->view<TransformComponent, RenderableComponent, TextureComponent>();
-        int count = 1;
         for(auto entity: renderables) {
             reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
             reach::TextureComponent &texture = renderables.get<TextureComponent>(entity);
             static glm::vec2 initScale = glm::vec2(1,1);
+            int textureID = -1;
+            int lastEmpty = -1;
+            for(int i = 0; i < 4; i++){
+                if(_textureSlots[i] == _EMPTY_KEY_){
+                    //REACH_WARN("Slot " << i << " is empty");
+                    lastEmpty = i;
+                    continue;
+                }
+                if(_textureSlots[i] == texture.keyFileName){
+                    REACH_DEBUG("Slot " << i << " used as textureID for " << texture.fileName);
+                    textureID = i;
+                    break;
+                }
+
+            }
+            if(textureID == -1){
+                if(lastEmpty == -1){REACH_ERROR("No slots left");}
+                else{
+                    //REACH_LOG("Slot " << lastEmpty << " was empty but now being used as textureID");
+                    _textureSlots[lastEmpty] = texture.keyFileName;
+                    textureID = lastEmpty;
+                }
+            }
 
             VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;
-            t1.texCoords = glm::vec3(0, 0, count);
+            t1.texCoords = glm::vec3(0, 0, textureID);
 
             t2.position = transform.position;
             t2.position.x += (initScale.x * transform.scale.x);
             t2.color = renderable.color;
-            t2.texCoords = glm::vec3(1, 0, count);
+            t2.texCoords = glm::vec3(1, 0, textureID);
 
             t3.position = transform.position;
             t3.position.y += (initScale.y * transform.scale.y);
             t3.color = renderable.color;
-            t3.texCoords = glm::vec3(0, 1, count);
+            t3.texCoords = glm::vec3(0, 1, textureID);
             
             t4.position = transform.position;
             t4.position.x += (initScale.x * transform.scale.x);
             t4.position.y += (initScale.y * transform.scale.y);
             t4.color = renderable.color;
-            t4.texCoords = glm::vec3(1, 1, count);
+            t4.texCoords = glm::vec3(1, 1, textureID);
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
 
             _amountSubmitted+=6;
-            glBindTextureUnit(GL_TEXTURE0 + count, texture.id);
+            glBindTextureUnit(GL_TEXTURE0 + textureID, texture.id);
         }
     }
 
@@ -99,6 +130,8 @@ namespace reach{
     }
 
     void BatchRenderer::flush(){
+        //static int count = 0;
+        //if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)) count = (count + 3 ) % _amountSubmitted;
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
