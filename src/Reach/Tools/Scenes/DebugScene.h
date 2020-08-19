@@ -14,12 +14,12 @@ namespace reach{
 
 
             void _loadChunk(int id){
-                static float C_SZ = 1;
-                static float offset = 0.25f;
+                static float C_SZ = 0.25f;
+                static float offset = 0.05f;
                 for(float x = 0; x < C_SZ; x+=offset){
                     for(float y = -1; y < C_SZ - 1; y+=offset){
                         float initOffset = id*C_SZ;
-                        addEntity(initOffset + x, initOffset + y, 0.25f);
+                        addEntity(initOffset + x, initOffset + y, offset);
                     }
                 }
 
@@ -32,12 +32,12 @@ namespace reach{
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
-                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0);
-                addEntity(-0.9, -0.9, 0.25f, 0, 1, 0);
-                addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
-               // _loadChunk(0);
-               // _loadChunk(2);
-               //_loadChunk(-2);
+                //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0);
+                //addEntity(-0.9, -0.9, 0.25f, 0, 1, 0);
+                //addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
+                _loadChunk(0);
+                _loadChunk(1);
+                _loadChunk(3);
 
             }
             void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1){
