@@ -17,7 +17,7 @@ namespace reach{
 
             int _check_uniform_(const char* name){
                 GLint uniformID = glGetUniformLocation(_shaderProgram, name);
-                if(uniformID == -1) REACH_ERROR("'" << name << "' name not found in shader");
+                if(uniformID == -1) REACH_WARN("'" << name << "' name not found in shader");
                 return uniformID;
             }
         public:

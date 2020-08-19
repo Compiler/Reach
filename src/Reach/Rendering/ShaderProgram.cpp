@@ -66,9 +66,9 @@ namespace reach{
     void ShaderProgram::uniform_set1Integer(const char* name, int32_t value){
         int id = _check_uniform_(name);
         glUniform1i(id, value);
-        //GLenum error = glGetError();
-		//if(error != GL_NO_ERROR)
-		//	REACH_ERROR("OpenGL Error 'uniform_set1Integer' : " << error);
+        GLenum error = glGetError();
+		if(error != GL_NO_ERROR)
+			REACH_ERROR("OpenGL Error 'uniform_set1Integer' : " << error);
         
     }
 

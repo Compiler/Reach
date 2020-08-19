@@ -32,8 +32,9 @@ namespace reach{
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
 
-                addEntity(-1, -1, 1, 1, 0, 0);
-                addEntity(0 , -1, 1, 1, 0, 0);
+                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0);
+                addEntity(-0.9, -0.9, 0.25f, 0, 1, 0);
+                //addEntity(0.1,  0.1, 0.25f, 0, 0, 1);
                // _loadChunk(0);
                // _loadChunk(2);
                //_loadChunk(-2);
@@ -44,7 +45,7 @@ namespace reach{
                 REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos.position = glm::vec2(x, y);
-                pos.scale = glm::vec2(1, 1);
+                pos.scale = glm::vec2(s);
 
                 auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
                 rend.color = glm::vec4(r,g,b,1.0f);
