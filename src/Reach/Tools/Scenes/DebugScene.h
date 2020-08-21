@@ -20,7 +20,7 @@ namespace reach{
                 for(float x = 0; x < C_SZ; x+=offset){
                     for(float y = -1; y < C_SZ - 1; y+=offset){
                         float initOffset = id*C_SZ;
-                        addEntity(initOffset + x, initOffset + y, offset);
+                        addEntity(initOffset + x, initOffset + y, offset, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                     }
                 }
 
@@ -35,7 +35,6 @@ namespace reach{
 
                 addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
-
                 
                 
                 

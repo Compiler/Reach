@@ -39,9 +39,6 @@ namespace reach{
             glBindVertexArray(0);
 
 
-            GLint availSlots;
-		    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &availSlots);
-
     }
 
     void BatchRenderer::begin(){

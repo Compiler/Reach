@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <stdint.h>
+//#include <filesystem>
 
 namespace reach{
 
@@ -19,8 +20,17 @@ namespace reach{
             static uint16_t _currentIndex;
             static constexpr uint64_t _DEF_EMPTY_VALUE_ = 0;
 
+            // static void _populateFilePaths() {
+            //     for (const auto& entry : std::filesystem::directory_iterator("src/Resources/Textures/")) {
+            //         std::string fullPath = entry.path().string();
+            //         REACH_LOG(fullPath);
+            //     }
+
+		    // }
         public:
+
             static void __init(){
+                //_populateFilePaths();
                 _currentIndex = 0;
                 glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &_availableSlots);
                 _textureSlots = new uint64_t[_availableSlots];
