@@ -35,7 +35,7 @@ STARTUP_OBJS = StartupSystems.o
 OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(COMP_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
-ALL_SETTINGS = $(CXX) $(CXXFLAGS) -pthread $(LIBS) $(INC) 
+ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
 all: main
 
