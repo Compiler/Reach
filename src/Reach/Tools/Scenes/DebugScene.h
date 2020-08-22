@@ -1,9 +1,10 @@
-#pragma once 
+#pragma once
 #include <Reach/Tools/Scenes/Scene.h>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
 #include <Reach/Rendering/TextureManager.h>
+#include <Reach/Rendering/ParticleSystem.h>
 
 
 namespace reach{
@@ -11,7 +12,8 @@ namespace reach{
     class DebugScene : public Scene{
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
-            TextureComponent* comp;
+            ParticleSystem _system;
+
 
 
             void _loadChunk(int id){
@@ -26,7 +28,7 @@ namespace reach{
 
             }
         public:
-            
+
             explicit DebugScene(){
                 m_sceneName = "Debug Scene";
 
@@ -35,9 +37,9 @@ namespace reach{
 
                 addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
-                
-                
-                
+
+                _system.init(TextureComponent());
+
                 //_loadChunk(0);
                 //_loadChunk(1);
                 //_loadChunk(3);
@@ -69,18 +71,20 @@ namespace reach{
 
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");
-            
+
             }
             void update()override{}
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
 
-                _shaderProgram->use();
-                m_renderer->begin();
-                m_renderer->submit(&m_registry);
-                m_renderer->end();
-                m_renderer->flush();
+
+                _system.flush();
+                // _shaderProgram->use();
+                // m_renderer->begin();
+                // m_renderer->submit(&m_registry);
+                // m_renderer->end();
+                // m_renderer->flush();
 
             }
             void unload()override{

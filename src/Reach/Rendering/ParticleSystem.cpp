@@ -56,11 +56,19 @@ namespace reach{
            // glGenBuffers(1, &_indexBufferID);
            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
            // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
-           // glBindVertexArray(0);
+            glBindVertexArray(0);
 
 
     }
 
+
+    void ParticleSystem::flush(){
+
+        glBindVertexArray(_vertexArrayID);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
+        glBindVertexArray(0);
+
+    }
 
 
 }
