@@ -10,7 +10,6 @@ namespace reach{
         
         glm::vec2 position;
         glm::vec4 color;
-        glm::vec2 offset;
 
     };
 
@@ -18,7 +17,7 @@ namespace reach{
     class ParticleSystem{
 
         private:
-            uint32_t _vertexArrayID, _bufferID, _indexBufferID;
+            uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
             uint32_t _amountSubmitted;
 
 
