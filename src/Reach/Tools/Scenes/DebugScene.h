@@ -13,7 +13,7 @@ namespace reach{
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleSystem _system;
-
+            ShaderProgram _particleShader;
 
 
             void _loadChunk(int id){
@@ -34,6 +34,9 @@ namespace reach{
 
                 _shaderProgram = new ShaderProgram();
                 _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
+
+                _particleShader = ShaderProgram();
+                _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
 
                 addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
@@ -78,7 +81,7 @@ namespace reach{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
 
-
+                _particleShader.use();
                 _system.flush();
                 // _shaderProgram->use();
                 // m_renderer->begin();
