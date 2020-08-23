@@ -20,6 +20,8 @@ namespace reach{
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
             uint32_t _amountSubmitted;
 
+            uint16_t* _indices;
+
 
         public:
 

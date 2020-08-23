@@ -5,7 +5,7 @@ namespace reach{
 
     void ParticleSystem::init(TextureComponent particle){
 
-            REACH_LOG("BatchRenderer initializing...");
+            REACH_LOG("ParticleSystem initializing...");
             glGenVertexArrays(1, &_vertexArrayID);
             glBindVertexArray(_vertexArrayID);
             glm::vec2 translations[100];
@@ -24,13 +24,13 @@ namespace reach{
 
             float quadVertices[] = {
                 // positions     // colors
-                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1,
-                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,
-                -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,1,
+                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1, //0
+                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,  //1
+                -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,1, //2
 
-                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1,
-                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,
-                0.05f,  0.05f,  0.0f, 1.0f, 1.0f,1		    		
+                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1, //0
+                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,  //1
+                0.05f,  0.05f,  0.0f, 1.0f, 1.0f,1	 //5	    		
             };  
             
             glGenBuffers(1, &_instancedBufferID);
@@ -53,11 +53,14 @@ namespace reach{
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glVertexAttribDivisor(2, 1); 
-           // glGenBuffers(1, &_indexBufferID);
-           // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-           // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_ind), _ind, GL_STATIC_DRAW);
-            glBindVertexArray(0);
 
+            _indices = new uint16_t[100];
+            for(uint16_t i = 0; i < 100; i ++) _indices[i] = i;
+            _indices[3] = 0; _indices[4] = 1;_indices[5] = 5;
+            glGenBuffers(1, &_indexBufferID);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
+            glBindVertexArray(0);
 
     }
 
@@ -65,7 +68,9 @@ namespace reach{
     void ParticleSystem::flush(){
 
         glBindVertexArray(_vertexArrayID);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
+        //glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
+        glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (const void*)0, 100); 
         glBindVertexArray(0);
 
     }

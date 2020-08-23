@@ -22,14 +22,14 @@ namespace reach{
             
             
             _amountSubmitted = 0;
-            uint32_t offset = 0;
-            for(int i = 0; i < REACH_INDEX_BUFFER_SIZE; i += 6){
-                _ind[i + 0] = (uint32_t)(offset + 0);
-                _ind[i + 1] = (uint32_t)(offset + 1);
-                _ind[i + 2] = (uint32_t)(offset + 2);
-                _ind[i + 3] = (uint32_t)(offset + 2);
-                _ind[i + 4] = (uint32_t)(offset + 1);
-                _ind[i + 5] = (uint32_t)(offset + 3);
+            uint16_t offset = 0;
+            for(uint16_t i = 0; i < REACH_INDEX_BUFFER_SIZE - 6; i += 6){
+                _ind[i + 0] = offset + 0;
+                _ind[i + 1] = offset + 1;
+                _ind[i + 2] = offset + 2;
+                _ind[i + 3] = offset + 2;
+                _ind[i + 4] = offset + 1;
+                _ind[i + 5] = offset + 3;
                 offset+=4;
 
             }
