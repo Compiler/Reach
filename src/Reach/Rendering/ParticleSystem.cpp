@@ -10,7 +10,7 @@ namespace reach{
             glBindVertexArray(_vertexArrayID);
             glm::vec2 translations[100];
             int index = 0;
-            float offset = 0.1f;
+            float offset = 0.01f;
             for (int y = -10; y < 10; y += 2)
             {
                 for (int x = -10; x < 10; x += 2)
