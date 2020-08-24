@@ -47,7 +47,7 @@ namespace reach{
 
     }
 
-    void reach::BatchRenderer::_setBuffer(VertexData data){
+    void reach::BatchRenderer::_setBuffer(VertexData& data){
         //  REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
         //  << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
         _dataBuffer->position  =    data.position;
@@ -104,10 +104,6 @@ namespace reach{
         //static int count = 0;
         //if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)) count = (count + 3 ) % _amountSubmitted;
         glBindVertexArray(_vertexArrayID);
-        glBindTextureUnit(GL_TEXTURE1, 1);
-        glBindTextureUnit(GL_TEXTURE2, 2);
-        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
         glDrawElements(GL_TRIANGLES, _amountSubmitted, GL_UNSIGNED_SHORT, (const void*)0);
         _amountSubmitted = 0;
 

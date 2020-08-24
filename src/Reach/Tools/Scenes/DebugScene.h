@@ -38,8 +38,8 @@ namespace reach{
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
 
-                addEntity(0.1,  0.1, 0.25f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
+                addEntity(-0.05,  -0.05, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
                 _system.init(TextureComponent());
 
@@ -82,12 +82,15 @@ namespace reach{
                 glClearColor(col.r, col.g, col.b, col.a);
 
                 _particleShader.use();
+                _system.begin();
+                _system.submit(&m_registry);
+                _system.end();
                 _system.flush();
-                // _shaderProgram->use();
-                // m_renderer->begin();
-                // m_renderer->submit(&m_registry);
-                // m_renderer->end();
-                // m_renderer->flush();
+                //_shaderProgram->use();
+                //m_renderer->begin();
+                //m_renderer->submit(&m_registry);
+                //m_renderer->end();
+                //m_renderer->flush();
 
             }
             void unload()override{

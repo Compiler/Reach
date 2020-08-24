@@ -32,11 +32,9 @@ namespace reach{
             VertexData* _dataBuffer;
             uint32_t _vertexArrayID, _bufferID, _indexBufferID;
             uint32_t _amountSubmitted;
-            void _setBuffer(VertexData data);
             uint16_t _ind[REACH_INDEX_BUFFER_SIZE];
 
-            const uint64_t _EMPTY_KEY_ = 4;
-            uint64_t* _textureSlots;
+            void _setBuffer(VertexData& data);
 
 
         public:

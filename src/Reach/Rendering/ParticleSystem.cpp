@@ -40,7 +40,8 @@ namespace reach{
 
             glGenBuffers(1, &_bufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
+            //glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
             
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
@@ -66,19 +67,56 @@ namespace reach{
 
     void ParticleSystem::begin(){
         //setup dynamic buffer - profile speed gap
-
+        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+        _dataBuffer = (reach::ParticleVertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     }
 
-    void ParticleSystem::submit(){
-        //submit particle systems as a component to render different batches
+    void reach::ParticleSystem::_setBuffer(ParticleVertexData& data){
+        //  REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
+        //  << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
+        _dataBuffer->position  =    data.position;
+        _dataBuffer->color     =    data.color;
+        _dataBuffer++;
+           
+    }
 
+    void ParticleSystem::submit(entt::basic_registry<entt::entity>* registry){
+        //submit particle systems as a component to render different batches
+        auto renderables = registry->view<TransformComponent, RenderableComponent>();
+        for(auto entity: renderables) {
+            reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
+            reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
+            
+
+            static glm::vec2 initScale = glm::vec2(1,1);
+            //unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
+            ParticleVertexData t1, t2, t3, t4;
+            t1.position = transform.position;
+            t1.color = renderable.color;
+
+            t2.position = transform.position;
+            t2.position.x += (initScale.x * transform.scale.x);
+            t2.color = renderable.color;
+
+            t3.position = transform.position;
+            t3.position.y += (initScale.y * transform.scale.y);
+            t3.color = renderable.color;
+            
+            t4.position = transform.position;
+            t4.position.x += (initScale.x * transform.scale.x);
+            t4.position.y += (initScale.y * transform.scale.y);
+            t4.color = renderable.color;
+            _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
+            _setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
+            _amountSubmitted+=6;
+            
+        }
 
     }
 
     void ParticleSystem::end(){
         //unbind dynamic buffer
-
-
+        glUnmapBuffer(GL_ARRAY_BUFFER);
     }
 
 
