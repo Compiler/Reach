@@ -64,13 +64,30 @@ namespace reach{
 
     }
 
+    void ParticleSystem::begin(){
+        //setup dynamic buffer - profile speed gap
+
+    }
+
+    void ParticleSystem::submit(){
+        //submit particle systems as a component to render different batches
+
+
+    }
+
+    void ParticleSystem::end(){
+        //unbind dynamic buffer
+
+
+    }
+
 
     void ParticleSystem::flush(){
 
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-        //glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
-        glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (const void*)0, 100); 
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
+        //glDrawElementsInstanced(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, (const void*)0, 100); 
         glBindVertexArray(0);
 
     }
