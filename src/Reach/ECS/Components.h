@@ -37,4 +37,13 @@ namespace reach{
         const char* fileName;
 
     };
+
+
+    struct ParticleEmitter{
+
+        uint16_t emissionCount;
+        glm::vec2 velocity;
+        float life;
+
+    };
 }
