@@ -12,6 +12,7 @@ namespace reach{
 			_currentScene = _nextScene;
 			_scenes[_currentScene]->load();
 		}
+		_scenes[_currentScene]->update();
 	}
 	void SceneManager::render(){
 		_scenes[_currentScene]->render();
