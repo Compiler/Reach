@@ -30,12 +30,12 @@ namespace reach{
 
                 -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1, //0
                 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,  //1
-                0.05f,  0.05f,  0.0f, 1.0f, 1.0f,1	 //5	    		
+                0.05f,  0.05f,  0.0f, 0.0f, 1.0f,1	 //5	    		
             };  
             
             glGenBuffers(1, &_instancedBufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInstancedData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
             //glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -68,16 +68,16 @@ namespace reach{
     void ParticleSystem::begin(){
         //setup dynamic buffer - profile speed gap
         glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
-        _dataBuffer = (reach::ParticleVertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        _dataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         float offset = 0.01f;
-            for (int y = -10; y < 10; y += 2)
+            for (int y = -5; y < 5; y += 2)
             {
-                for (int x = -10; x < 10; x += 2)
+                for (int x = -5; x < 5; x += 2)
                 {
                     glm::vec2 translation;
                     translation.x = (float)x / 10.0f + offset;
                     translation.y = (float)y / 10.0f + offset;
-                    _dataBuffer->position = translation;
+                    _dataBuffer->offset = translation;
                     _dataBuffer++;
                 }
             }

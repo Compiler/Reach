@@ -11,9 +11,15 @@
 
 namespace reach{
 
+    struct ParticleInstancedData{
+        glm::vec2 offset;
+
+    };
+
     struct ParticleVertexData{
         
         glm::vec2 position;
+        glm::vec4 color;
 
     };
 
@@ -24,7 +30,7 @@ namespace reach{
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
             uint32_t _amountSubmitted;
             uint16_t* _indices;
-            ParticleVertexData* _dataBuffer;
+            ParticleInstancedData* _dataBuffer;
 
             void _setBuffer(ParticleVertexData& data);
 
