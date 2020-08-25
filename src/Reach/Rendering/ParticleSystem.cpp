@@ -35,13 +35,13 @@ namespace reach{
             
             glGenBuffers(1, &_instancedBufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
+            //glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glGenBuffers(1, &_bufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
-            //glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
             
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
@@ -67,16 +67,27 @@ namespace reach{
 
     void ParticleSystem::begin(){
         //setup dynamic buffer - profile speed gap
-        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+        glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
         _dataBuffer = (reach::ParticleVertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        float offset = 0.01f;
+            for (int y = -10; y < 10; y += 2)
+            {
+                for (int x = -10; x < 10; x += 2)
+                {
+                    glm::vec2 translation;
+                    translation.x = (float)x / 10.0f + offset;
+                    translation.y = (float)y / 10.0f + offset;
+                    _dataBuffer->position = translation;
+                    _dataBuffer++;
+                }
+            }
     }
 
     void reach::ParticleSystem::_setBuffer(ParticleVertexData& data){
-        //  REACH_DEBUG("Submitted:\n\tPosition: (" << data.position.x << ", "<< data.position.y << ")\n\tColor: ("
-        //  << data.color.x << ", "<< data.color.y << ", "<< data.color.z << ", "<< data.color.w<< ")\n\tTexCoords: ("<< data.texCoords.x << ", "<< data.texCoords.y << ")");
-        _dataBuffer->position  =    data.position;
-        _dataBuffer->color     =    data.color;
-        _dataBuffer++;
+        //static float spot = 0;
+        //_dataBuffer->position  =    data.position * spot;
+        //spot += 0.0001f;
+        //_dataBuffer++;
            
     }
 
@@ -92,20 +103,16 @@ namespace reach{
             //unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
             ParticleVertexData t1, t2, t3, t4;
             t1.position = transform.position;
-            t1.color = renderable.color;
 
             t2.position = transform.position;
             t2.position.x += (initScale.x * transform.scale.x);
-            t2.color = renderable.color;
 
             t3.position = transform.position;
             t3.position.y += (initScale.y * transform.scale.y);
-            t3.color = renderable.color;
             
             t4.position = transform.position;
             t4.position.x += (initScale.x * transform.scale.x);
             t4.position.y += (initScale.y * transform.scale.y);
-            t4.color = renderable.color;
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
             _setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
             _amountSubmitted+=6;

@@ -79,28 +79,27 @@ namespace reach{
             }
             void update()override{
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_D)) {
-                    pos->position.x += 0.0001f;
-                    REACH_LOG("Moving!");
-                    //auto& c = m_registry.get<TransformComponent>(e);
-                    //c.position.x += 0.0001f;
-                }
+                if(InputManager::isKeyPressed(KeyCodes::KEY_D)) pos->position.x += 0.0001f;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_A)) pos->position.x -= 0.0001f;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_W)) pos->position.y += 0.0001f;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_S)) pos->position.y -= 0.0001f;
+                
 
             }
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
 
-                //_particleShader.use();
-                //_system.begin();
-                //_system.submit(&m_registry);
-                //_system.end();
-                //_system.flush();
-                _shaderProgram->use();
-                m_renderer->begin();
-                m_renderer->submit(&m_registry);
-                m_renderer->end();
-                m_renderer->flush();
+                _particleShader.use();
+                _system.begin();
+                _system.submit(&m_registry);
+                _system.end();
+                _system.flush();
+                //_shaderProgram->use();
+                //m_renderer->begin();
+                //m_renderer->submit(&m_registry);
+                //m_renderer->end();
+                //m_renderer->flush();
 
             }
             void unload()override{
