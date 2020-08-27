@@ -1,6 +1,6 @@
 #pragma once
 #include <Reach/ECS/System.h>
-
+#include <Reach/ECS/Components.h>
 
 namespace reach{
 

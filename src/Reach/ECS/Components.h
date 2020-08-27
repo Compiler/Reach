@@ -39,7 +39,7 @@ namespace reach{
     };
 
 
-    struct ParticleEmitter{
+    struct ParticleEmitterComponent{
 
         uint16_t emissionCount;
         glm::vec2 velocity;

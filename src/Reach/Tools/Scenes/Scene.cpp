@@ -5,13 +5,13 @@ namespace reach{
 
 	Scene::Scene() :m_sceneName((std::string("Scene") + std::to_string(_COUNT++)).c_str()) {
 		m_renderer = new reach::BatchRenderer();
-		_systemManager = new reach::SystemManager();
+		m_systemManager = new reach::SystemManager();
 		m_renderer->init();
         m_registry = entt::registry();}
 	Scene::Scene(const char* name) : m_sceneName(name) {
 		_COUNT++;
 		m_renderer = new reach::BatchRenderer();
-		_systemManager = new reach::SystemManager();
+		m_systemManager = new reach::SystemManager();
 		m_renderer->init();
        	m_registry = entt::registry();	 
 	}

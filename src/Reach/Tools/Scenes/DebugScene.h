@@ -6,10 +6,16 @@
 #include <Reach/Rendering/TextureManager.h>
 #include <Reach/Rendering/ParticleSystem.h>
 
+#include <Reach/ECS/ParticleSystemUpdater.h>
+
 
 namespace reach{
 
     class DebugScene : public Scene{
+        private:
+            ParticleSystemUpdater _updater;
+
+            
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleSystem _system;
@@ -33,9 +39,8 @@ namespace reach{
             explicit DebugScene(){
                 m_sceneName = "Debug Scene";
 
-                _shaderProgram = new ShaderProgram();
-                _shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
-
+                m_shaderProgram = new ShaderProgram();
+                m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
 
@@ -44,6 +49,9 @@ namespace reach{
 
                 _system.init(TextureComponent());
 
+
+                
+                m_systemManager->addSystem(&_updater);
                 //_loadChunk(0);
                 //_loadChunk(1);
                 //_loadChunk(3);
@@ -64,6 +72,9 @@ namespace reach{
                 texComp.bitsPerPixel = bpp;
                 texComp.fileName = str;
                 flip = !flip;
+
+                auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
+                particleComp.velocity = glm::vec2(2, 1);
                 TextureManager::_dbg_printTextureSlots();
                 TextureManager::registerTexture(texComp);
                 TextureManager::_dbg_printTextureSlots();
@@ -83,23 +94,23 @@ namespace reach{
                 if(InputManager::isKeyPressed(KeyCodes::KEY_A)) pos->position.x -= 0.0001f;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_W)) pos->position.y += 0.0001f;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_S)) pos->position.y -= 0.0001f;
-                
+                m_systemManager->update(&m_registry);
 
             }
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
 
-                _particleShader.use();
-                _system.begin();
-                _system.submit(&m_registry);
-                _system.end();
-                _system.flush();
-                //_shaderProgram->use();
-                //m_renderer->begin();
-                //m_renderer->submit(&m_registry);
-                //m_renderer->end();
-                //m_renderer->flush();
+                //_particleShader.use();
+                //_system.begin();
+                //_system.submit(&m_registry);
+                //_system.end();
+                //_system.flush();
+                m_shaderProgram->use();
+                m_renderer->begin();
+                m_renderer->submit(&m_registry);
+                m_renderer->end();
+                m_renderer->flush();
 
             }
             void unload()override{
