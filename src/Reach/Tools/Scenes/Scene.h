@@ -4,7 +4,7 @@
 #include <entt/entity/registry.hpp>
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/ShaderProgram.h>
-
+#include <Reach/ECS/SystemManager.h>
 namespace reach{
 
 
@@ -17,6 +17,7 @@ namespace reach{
         protected:
 
             ShaderProgram* _shaderProgram;
+            SystemManager* _systemManager;
 		    const char* m_sceneName;
             reach::BatchRenderer* m_renderer;
             entt::basic_registry<entt::entity> m_registry;

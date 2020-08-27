@@ -29,10 +29,10 @@ INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
 RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleSystem.o
 FILE_OBJS = FileLoaderFactory.o
-COMP_OBJS = Components.o
+ECS_OBJS = Components.o SystemManager.o ParticleSystemUpdater.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
-OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(COMP_OBJS)
+OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
@@ -64,7 +64,7 @@ $(INPUT_OBJS): %.o: src/Reach/Tools/Input/%.cpp
 $(SCENE_OBJS): %.o: src/Reach/Tools/Scenes/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
-$(COMP_OBJS): %.o: src/Reach/ECS/%.cpp
+$(ECS_OBJS): %.o: src/Reach/ECS/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
