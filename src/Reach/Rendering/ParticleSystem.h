@@ -32,7 +32,7 @@ namespace reach{
             uint16_t* _indices;
             ParticleInstancedData* _dataBuffer;
 
-            void _setBuffer(ParticleVertexData& data);
+            void _setBuffer(glm::vec2& pos, glm::vec2& vel);
 
 
 

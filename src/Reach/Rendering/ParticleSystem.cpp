@@ -83,39 +83,35 @@ namespace reach{
             }
     }
 
-    void reach::ParticleSystem::_setBuffer(ParticleVertexData& data){
-        //static float spot = 0;
-        //_dataBuffer->position  =    data.position * spot;
-        //spot += 0.0001f;
-        //_dataBuffer++;
+    void reach::ParticleSystem::_setBuffer(glm::vec2& pos, glm::vec2& vel){
+        float offset = 0.01f;
+            for (int y = -5; y < 5; y += 2)
+            {
+                for (int x = -5; x < 5; x += 2)
+                {
+                    static constexpr float _MAG_ = 0.00005f;
+                    float directionX = 1 - ((std::rand()*10) % 2);
+                    float directionY = 1 - ((std::rand()*10) % 2);
+
+
+                    _dataBuffer->offset.x = pos.x + directionX * vel.x * _MAG_;
+                    _dataBuffer->offset.y = pos.y + directionY * vel.y * _MAG_;
+                    _dataBuffer++;
+                }
+            }
            
     }
 
     void ParticleSystem::submit(entt::basic_registry<entt::entity>* registry){
         //submit particle systems as a component to render different batches
-        auto renderables = registry->view<TransformComponent, RenderableComponent>();
+        auto renderables = registry->view<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
         for(auto entity: renderables) {
             reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
+            reach::ParticleEmitterComponent &emitter = renderables.get<ParticleEmitterComponent>(entity);
             
+            //_setBuffer(transform.position, emitter.velocity);
 
-            static glm::vec2 initScale = glm::vec2(1,1);
-            //unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
-            ParticleVertexData t1, t2, t3, t4;
-            t1.position = transform.position;
-
-            t2.position = transform.position;
-            t2.position.x += (initScale.x * transform.scale.x);
-
-            t3.position = transform.position;
-            t3.position.y += (initScale.y * transform.scale.y);
-            
-            t4.position = transform.position;
-            t4.position.x += (initScale.x * transform.scale.x);
-            t4.position.y += (initScale.y * transform.scale.y);
-            _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);
-            _setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
-            _amountSubmitted+=6;
             
         }
 
