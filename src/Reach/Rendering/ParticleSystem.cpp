@@ -62,22 +62,26 @@ namespace reach{
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
             glBindVertexArray(0);
-
+            _passedBufferState.reserve(100);
     }
 
     void ParticleSystem::begin(){
         //setup dynamic buffer - profile speed gap
         glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
         _dataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-        float offset = 0.01f;
+        _amountSubmitted = 0;
+
+        float offset = 0.000001f;
             for (int y = -5; y < 5; y += 2)
             {
                 for (int x = -5; x < 5; x += 2)
                 {
-                    glm::vec2 translation;
-                    translation.x = (float)x / 10.0f + offset;
-                    translation.y = (float)y / 10.0f + offset;
-                    _dataBuffer->offset = translation;
+                    ParticleInstancedData datum;
+                    datum.offset.x = (float)x / 100000.0f + offset;
+                    datum.offset.y = (float)y / 100000.0f + offset;
+                    _passedBufferState[_amountSubmitted].offset += datum.offset;
+
+                    _dataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
                     _dataBuffer++;
                 }
             }
@@ -97,6 +101,7 @@ namespace reach{
                     _dataBuffer->offset.x = pos.x + directionX * vel.x * _MAG_;
                     _dataBuffer->offset.y = pos.y + directionY * vel.y * _MAG_;
                     _dataBuffer++;
+                    _amountSubmitted ++;
                 }
             }
            
