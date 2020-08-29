@@ -43,8 +43,10 @@ namespace reach{
     struct ParticleEmitterComponent{
 
         uint16_t emissionCount;
+        glm::vec2* offsets;
         glm::vec2 velocity;
         float life;
+
 
     };
 

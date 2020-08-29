@@ -41,7 +41,6 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-
                 auto entity  = addEntity(0, 0, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
                 float m = 0.001f;
@@ -53,16 +52,13 @@ namespace reach{
 
                 _system.init(TextureComponent());
 
-                //m_systemManager->addSystem(&_updater);
+                m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
-                //_loadChunk(0);
-                //_loadChunk(1);
-                //_loadChunk(3);
 
             }
             entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
                 auto e = m_registry.create();
-                REACH_DEBUG("Created entity");
+                //REACH_DEBUG("Created entity");
                 auto pos = &m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos->position = glm::vec2(x, y);
                 pos->scale = glm::vec2(s);
@@ -78,10 +74,7 @@ namespace reach{
 
                 auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
                 particleComp.velocity = glm::vec2(2, 1);
-                TextureManager::_dbg_printTextureSlots();
-                TextureManager::registerTexture(texComp);
-                TextureManager::_dbg_printTextureSlots();
-
+                TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
 
 
@@ -101,16 +94,16 @@ namespace reach{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
 
-                _particleShader.use();
-                _system.begin();
-                _system.submit(&m_registry);
-                _system.end();
-                _system.flush();
-                //m_shaderProgram->use();
-                //m_renderer->begin();
-                //m_renderer->submit(&m_registry);
-                //m_renderer->end();
-                //m_renderer->flush();
+                //_particleShader.use();
+                //_system.begin();
+                //_system.submit(&m_registry);
+                //_system.end();
+                //_system.flush();
+                m_shaderProgram->use();
+                m_renderer->begin();
+                m_renderer->submit(&m_registry);
+                m_renderer->end();
+                m_renderer->flush();
 
             }
             void unload()override{

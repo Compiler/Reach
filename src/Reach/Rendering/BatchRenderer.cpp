@@ -58,13 +58,7 @@ namespace reach{
     }
 
     void BatchRenderer::submit(entt::basic_registry<entt::entity>* registry){
-        auto renderables = registry->view<TransformComponent, RenderableComponent, TextureComponent>();
-        for(auto entity: renderables) {
-            reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
-            reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
-            reach::TextureComponent &texture = renderables.get<TextureComponent>(entity);
-            
-
+        for(auto &&[entity, transform, renderable, texture]: registry->group<TransformComponent, RenderableComponent, TextureComponent>().proxy()){
             static glm::vec2 initScale = glm::vec2(1,1);
             unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
             VertexData t1, t2, t3, t4;

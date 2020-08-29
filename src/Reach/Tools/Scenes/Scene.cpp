@@ -7,13 +7,16 @@ namespace reach{
 		m_renderer = new reach::BatchRenderer();
 		m_systemManager = new reach::SystemManager();
 		m_renderer->init();
-        m_registry = entt::registry();}
+        m_registry = entt::registry();
+		//m_registry.group<>();
+	}
 	Scene::Scene(const char* name) : m_sceneName(name) {
 		_COUNT++;
 		m_renderer = new reach::BatchRenderer();
 		m_systemManager = new reach::SystemManager();
 		m_renderer->init();
-       	m_registry = entt::registry();	 
+       	m_registry = entt::registry();
+		//m_registry.group<>();
 	}
 
 

@@ -91,11 +91,13 @@ namespace reach{
 
     void ParticleSystem::submit(entt::basic_registry<entt::entity>* registry){
         //submit particle systems as a component to render different batches
-        auto renderables = registry->view<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
-        for(auto entity: renderables) {
-            reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);
-            reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
-            reach::ParticleEmitterComponent &emitter = renderables.get<ParticleEmitterComponent>(entity);
+        //auto renderables = registry->view<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
+        auto group = registry->group<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
+        
+        for(auto entity: group) {
+            reach::TransformComponent &transform = group.get<TransformComponent>(entity);
+            reach::RenderableComponent &renderable = group.get<RenderableComponent>(entity);
+            reach::ParticleEmitterComponent &emitter = group.get<ParticleEmitterComponent>(entity);
             
             ParticleVertexData data;
             data.position = transform.position;

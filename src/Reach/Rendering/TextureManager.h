@@ -41,7 +41,7 @@ namespace reach{
             static void registerTexture(TextureComponent& texture){
                 if(texture.keyFileName == -1){
                     FileLoaderFactory::loadOpenGLTexture(&texture);
-                    REACH_LOG("Was forced to load texture for user");
+                    //REACH_LOG("Was forced to load texture for user");
                 }
                 if(_hashToGLID.find(texture.keyFileName) == _hashToGLID.end()){
                     _hashToGLID[texture.keyFileName] = texture.id;
