@@ -44,7 +44,7 @@ namespace reach{
 
                 auto entity  = addEntity(0, 0, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
-                float m = 0.00001f;
+                float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement->set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement->set(KeyCodes::KEY_W, glm::vec2(0, m));

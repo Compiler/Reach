@@ -51,7 +51,7 @@ namespace reach{
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
             glBindVertexArray(0);
-            _passedBufferState.reserve(100);
+            _passedBufferState.reserve(1000);
     }
 
     void ParticleSystem::begin(){
@@ -61,9 +61,9 @@ namespace reach{
         _amountSubmitted = 0;
 
         float offset = 0.00001f;
-            for (int y = -5; y < 5; y += 2)
+            for (int y = -15; y < 15; y += 2)
             {
-                for (int x = -5; x < 5; x += 2)
+                for (int x = -15; x < 15; x += 2)
                 {
                     ParticleInstancedData datum;
                     float neg_offset = 1 - (rand() % 2);
@@ -137,7 +137,7 @@ namespace reach{
 
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); 
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1000); 
         //glDrawElementsInstanced(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, (const void*)0, 100); 
         glBindVertexArray(0);
 
