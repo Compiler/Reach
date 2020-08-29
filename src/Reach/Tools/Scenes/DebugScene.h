@@ -7,14 +7,14 @@
 #include <Reach/Rendering/ParticleSystem.h>
 
 #include <Reach/ECS/ParticleSystemUpdater.h>
-
+#include <Reach/ECS/MovementSystem.h>
 
 namespace reach{
 
     class DebugScene : public Scene{
         private:
             ParticleSystemUpdater _updater;
-
+            MovementSystem _movement;
             
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
@@ -44,20 +44,25 @@ namespace reach{
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
 
-                addEntity(-0.05,  -0.05, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto entity  = addEntity(-0.05,  -0.05, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto movement = &m_registry.emplace<MovementComponent>(e, MovementComponent());
+                float m = 0.01f;
+                movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
+                movement->set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
+                movement->set(KeyCodes::KEY_W, glm::vec2(0, m));
+                movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
                 _system.init(TextureComponent());
 
-
-                
                 m_systemManager->addSystem(&_updater);
+                m_systemManager->addSystem(&_movement);
                 //_loadChunk(0);
                 //_loadChunk(1);
                 //_loadChunk(3);
 
             }
-            void addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
+            entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
                 e = m_registry.create();
                 REACH_DEBUG("Created entity");
                 pos = &m_registry.emplace<TransformComponent>(e, TransformComponent());
@@ -79,6 +84,7 @@ namespace reach{
                 TextureManager::registerTexture(texComp);
                 TextureManager::_dbg_printTextureSlots();
 
+                return e;
 
 
             }
@@ -90,10 +96,10 @@ namespace reach{
             }
             void update()override{
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_D)) pos->position.x += 0.0001f;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_A)) pos->position.x -= 0.0001f;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_W)) pos->position.y += 0.0001f;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_S)) pos->position.y -= 0.0001f;
+                //if(InputManager::isKeyPressed(KeyCodes::KEY_D)) pos->position.x += 0.0001f;
+                //if(InputManager::isKeyPressed(KeyCodes::KEY_A)) pos->position.x -= 0.0001f;
+                //if(InputManager::isKeyPressed(KeyCodes::KEY_W)) pos->position.y += 0.0001f;
+                //if(InputManager::isKeyPressed(KeyCodes::KEY_S)) pos->position.y -= 0.0001f;
                 m_systemManager->update(&m_registry);
 
             }

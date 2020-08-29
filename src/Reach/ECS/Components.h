@@ -2,6 +2,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <vector>
 namespace reach{
 
 
@@ -44,6 +45,14 @@ namespace reach{
         uint16_t emissionCount;
         glm::vec2 velocity;
         float life;
+
+    };
+
+    struct MovementComponent{
+        std::vector<uint16_t> keys;
+        std::vector<glm::vec2> velocities;
+
+        void set(uint16_t key, glm::vec2 vel){keys.push_back(key);velocities.push_back(vel);}
 
     };
 }

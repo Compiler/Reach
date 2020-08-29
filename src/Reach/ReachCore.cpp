@@ -37,7 +37,6 @@ namespace reach{
         glfwPollEvents();
 		_sceneManager.update();
 
-		if(InputManager::isKeyPressed(reach::KeyCodes::KEY_A)) REACH_WARN("A");
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
     }
     void ReachCore::render(){

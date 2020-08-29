@@ -11,6 +11,12 @@ namespace reach{
 
         public:
             
+            template<typename T>
+            T* emplaceSystem(){
+                T* t = new T();
+                _systems.push_back(t);
+                return t;
+            }
             void addSystem(reach::System* system);
             void update(entt::basic_registry<entt::entity>* registry);
 

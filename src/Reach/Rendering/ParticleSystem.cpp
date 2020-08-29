@@ -78,9 +78,9 @@ namespace reach{
                 {
                     ParticleInstancedData datum;
                     float neg_offset = 1 - (rand() % 2);
-                    float p_offset = ((rand() % 1000) / 1000.0f) * neg_offset;
-                    datum.offset.x = (float)x / 100000.0f + offset * p_offset;
-                    datum.offset.y = (float)y / 100000.0f + offset * p_offset;
+                    float p_offset = ((rand() % 100) / 100.0f) * neg_offset;
+                    datum.offset.x = (float)x / 1000000.0f + offset * p_offset;
+                    datum.offset.y = (float)y / 1000000.0f + offset * p_offset;
                     _passedBufferState[_amountSubmitted].offset += datum.offset;
 
                     _dataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
