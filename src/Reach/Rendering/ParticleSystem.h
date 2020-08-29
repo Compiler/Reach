@@ -30,11 +30,12 @@ namespace reach{
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
             uint32_t _amountSubmitted;
             uint16_t* _indices;
-            ParticleInstancedData* _dataBuffer;
+            ParticleInstancedData* _instancedDataBuffer;
+            ParticleVertexData * _vertexDataBuffer;
             std::vector<ParticleInstancedData> _passedBufferState;
             
 
-            void _setBuffer(glm::vec2& pos, glm::vec2& vel);
+            void _setBuffer(ParticleVertexData& buffer);
 
 
 

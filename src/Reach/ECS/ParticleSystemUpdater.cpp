@@ -10,7 +10,7 @@ void reach::ParticleSystemUpdater::update(entt::basic_registry<entt::entity>* re
             reach::ParticleEmitterComponent &emitter = renderables.get<ParticleEmitterComponent>(entity);
 
 
-            static constexpr float _MAG_ = 0.0001f;
+            static constexpr float _MAG_ = 0.00001f;
             float directionX = 1 - ((std::rand()*10) % 2);
             float directionY = 1 - ((std::rand()*10) % 2);
 

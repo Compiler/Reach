@@ -22,17 +22,6 @@ namespace reach{
                 }
             }
 
-            float quadVertices[] = {
-                // positions     // colors
-                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1, //0
-                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,  //1
-                -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,1, //2
-
-                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,1, //0
-                0.05f, -0.05f,  0.0f, 1.0f, 0.0f,1,  //1
-                0.05f,  0.05f,  0.0f, 0.0f, 1.0f,1	 //5	    		
-            };  
-            
             glGenBuffers(1, &_instancedBufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
             glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInstancedData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
@@ -41,7 +30,7 @@ namespace reach{
 
             glGenBuffers(1, &_bufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
             
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
@@ -68,10 +57,10 @@ namespace reach{
     void ParticleSystem::begin(){
         //setup dynamic buffer - profile speed gap
         glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
-        _dataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        _instancedDataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         _amountSubmitted = 0;
 
-        float offset = 0.000001f;
+        float offset = 0.00001f;
             for (int y = -5; y < 5; y += 2)
             {
                 for (int x = -5; x < 5; x += 2)
@@ -79,33 +68,24 @@ namespace reach{
                     ParticleInstancedData datum;
                     float neg_offset = 1 - (rand() % 2);
                     float p_offset = ((rand() % 100) / 100.0f) * neg_offset;
-                    datum.offset.x = (float)x / 1000000.0f + offset * p_offset;
-                    datum.offset.y = (float)y / 1000000.0f + offset * p_offset;
+                    datum.offset.x = (float)x / 100000.0f + offset * p_offset;
+                    datum.offset.y = (float)y / 100000.0f + offset * p_offset;
                     _passedBufferState[_amountSubmitted].offset += datum.offset;
 
-                    _dataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
-                    _dataBuffer++;
+                    _instancedDataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
+                    _instancedDataBuffer++;
                 }
             }
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+        glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
+        _vertexDataBuffer = (reach::ParticleVertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
     }
 
-    void reach::ParticleSystem::_setBuffer(glm::vec2& pos, glm::vec2& vel){
-        float offset = 0.01f;
-            for (int y = -5; y < 5; y += 2)
-            {
-                for (int x = -5; x < 5; x += 2)
-                {
-                    static constexpr float _MAG_ = 0.00005f;
-                    float directionX = 1 - ((std::rand()*10) % 2);
-                    float directionY = 1 - ((std::rand()*10) % 2);
-
-
-                    _dataBuffer->offset.x = pos.x + directionX * vel.x * _MAG_;
-                    _dataBuffer->offset.y = pos.y + directionY * vel.y * _MAG_;
-                    _dataBuffer++;
-                    _amountSubmitted ++;
-                }
-            }
+    void reach::ParticleSystem::_setBuffer(ParticleVertexData& buffer){
+        _vertexDataBuffer->position = buffer.position;
+        _vertexDataBuffer->color = buffer.color;
+        _vertexDataBuffer++;
            
     }
 
@@ -117,7 +97,30 @@ namespace reach{
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
             reach::ParticleEmitterComponent &emitter = renderables.get<ParticleEmitterComponent>(entity);
             
-            //_setBuffer(transform.position, emitter.velocity);
+            ParticleVertexData data;
+            data.position = transform.position;
+            data.color = renderable.color;
+            _setBuffer(data);
+            
+            data.position = transform.position + glm::vec2(transform.scale.x, 0);
+            data.color = renderable.color;
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(0, transform.scale.y);
+            data.color = renderable.color;
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(transform.scale.x, transform.scale.y);
+            data.color = renderable.color;
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(transform.scale.x, 0);
+            data.color = renderable.color;
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(0, transform.scale.y);
+            data.color = renderable.color;
+            _setBuffer(data);
 
             
         }

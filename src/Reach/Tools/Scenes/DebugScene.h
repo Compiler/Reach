@@ -20,8 +20,6 @@ namespace reach{
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleSystem _system;
             ShaderProgram _particleShader;
-            entt::entity e;
-            reach::TransformComponent* pos;
 
             void _loadChunk(int id){
                 static float C_SZ = 0.25f;
@@ -44,9 +42,9 @@ namespace reach{
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
 
-                auto entity  = addEntity(-0.05,  -0.05, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                auto movement = &m_registry.emplace<MovementComponent>(e, MovementComponent());
-                float m = 0.01f;
+                auto entity  = addEntity(0, 0, 0.10f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
+                float m = 0.00001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement->set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement->set(KeyCodes::KEY_W, glm::vec2(0, m));
@@ -55,7 +53,7 @@ namespace reach{
 
                 _system.init(TextureComponent());
 
-                m_systemManager->addSystem(&_updater);
+                //m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
                 //_loadChunk(0);
                 //_loadChunk(1);
@@ -63,9 +61,9 @@ namespace reach{
 
             }
             entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
-                e = m_registry.create();
+                auto e = m_registry.create();
                 REACH_DEBUG("Created entity");
-                pos = &m_registry.emplace<TransformComponent>(e, TransformComponent());
+                auto pos = &m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos->position = glm::vec2(x, y);
                 pos->scale = glm::vec2(s);
 
@@ -96,10 +94,6 @@ namespace reach{
             }
             void update()override{
 
-                //if(InputManager::isKeyPressed(KeyCodes::KEY_D)) pos->position.x += 0.0001f;
-                //if(InputManager::isKeyPressed(KeyCodes::KEY_A)) pos->position.x -= 0.0001f;
-                //if(InputManager::isKeyPressed(KeyCodes::KEY_W)) pos->position.y += 0.0001f;
-                //if(InputManager::isKeyPressed(KeyCodes::KEY_S)) pos->position.y -= 0.0001f;
                 m_systemManager->update(&m_registry);
 
             }
