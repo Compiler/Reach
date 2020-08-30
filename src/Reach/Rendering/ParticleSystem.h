@@ -4,6 +4,7 @@
 #include <Reach/ECS/Components.h>
 #include <entt/entity/registry.hpp>
 #include <Reach/Rendering/TextureManager.h>
+#include <Reach/Tools/Utils/Random.h>
 #define REACH_MAX_RENDERABLE 65536
 #define REACH_VERTEXDATA_SIZE sizeof(reach::ParticleVertexData)
 #define REACH_BUFFER_SIZE REACH_MAX_RENDERABLES * REACH_VERTEXDATA_SIZE
@@ -25,6 +26,14 @@ namespace reach{
 
 
     class ParticleSystem{
+
+        private:
+
+            struct Particle{
+                
+
+            };
+
 
         private:
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;

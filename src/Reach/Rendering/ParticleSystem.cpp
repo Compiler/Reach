@@ -60,17 +60,17 @@ namespace reach{
         _instancedDataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         _amountSubmitted = 0;
 
-        float offset = 0.00001f;
+        float offset = 0.0001f;
             for (int y = -15; y < 15; y += 2)
             {
                 for (int x = -15; x < 15; x += 2)
                 {
                     ParticleInstancedData datum;
-                    float neg_offset = 1 - (rand() % 2);
-                    float p_offset = ((rand() % 100) / 100.0f) * neg_offset;
-                    datum.offset.x = (float)x / 100000.0f + offset * p_offset;
-                    datum.offset.y = (float)y / 100000.0f + offset * p_offset;
-                    _passedBufferState[_amountSubmitted].offset += datum.offset;
+                    float neg_offset = 1 - (Random::GenerateFloat() * 2.0f);
+                    float p_offset = (Random::GenerateFloat()) * neg_offset;
+                    datum.offset.x = (float)x / 1000.0f + offset * p_offset;
+                    datum.offset.y = (float)y / 1000.0f + offset * p_offset;
+                    _passedBufferState[_amountSubmitted].offset += datum.offset * (1.0f - Random::GenerateFloat() * 2.0f);
 
                     _instancedDataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
                     _instancedDataBuffer++;
@@ -101,27 +101,28 @@ namespace reach{
             
             ParticleVertexData data;
             data.position = transform.position;
-            data.color = renderable.color;
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
             _setBuffer(data);
             
             data.position = transform.position + glm::vec2(transform.scale.x, 0);
-            data.color = renderable.color;
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(0, transform.scale.y);
-            data.color = renderable.color;
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(transform.scale.x, transform.scale.y);
-            data.color = renderable.color;
-            _setBuffer(data);
-
-            data.position = transform.position + glm::vec2(transform.scale.x, 0);
-            data.color = renderable.color;
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(0, transform.scale.y);
-            data.color = renderable.color;
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(transform.scale.x, 0);
+            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+
             _setBuffer(data);
 
             
