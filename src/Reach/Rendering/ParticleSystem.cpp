@@ -8,12 +8,13 @@ namespace reach{
             REACH_LOG("ParticleSystem initializing...");
             glGenVertexArrays(1, &_vertexArrayID);
             glBindVertexArray(_vertexArrayID);
-            glm::vec2 translations[100];
+            glm::vec2 translations[8100];
             int index = 0;
             float offset = 0.01f;
-            for (int y = -10; y < 10; y += 2)
+
+            for (int y = -50; y < 40; y += 2)
             {
-                for (int x = -10; x < 10; x += 2)
+                for (int x = -50; x < 40; x += 2)
                 {
                     glm::vec2 translation;
                     translation.x = (float)x / 10.0f + offset;
@@ -51,7 +52,7 @@ namespace reach{
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
             glBindVertexArray(0);
-            _passedBufferState.reserve(1000);
+            _passedBufferState.resize(8100);
     }
 
     void ParticleSystem::begin(){
@@ -61,9 +62,9 @@ namespace reach{
         _amountSubmitted = 0;
 
         float offset = 0.0001f;
-            for (int y = -15; y < 15; y += 2)
+            for (int y = -50; y < 40; y += 2)
             {
-                for (int x = -15; x < 15; x += 2)
+                for (int x = -50; x < 40; x += 2)
                 {
                     ParticleInstancedData datum;
                     float neg_offset = 1 - (Random::GenerateFloat() * 2.0f);
@@ -98,30 +99,31 @@ namespace reach{
             reach::TransformComponent &transform = group.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = group.get<RenderableComponent>(entity);
             reach::ParticleEmitterComponent &emitter = group.get<ParticleEmitterComponent>(entity);
-            
+            static auto one = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            static auto two = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
             ParticleVertexData data;
             data.position = transform.position;
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            data.color = one;
             _setBuffer(data);
             
             data.position = transform.position + glm::vec2(transform.scale.x, 0);
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            data.color = two;
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(0, transform.scale.y);
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            data.color = one;
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(transform.scale.x, transform.scale.y);
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
-            _setBuffer(data);
-
-            data.position = transform.position + glm::vec2(0, transform.scale.y);
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            data.color = one;
             _setBuffer(data);
 
             data.position = transform.position + glm::vec2(transform.scale.x, 0);
-            data.color = glm::vec4(Random::GenerateFloat(),Random::GenerateFloat(),Random::GenerateFloat(),1.0f);
+            data.color = two;
+            _setBuffer(data);
+
+            data.position = transform.position + glm::vec2(0, transform.scale.y);
+            data.color = one;
 
             _setBuffer(data);
 
