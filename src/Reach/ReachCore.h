@@ -15,7 +15,6 @@
 
 namespace reach{
 
-
     class ReachCore{
 
         private:

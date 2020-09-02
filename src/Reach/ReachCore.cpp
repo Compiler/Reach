@@ -2,7 +2,7 @@
 
 namespace reach{
 
-
+	float DELTA_TIME = 0.0f;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
        	_windowRef = new reach::Window(1920, 1080, "Reach", false);
@@ -35,6 +35,7 @@ namespace reach{
 			accumMSFPS = 0;
 		}
         glfwPollEvents();
+		reach::DELTA_TIME = msPerFrame;
 		_sceneManager.update(msPerFrame);
 
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;

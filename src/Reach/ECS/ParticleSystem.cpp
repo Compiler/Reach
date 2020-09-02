@@ -17,7 +17,7 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry,
                     float p_offset = (Random::GenerateFloat()) * neg_offset;
                     emitter.particles[currentParticleIndex].position.x += emitter.startingVelocity.x * p_offset;
                     emitter.particles[currentParticleIndex].position.y += emitter.startingVelocity.y * p_offset;
-                    emitter.particles[currentParticleIndex].timeAlive += deltaTime / 10000.0f;
+                    emitter.particles[currentParticleIndex].timeAlive += reach::DELTA_TIME / (100000.0f * Random::GenerateFloat());
                    // REACH_LOG("Time alive: " << emitter.particles[currentParticleIndex].timeAlive << " -- life time allowed to live " << emitter.particles[currentParticleIndex].lifeTime);
                     if(emitter.particles[currentParticleIndex].timeAlive >= emitter.particles[currentParticleIndex].lifeTime){
                         emitter.particles[currentParticleIndex].active = false;
