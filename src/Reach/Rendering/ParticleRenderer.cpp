@@ -105,10 +105,10 @@ namespace reach{
             reach::ParticleEmitterComponent &emitter = group.get<ParticleEmitterComponent>(entity);
 
             for(int i = 0; i < emitter.emissionCount; i++){
-                _instancedDataBuffer->offset = emitter.offsets[i];
-                _instancedDataBuffer++;
+                _instancedDataBuffer->offset = emitter.particles[i].position;
+                _instancesCreated += emitter.particles[i].active;
+                _instancedDataBuffer += emitter.particles[i].active; //wont move buffe rif it didnt update (saves an if)
             }
-            _instancesCreated+=emitter.emissionCount;
 
 
 

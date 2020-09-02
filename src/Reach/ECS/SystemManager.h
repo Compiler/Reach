@@ -18,7 +18,7 @@ namespace reach{
                 return t;
             }
             void addSystem(reach::System* system);
-            void update(entt::basic_registry<entt::entity>* registry);
+            void update(entt::basic_registry<entt::entity>* registry, float deltaTime);
 
 
     };

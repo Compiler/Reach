@@ -28,7 +28,7 @@ namespace reach{
             explicit Scene(const char* name);
 
             virtual void load();
-            virtual void update();
+            virtual void update(float deltaTime = 0.0f);
             virtual void render();
             virtual void unload();
 

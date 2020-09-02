@@ -39,11 +39,17 @@ namespace reach{
 
     };
 
+    struct RenderableParticle{
+        float lifeTime = 1.0f;
+        float lifeAlive;
+        bool active = true;
+        glm::vec2 position;
 
+    };
     struct ParticleEmitterComponent{
 
         uint16_t emissionCount;
-        std::vector<glm::vec2> offsets;
+        std::vector<RenderableParticle> particles;
         glm::vec2 startingVelocity, endingVelocity;
         glm::vec4 startingColor, endingColor;
 

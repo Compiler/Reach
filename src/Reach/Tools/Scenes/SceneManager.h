@@ -18,7 +18,7 @@ namespace reach{
 
 		SceneManager() = default;
 
-		void update();
+		void update(float deltaTime = 0.0f);
 		void render();
 
 
