@@ -1,7 +1,6 @@
 #pragma once
 #include <Reach/Tools/Scenes/Scene.h>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
-#include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
 #include <Reach/Rendering/TextureManager.h>
 #include <Reach/Rendering/ParticleRenderer.h>
@@ -41,7 +40,7 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto entity  = addEntity(0, 0, 0.5f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto entity  = addEntity(0, 0, 0.05f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -73,7 +72,7 @@ namespace reach{
                 flip = !flip;
 
                 auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.startingVelocity = glm::vec2(2, 1);
+                particleComp.startingVelocity = glm::vec2(0.1, 1.0f/200.0f);
                 particleComp.emissionCount = 1000;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;

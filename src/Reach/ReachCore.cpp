@@ -35,7 +35,7 @@ namespace reach{
 			accumMSFPS = 0;
 		}
         glfwPollEvents();
-		_sceneManager.update();
+		_sceneManager.update(msPerFrame);
 
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
     }

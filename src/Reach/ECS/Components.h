@@ -41,7 +41,7 @@ namespace reach{
 
     struct RenderableParticle{
         float lifeTime = 1.0f;
-        float lifeAlive;
+        float timeAlive;
         bool active = true;
         glm::vec2 position;
 

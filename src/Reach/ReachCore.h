@@ -10,6 +10,7 @@
 #include <Reach/Tools/Startup/StartupSystems.h>
 #include <glm/vec3.hpp>
 #include <Reach/Tools/Callbacks/GLFWCallbacks.h>
+#include <Reach/Reach.h>
 
 
 namespace reach{
