@@ -1,7 +1,7 @@
 #include "MovementSystem.h"
 
 
-void reach::MovementSystem::update(entt::basic_registry<entt::entity>* registry, float deltaTime){
+void reach::MovementSystem::update(entt::basic_registry<entt::entity>* registry){
     auto renderables = registry->view<TransformComponent, MovementComponent>();
         for(auto entity: renderables) {
             reach::TransformComponent &transform = renderables.get<TransformComponent>(entity);

@@ -25,6 +25,7 @@ namespace reach{
 		_sceneManager.setCurrentScene(b);
     }
     void ReachCore::update(){
+		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
 		msPerFrame = (glfwGetTime() * 1000.0f) - previousMSPerFrame;
 		previousMSPerFrame = glfwGetTime() * 1000.0f;
 		accumMSFPS += msPerFrame;
@@ -34,11 +35,10 @@ namespace reach{
 			framesPerSecond = 0;
 			accumMSFPS = 0;
 		}
-        glfwPollEvents();
 		reach::DELTA_TIME = msPerFrame;
-		_sceneManager.update(msPerFrame);
+        glfwPollEvents();
+		_sceneManager.update();
 
-		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
     }
     void ReachCore::render(){
 		_sceneManager.render();

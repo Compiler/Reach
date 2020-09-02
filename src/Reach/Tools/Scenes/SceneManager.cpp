@@ -3,7 +3,7 @@
 namespace reach{
 
 
-    void SceneManager::update(float deltaTime) {
+    void SceneManager::update() {
 		//swap scene requested
 		if (_nextScene != _currentScene) _dirty = true;
 		if (_dirty) {
@@ -12,7 +12,7 @@ namespace reach{
 			_currentScene = _nextScene;
 			_scenes[_currentScene]->load();
 		}
-		_scenes[_currentScene]->update(deltaTime);
+		_scenes[_currentScene]->update();
 	}
 	void SceneManager::render(){
 		_scenes[_currentScene]->render();

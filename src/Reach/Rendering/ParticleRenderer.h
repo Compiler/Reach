@@ -26,28 +26,12 @@ namespace reach{
 
 
     class ParticleRenderer{
-
-        private:
-
-            struct Particle{
-                glm::vec2 position;
-                
-                float remainingLife;
-                float totalLifeTime = 1.0f;
-            };
-
-            std::vector<Particle> _particles;
-            uint32_t _particleCount;
-
-
         private:
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
             uint32_t _amountSubmitted, _instancesCreated;
             uint16_t* _indices;
             ParticleInstancedData* _instancedDataBuffer;
             ParticleVertexData * _vertexDataBuffer;
-            std::vector<ParticleInstancedData> _passedBufferState;
-            
 
             void _setBuffer(ParticleVertexData& buffer);
 
@@ -57,7 +41,7 @@ namespace reach{
 
             ParticleRenderer() = default;
 
-            void init(uint32_t count = 1000);
+            void init();
             void begin();
             void submit(entt::basic_registry<entt::entity>* registry);
             void end();

@@ -8,8 +8,8 @@ namespace reach{
 
     }
 
-    void SystemManager::update(entt::basic_registry<entt::entity>* registry, float deltaTime){
-        for(int i = 0; i < _systems.size(); i++) _systems[i]->update(registry, deltaTime);
+    void SystemManager::update(entt::basic_registry<entt::entity>* registry){
+        for(int i = 0; i < _systems.size(); i++) _systems[i]->update(registry);
     }
 
 }

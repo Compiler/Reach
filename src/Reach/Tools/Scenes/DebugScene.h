@@ -40,7 +40,7 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto entity  = addEntity(0, 0, 0.05f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto entity  = addEntity(0, 0, 0.0025f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -49,7 +49,7 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
-                _system.init(1024);
+                _system.init();
 
                 m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
@@ -72,8 +72,8 @@ namespace reach{
                 flip = !flip;
 
                 auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.startingVelocity = glm::vec2(0.1, 1.0f/200.0f);
-                particleComp.emissionCount = 1000;
+                particleComp.startingVelocity = glm::vec2(0.001f, 0.002f);
+                particleComp.emissionCount = 4000;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
 
@@ -85,9 +85,9 @@ namespace reach{
                 REACH_WARN(m_sceneName << " Loading...");
 
             }
-            void update(float deltaTime)override{
+            void update()override{
 
-                m_systemManager->update(&m_registry, deltaTime);
+                m_systemManager->update(&m_registry);
 
             }
             void render()override{

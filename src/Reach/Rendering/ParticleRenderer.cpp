@@ -3,26 +3,13 @@
 namespace reach{
 
 
-    void ParticleRenderer::init(uint32_t particleCount){
+    void ParticleRenderer::init(){
             REACH_LOG("ParticleRenderer initializing...");
-            _particleCount = particleCount;
+
             _instancesCreated = 0;
             glGenVertexArrays(1, &_vertexArrayID);
             glBindVertexArray(_vertexArrayID);
-            std::vector<glm::vec2> translations;
-            translations.resize(_particleCount);
-
-            int index = 0;
-            float offset = 0.01f;
-            for (int y = -sqrt(_particleCount); y < sqrt(_particleCount); y += 2){
-                for (int x = -sqrt(_particleCount); x < sqrt(_particleCount); x += 2){
-                    glm::vec2 translation;
-                    translation.x = (float)x / 10.0f + offset;
-                    translation.y = (float)y / 10.0f + offset;
-                    translations[index++] = translation;
-                }
-            }
-            REACH_DEBUG("Translations initialized.");
+          
 
             glGenBuffers(1, &_instancedBufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
@@ -60,8 +47,6 @@ namespace reach{
             //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
             //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
             glBindVertexArray(0);
-            REACH_LOG("Resizing passedBufferState from " << _passedBufferState.size() << " to " << _particleCount);
-            _passedBufferState.resize(_particleCount);
             REACH_DEBUG("Finished initialization of ParticleRenderer");
     }
 
@@ -71,21 +56,6 @@ namespace reach{
         _instancedDataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         _amountSubmitted = 0;
         _instancesCreated = 0;
-        // float offset = 0.0001f;
-        // static ParticleInstancedData _datum_;
-        // for (int y = -sqrt(_particleCount); y < sqrt(_particleCount); y += 2){
-        //     for (int x = -sqrt(_particleCount); x < sqrt(_particleCount); x += 2){
-        //         float neg_offset = 1 - (Random::GenerateFloat() * 2.0f);
-        //         float p_offset = (Random::GenerateFloat()) * neg_offset;
-        //         _datum_.offset.x = (float)x / 1000.0f + offset * p_offset;
-        //         _datum_.offset.y = (float)y / 1000.0f + offset * p_offset;
-        //         _passedBufferState[_amountSubmitted].offset += _datum_.offset * (1.0f - Random::GenerateFloat() * 2.0f);
-        //         _instancesCreated++;
-        //         _instancedDataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
-        //         _instancedDataBuffer++;
-        //     }
-        // }
-        
 
     }
 

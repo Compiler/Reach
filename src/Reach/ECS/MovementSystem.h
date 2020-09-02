@@ -10,7 +10,7 @@ namespace reach{
     class MovementSystem : public System{
 
         public:
-            void update(entt::basic_registry<entt::entity>* registry, float deltaTime)override;
+            void update(entt::basic_registry<entt::entity>* registry)override;
 
     };
 
