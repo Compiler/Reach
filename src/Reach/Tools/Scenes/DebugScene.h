@@ -4,21 +4,21 @@
 #include <Reach/Tools/Files/FileLoaderFactory.h>
 #include <Reach/ECS/Components.h>
 #include <Reach/Rendering/TextureManager.h>
-#include <Reach/Rendering/ParticleSystem.h>
+#include <Reach/Rendering/ParticleRenderer.h>
 
-#include <Reach/ECS/ParticleSystemUpdater.h>
+#include <Reach/ECS/ParticleSystem.h>
 #include <Reach/ECS/MovementSystem.h>
 
 namespace reach{
 
     class DebugScene : public Scene{
         private:
-            ParticleSystemUpdater _updater;
+            ParticleSystem _updater;
             MovementSystem _movement;
             
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
-            ParticleSystem _system;
+            ParticleRenderer _system;
             ShaderProgram _particleShader;
 
             void _loadChunk(int id){
@@ -50,7 +50,7 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
-                _system.init(8192 / 2);
+                _system.init(1024);
 
                 m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
@@ -73,7 +73,7 @@ namespace reach{
                 flip = !flip;
 
                 auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.velocity = glm::vec2(2, 1);
+                particleComp.startingVelocity = glm::vec2(2, 1);
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
 
