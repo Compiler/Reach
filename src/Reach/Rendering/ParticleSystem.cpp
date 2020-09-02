@@ -3,56 +3,66 @@
 namespace reach{
 
 
-    void ParticleSystem::init(TextureComponent particle){
-
+    void ParticleSystem::init(uint32_t particleCount){
             REACH_LOG("ParticleSystem initializing...");
+            _particleCount = particleCount;
+            _instancesCreated = 0;
             glGenVertexArrays(1, &_vertexArrayID);
             glBindVertexArray(_vertexArrayID);
-            glm::vec2 translations[8100];
+            std::vector<glm::vec2> translations;
+            translations.resize(_particleCount);
+
             int index = 0;
             float offset = 0.01f;
-
-            for (int y = -50; y < 40; y += 2)
-            {
-                for (int x = -50; x < 40; x += 2)
-                {
+            for (int y = -sqrt(_particleCount); y < sqrt(_particleCount); y += 2){
+                for (int x = -sqrt(_particleCount); x < sqrt(_particleCount); x += 2){
                     glm::vec2 translation;
                     translation.x = (float)x / 10.0f + offset;
                     translation.y = (float)y / 10.0f + offset;
                     translations[index++] = translation;
                 }
             }
+            REACH_DEBUG("Translations initialized.");
 
             glGenBuffers(1, &_instancedBufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
             glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInstancedData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
             //glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+            int _c_ = 0;
+            REACH_DEBUG(_c_++);
+
 
             glGenBuffers(1, &_bufferID);
             glBindBuffer(GL_ARRAY_BUFFER, _bufferID);
             glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertexData) * REACH_MAX_RENDERABLE, NULL, GL_DYNAMIC_DRAW);
+            REACH_DEBUG(_c_++);
             
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
+            REACH_DEBUG(_c_++);
 
             glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleVertexData), (const void*)  0                  ); // POSITION
             glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleVertexData), (const void*) (2 * sizeof(float)) ); // COLOUR
+            REACH_DEBUG(_c_++);
 
             glEnableVertexAttribArray(2);
             glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glVertexAttribDivisor(2, 1); 
+            REACH_DEBUG(_c_++);
 
-            _indices = new uint16_t[100];
-            for(uint16_t i = 0; i < 100; i ++) _indices[i] = i;
-            _indices[3] = 0; _indices[4] = 1;_indices[5] = 5;
-            glGenBuffers(1, &_indexBufferID);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
+            //_indices = new uint16_t[100];
+            //for(uint16_t i = 0; i < 100; i ++) _indices[i] = i;
+           // _indices[3] = 0; _indices[4] = 1;_indices[5] = 5;
+            //glGenBuffers(1, &_indexBufferID);
+            //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
+            //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_indices), _indices, GL_STATIC_DRAW);
             glBindVertexArray(0);
-            _passedBufferState.resize(8100);
+            REACH_LOG("Resizing passedBufferState from " << _passedBufferState.size() << " to " << _particleCount);
+            _passedBufferState.reserve(_particleCount);
+            REACH_DEBUG("Finished initialization of ParticleSystem");
     }
 
     void ParticleSystem::begin(){
@@ -60,19 +70,17 @@ namespace reach{
         glBindBuffer(GL_ARRAY_BUFFER, _instancedBufferID);
         _instancedDataBuffer = (reach::ParticleInstancedData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         _amountSubmitted = 0;
-
+        _instancesCreated = 0;
         float offset = 0.0001f;
-            for (int y = -50; y < 40; y += 2)
-            {
-                for (int x = -50; x < 40; x += 2)
-                {
+            for (int y = -sqrt(_particleCount); y < sqrt(_particleCount); y += 2){
+                for (int x = -sqrt(_particleCount); x < sqrt(_particleCount); x += 2){
                     ParticleInstancedData datum;
                     float neg_offset = 1 - (Random::GenerateFloat() * 2.0f);
                     float p_offset = (Random::GenerateFloat()) * neg_offset;
                     datum.offset.x = (float)x / 1000.0f + offset * p_offset;
                     datum.offset.y = (float)y / 1000.0f + offset * p_offset;
                     _passedBufferState[_amountSubmitted].offset += datum.offset * (1.0f - Random::GenerateFloat() * 2.0f);
-
+                    _instancesCreated++;
                     _instancedDataBuffer->offset = _passedBufferState[_amountSubmitted++].offset;
                     _instancedDataBuffer++;
                 }
@@ -92,9 +100,7 @@ namespace reach{
 
     void ParticleSystem::submit(entt::basic_registry<entt::entity>* registry){
         //submit particle systems as a component to render different batches
-        //auto renderables = registry->view<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
         auto group = registry->group<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
-        
         for(auto entity: group) {
             reach::TransformComponent &transform = group.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = group.get<RenderableComponent>(entity);
@@ -124,7 +130,6 @@ namespace reach{
 
             data.position = transform.position + glm::vec2(0, transform.scale.y);
             data.color = one;
-
             _setBuffer(data);
 
             
@@ -142,7 +147,7 @@ namespace reach{
 
         glBindVertexArray(_vertexArrayID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1000); 
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, _instancesCreated); 
         //glDrawElementsInstanced(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, (const void*)0, 100); 
         glBindVertexArray(0);
 

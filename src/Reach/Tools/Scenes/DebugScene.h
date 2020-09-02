@@ -50,7 +50,7 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
-                _system.init(TextureComponent());
+                _system.init(8192 / 2);
 
                 m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);

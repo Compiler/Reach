@@ -30,14 +30,20 @@ namespace reach{
         private:
 
             struct Particle{
-                
-
+                glm::vec2 position;
+                glm::vec2 startingVelocity, endingVelocity;
+                glm::vec4 startingColor, endingColor;
+                float remainingLife;
+                float totalLifeTime = 1.0f;
             };
+
+            std::vector<Particle> _particles;
+            uint32_t _particleCount;
 
 
         private:
             uint32_t _vertexArrayID, _bufferID, _instancedBufferID, _indexBufferID;
-            uint32_t _amountSubmitted;
+            uint32_t _amountSubmitted, _instancesCreated;
             uint16_t* _indices;
             ParticleInstancedData* _instancedDataBuffer;
             ParticleVertexData * _vertexDataBuffer;
@@ -52,7 +58,7 @@ namespace reach{
 
             ParticleSystem() = default;
 
-            void init(TextureComponent particles);
+            void init(uint32_t count = 1000);
             void begin();
             void submit(entt::basic_registry<entt::entity>* registry);
             void end();
