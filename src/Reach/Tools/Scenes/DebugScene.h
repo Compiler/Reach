@@ -72,13 +72,20 @@ namespace reach{
                 flip = !flip;
 
                 auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.startingVelocity = glm::vec2(-0.0025f, 0.0004f);
-                particleComp.endingVelocity = glm::vec2(0.0025f, 0.00004f);
-                particleComp.startingColor = glm::vec4(0.5, 0.2, 0.1, 1);
-                particleComp.endingColor = glm::vec4(0.7, 0.7, 0.7, 1);
+                particleComp.velocities.push_back(glm::vec2(-0.00025f, 0.0004f));
+                particleComp.velocities.push_back(glm::vec2(0.00025f, 0.00004f));
+                particleComp.velocities.push_back(glm::vec2(0.0f, 0.0004f));
+
+                particleComp.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 1));
+                particleComp.colors.push_back(glm::vec4(0.7, 0.7, 0.7, 1));
+                particleComp.colors.push_back(glm::vec4(0.0, 0.0, 1.0, 1));
+                particleComp.colors.push_back(glm::vec4(0.0, 1.0, 0.0, 1));
+                particleComp.colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
+
                 particleComp.emissionCount = 8192;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
+
 
 
             }

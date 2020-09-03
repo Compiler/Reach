@@ -51,9 +51,8 @@ namespace reach{
         glm::vec2 anchorPosition;
         uint16_t emissionCount;
         std::vector<RenderableParticle> particles;
-        glm::vec2 startingVelocity, endingVelocity;
-        glm::vec4 startingColor, endingColor;
-
+        std::vector<glm::vec2> velocities;
+        std::vector<glm::vec4> colors;
 
     };
 
