@@ -14,7 +14,7 @@ namespace reach{
         private:
             ParticleSystem _updater;
             MovementSystem _movement;
-            
+            ParticleEmitterComponent* particleComp;
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -71,18 +71,20 @@ namespace reach{
                 texComp.fileName = str;
                 flip = !flip;
 
-                auto &particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.velocities.push_back(glm::vec2(-0.00025f, 0.0004f));
-                particleComp.velocities.push_back(glm::vec2(0.00025f, 0.00004f));
-                particleComp.velocities.push_back(glm::vec2(0.0f, 0.0004f));
+                particleComp = &m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
+                particleComp->decayVariance = 2.0f;
 
-                particleComp.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 1));
-                particleComp.colors.push_back(glm::vec4(0.7, 0.7, 0.7, 1));
-                particleComp.colors.push_back(glm::vec4(0.0, 0.0, 1.0, 1));
-                particleComp.colors.push_back(glm::vec4(0.0, 1.0, 0.0, 1));
-                particleComp.colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
+                particleComp->velocities.push_back(glm::vec2(-0.00025f, 0.0004f));
+                particleComp->velocities.push_back(glm::vec2(0.00025f, 0.00004f));
+                particleComp->velocities.push_back(glm::vec2(0.0f, 0.0004f));
 
-                particleComp.emissionCount = 8192;
+                particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 1));
+                particleComp->colors.push_back(glm::vec4(0.7, 0.7, 0.7, 1));
+                particleComp->colors.push_back(glm::vec4(0.0, 0.0, 1.0, 1));
+                particleComp->colors.push_back(glm::vec4(0.0, 1.0, 0.0, 1));
+                particleComp->colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
+
+                particleComp->emissionCount = 8192;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
 
@@ -103,7 +105,8 @@ namespace reach{
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
-
+                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  particleComp->decayVariance -= 0.02f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  particleComp->decayVariance += 0.02f * reach::DELTA_TIME;
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);

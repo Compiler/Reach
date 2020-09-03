@@ -48,8 +48,10 @@ namespace reach{
 
     };
     struct ParticleEmitterComponent{
-        glm::vec2 anchorPosition;
         uint16_t emissionCount;
+        float decayMagnitude = 1000.0f;
+        float decayVariance = 0.0f;
+        glm::vec2 anchorPosition;
         std::vector<RenderableParticle> particles;
         std::vector<glm::vec2> velocities;
         std::vector<glm::vec4> colors;
