@@ -56,6 +56,14 @@ namespace reach{
         std::vector<glm::vec2> velocities;
         std::vector<glm::vec4> colors;
 
+
+        void addColorWeight(glm::vec4 color, uint16_t weight){
+            for(int i = 0; i < weight; i++) colors.push_back(color);
+        }
+        void addVelocityWeight(glm::vec2 velocity, uint16_t weight){
+            for(int i = 0; i < weight; i++) velocities.push_back(velocity);
+        }
+
     };
 
     struct MovementComponent{
