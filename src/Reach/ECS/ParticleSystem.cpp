@@ -16,21 +16,26 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry)
                 float t = emitter.particles[currentParticleIndex].timeAlive;
                 static glm::vec2 lerpedValue;
                 int index1 = (int)(t * emitter.velocities.size());
-                int index2 = index1 == emitter.velocities.size()-1 ? index1 : index1 + 1;
+                int index2 = index1 == emitter.velocities.size()-1 ? index1 * emitter.cycle : index1 + 1;
+                //REACH_DEBUG("Time: " << t  << " (" << t * emitter.velocities.size() << " = " << index1 << ", " << index2 << ")");
                 lerpedValue = reach::lerp(emitter.velocities[index1], emitter.velocities[index2], glm::vec2(t));
                 emitter.particles[currentParticleIndex].position.x += lerpedValue.x;
                 emitter.particles[currentParticleIndex].position.y += lerpedValue.y;
 
                 index1 = (int)(t * emitter.colors.size());
-                index2 = index1 == emitter.colors.size()-1 ? index1 : index1 + 1;
+                index2 = index1 == emitter.colors.size()-1 ? index1 * emitter.cycle : index1 + 1;
                 emitter.particles[currentParticleIndex].color =  reach::lerp(emitter.colors[index1], emitter.colors[index2], glm::vec4(t));
-                emitter.particles[currentParticleIndex].timeAlive += reach::DELTA_TIME / ((emitter.decayMagnitude) * Random::GenerateFloat()* emitter.decayVariance);
+
+
+                emitter.particles[currentParticleIndex].timeAlive += reach::DELTA_TIME / ((emitter.decayMagnitude) * emitter.decayVariance * Random::GenerateFloat());
                 if(emitter.particles[currentParticleIndex].timeAlive >= emitter.particles[currentParticleIndex].lifeTime){
                 //emitter.particles[currentParticleIndex].timeAlive = emitter.particles[currentParticleIndex].lifeTime;
                 //emitter.particles[currentParticleIndex].active = false;
                 
                 emitter.particles[currentParticleIndex].timeAlive = 0;
-                emitter.particles[currentParticleIndex].position = emitter.anchorPosition;
+
+                float neg = 1 - (Random::GenerateFloat() * 2);
+                emitter.particles[currentParticleIndex].position = emitter.anchorPosition + emitter.spawnOffset * (emitter.spawnVariance * neg);
                 emitter.particles[currentParticleIndex].active = true;
 
                 }

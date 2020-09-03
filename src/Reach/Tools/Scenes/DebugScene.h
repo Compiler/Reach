@@ -73,18 +73,22 @@ namespace reach{
 
                 particleComp = &m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
                 particleComp->decayVariance = 2.0f;
+                particleComp->decayMagnitude= 1000.0f;
 
-                particleComp->velocities.push_back(glm::vec2(-0.00025f, 0.0004f));
-                particleComp->velocities.push_back(glm::vec2(0.00025f, 0.00004f));
-                particleComp->velocities.push_back(glm::vec2(0.0f, 0.0004f));
-                particleComp->velocities.push_back(glm::vec2(0.0f, 0.00004f));
+                particleComp->spawnOffset = glm::vec2(0.05, 0.02);
+                particleComp->spawnVariance = 0.0f;
+
+
+                float v = 0.00025f;
+                particleComp->addVelocityWeight(glm::vec2(v, 0), 1);
+                particleComp->addVelocityWeight(glm::vec2(0, v*4), 1);
+                particleComp->addVelocityWeight(glm::vec2(-v*4, 0), 1);
+                particleComp->addVelocityWeight(glm::vec2(0, -v * 4), 1);
 
                 particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 1));
-                particleComp->colors.push_back(glm::vec4(0.7, 0.7, 0.7, 1));
                 particleComp->colors.push_back(glm::vec4(0.0, 0.0, 1.0, 1));
                 particleComp->colors.push_back(glm::vec4(0.0, 1.0, 0.0, 1));
                 particleComp->colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
-                particleComp->colors.push_back(glm::vec4(.2, 0.2, 0.2, 1));
 
                 particleComp->emissionCount = 8192;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
@@ -109,6 +113,12 @@ namespace reach{
                 glClearColor(col.r, col.g, col.b, col.a);
                 if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  particleComp->decayVariance -= 0.02f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  particleComp->decayVariance += 0.02f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  particleComp->decayMagnitude -= 2.f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  particleComp->decayMagnitude += 2.f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  particleComp->cycle = !particleComp->cycle;
+                if(particleComp->decayVariance <= 0) particleComp->decayVariance = 0.000000001f;
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);
