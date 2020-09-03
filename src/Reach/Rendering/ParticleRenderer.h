@@ -5,7 +5,7 @@
 #include <entt/entity/registry.hpp>
 #include <Reach/Rendering/TextureManager.h>
 #include <Reach/Tools/Utils/Random.h>
-#define REACH_MAX_RENDERABLE 65536
+#define REACH_MAX_RENDERABLE 65536 * 4
 #define REACH_VERTEXDATA_SIZE sizeof(reach::ParticleVertexData)
 #define REACH_BUFFER_SIZE REACH_MAX_RENDERABLES * REACH_VERTEXDATA_SIZE
 #define REACH_INDEX_BUFFER_SIZE REACH_MAX_RENDERABLE 
@@ -14,13 +14,13 @@ namespace reach{
 
     struct ParticleInstancedData{
         glm::vec2 offset;
+        glm::vec4 color;
 
     };
 
     struct ParticleVertexData{
         
         glm::vec2 position;
-        glm::vec4 color;
 
     };
 

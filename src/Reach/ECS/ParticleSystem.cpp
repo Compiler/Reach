@@ -13,17 +13,26 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry)
             if(emitter.particles.size() != emitter.emissionCount) emitter.particles.resize(emitter.emissionCount);
             static constexpr float _MAG_ = 0.0001f;
             for (int currentParticleIndex = 0; currentParticleIndex < emitter.emissionCount; currentParticleIndex++){
-                    float neg1 = 1 - (Random::GenerateFloat() * 2.0f);
-                    float neg2 = 1 - (Random::GenerateFloat() * 2.0f);
-                    emitter.particles[currentParticleIndex].position.x += emitter.startingVelocity.x * Random::GenerateFloat() * 2.0f * neg1;
-                    emitter.particles[currentParticleIndex].position.y += emitter.startingVelocity.y * Random::GenerateFloat() * 2.0f * neg2;
-                    emitter.particles[currentParticleIndex].timeAlive += reach::DELTA_TIME / (100000.0f * Random::GenerateFloat());
-                   // REACH_LOG("Time alive: " << emitter.particles[currentParticleIndex].timeAlive << " -- life time allowed to live " << emitter.particles[currentParticleIndex].lifeTime);
-                    if(emitter.particles[currentParticleIndex].timeAlive >= emitter.particles[currentParticleIndex].lifeTime){
-                        emitter.particles[currentParticleIndex].active = false;
-                       // REACH_WARN("Particle #" << currentParticleIndex << " is dead.");
-                    }
-                    currentParticleIndex++;
+                //float neg1 = 1 - (Random::GenerateFloat() * 2.0f);
+                //float neg2 = 1 - (Random::GenerateFloat() * 2.0f);
+                float t = emitter.particles[currentParticleIndex].timeAlive;
+                static glm::vec2 lerpedValue;
+                lerpedValue = reach::lerp(emitter.startingVelocity, emitter.endingVelocity, glm::vec2(t));
+                emitter.particles[currentParticleIndex].position.x += lerpedValue.x;
+                emitter.particles[currentParticleIndex].position.y += lerpedValue.y;
+                
+                emitter.particles[currentParticleIndex].color = reach::lerp(emitter.startingColor, emitter.endingColor, glm::vec4(t));
+                emitter.particles[currentParticleIndex].timeAlive += reach::DELTA_TIME / (10000.0f * Random::GenerateFloat());
+                if(emitter.particles[currentParticleIndex].timeAlive >= emitter.particles[currentParticleIndex].lifeTime){
+                //emitter.particles[currentParticleIndex].timeAlive = emitter.particles[currentParticleIndex].lifeTime;
+                //emitter.particles[currentParticleIndex].active = false;
+                
+                emitter.particles[currentParticleIndex].timeAlive = 0;
+                emitter.particles[currentParticleIndex].position = emitter.anchorPosition;
+                emitter.particles[currentParticleIndex].active = true;
+
+                }
+                currentParticleIndex++;
             }
 
 

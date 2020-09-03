@@ -3,7 +3,7 @@
 #include <Reach/ECS/System.h>
 #include <Reach/ECS/Components.h>
 #include <Reach/Tools/Utils/Random.h>
-
+#include <Reach/Tools/Utils/MathHelpers.h>
 namespace reach{
 
 

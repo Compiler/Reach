@@ -44,10 +44,11 @@ namespace reach{
         float timeAlive;
         bool active = true;
         glm::vec2 position;
+        glm::vec4 color;
 
     };
     struct ParticleEmitterComponent{
-
+        glm::vec2 anchorPosition;
         uint16_t emissionCount;
         std::vector<RenderableParticle> particles;
         glm::vec2 startingVelocity, endingVelocity;
