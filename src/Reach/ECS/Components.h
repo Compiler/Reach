@@ -57,7 +57,6 @@ namespace reach{
        
         glm::vec2 spawnOffset = glm::vec2(0,0);
 
-        glm::vec2 anchorPosition;
         std::vector<RenderableParticle> particles;
         std::vector<glm::vec2> velocities;
         std::vector<glm::vec4> colors;

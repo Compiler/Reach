@@ -35,7 +35,7 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry)
                 emitter.particles[currentParticleIndex].timeAlive = 0;
 
                 float neg = 1 - (Random::GenerateFloat() * 2);
-                emitter.particles[currentParticleIndex].position = emitter.anchorPosition + emitter.spawnOffset * (emitter.spawnVariance * neg);
+                emitter.particles[currentParticleIndex].position = transform.position + emitter.spawnOffset * (emitter.spawnVariance * neg);
                 emitter.particles[currentParticleIndex].active = true;
 
                 }
