@@ -33,7 +33,12 @@ ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
-OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS)
+PLAYER_SYSTEM_OBJS = InventorySystem.o
+
+REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS)
+GAME_OBJS = $(PLAYER_SYSTEM_OBJS)
+
+OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
@@ -69,6 +74,10 @@ $(ECS_OBJS): %.o: src/Reach/ECS/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+
+$(PLAYER_SYSTEM_OBJS): %.o: src/Sandbox/PlayerSystems/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
