@@ -14,10 +14,16 @@ namespace reach{
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
+
+
 	}
 	void StartupSystems::_initGlad(){
 		if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) REACH_DEBUG("Failed to init glad");
 		else { REACH_DEBUG("Glad initialized."); }
+
+
+		glEnable(GL_BLEND); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 	
 
 	}

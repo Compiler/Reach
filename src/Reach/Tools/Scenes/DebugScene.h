@@ -40,7 +40,10 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto entity  = addEntity(0, 0, 0.0025f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto entity  = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+
+                
+
                 auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -49,6 +52,28 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
+                auto e = m_registry.create();
+                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
+                auto& pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
+                pos.position = glm::vec2(0);
+                pos.scale = glm::vec2(1);
+                auto& rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
+                p.decayVariance = 2.0f;
+                p.decayMagnitude= 1000.0f;
+
+                p.spawnOffset = glm::vec2(0.05, 0.02);
+                p.spawnVariance = 0.0f;
+
+
+                float v = 0.000025f;
+                p.addVelocityWeight(glm::vec2(0, v), 1);
+                p.addVelocityWeight(glm::vec2(0, v/20), 1);
+                p.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
+                p.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
+                p.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
+
+                particleComp->emissionCount = 500;
+                
                 _system.init();
 
                 m_systemManager->addSystem(&_updater);
@@ -86,9 +111,9 @@ namespace reach{
                 particleComp->addVelocityWeight(glm::vec2(0, -v * 4), 1);
 
                 particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 1));
-                particleComp->colors.push_back(glm::vec4(0.0, 0.0, 1.0, 1));
-                particleComp->colors.push_back(glm::vec4(0.0, 1.0, 0.0, 1));
-                particleComp->colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
+                particleComp->colors.push_back(glm::vec4(0.0, 0.0, 1.0, 0.7));
+                particleComp->colors.push_back(glm::vec4(0.0, 1.0, 0.0, 0.4));
+                particleComp->colors.push_back(glm::vec4(1.0, 0.0, 0.0, 0.1));
 
                 particleComp->emissionCount = 8192;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
