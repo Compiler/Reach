@@ -154,6 +154,9 @@ namespace reach{
                 if(InputManager::isKeyPressed(KeyCodes::KEY_C))  particleComp->spawnVariance -= .2f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_V))  particleComp->spawnVariance += .2f * reach::DELTA_TIME;
 
+                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  particleComp->emissionCount -= 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  particleComp->emissionCount += 10;
+
                 if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  particleComp->cycle = !particleComp->cycle;
                 if(particleComp->decayVariance <= 0) particleComp->decayVariance = 0.000000001f;
                 _particleShader.use();

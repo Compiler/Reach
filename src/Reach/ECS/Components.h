@@ -43,19 +43,24 @@ namespace reach{
         float lifeTime = 1.0f;
         float timeAlive;
         bool active = true;
-        glm::vec2 position;
+        glm::vec2 position;//todo: xy = position, zw = last position
         glm::vec4 color;
 
     };
     struct ParticleEmitterComponent{
+        //how many particles to emit :D
         uint16_t emissionCount;
+        //the value at which we divide the amount of lifetime decays 
         float decayMagnitude = 1000.0f;
+        //what value to go between to multiple the magnitude by
         float decayVariance = 0.0f;
 
+        //how much to multiply a random value between -spawnVariance and spawnVariance against spawnOffset
         float spawnVariance = 1.0f;
-        bool cycle = false;
-       
+        //the amount of pixels to offset the particle 
         glm::vec2 spawnOffset = glm::vec2(0,0);
+       
+        bool cycle = false;
 
         std::vector<RenderableParticle> particles;
         std::vector<glm::vec2> velocities;
