@@ -45,6 +45,8 @@ ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC)
 
 all: main
 
+link: $(ENTRY_POINT)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
 main: $(ENTRY_POINT) $(OBJS)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)

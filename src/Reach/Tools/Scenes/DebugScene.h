@@ -100,22 +100,31 @@ namespace reach{
                 particleComp->decayVariance = 2.0f;
                 particleComp->decayMagnitude= 1000.0f;
 
-                particleComp->spawnOffset = glm::vec2(0.05, 0.02);
-                particleComp->spawnVariance = 0.0f;
+                particleComp->spawnOffset = glm::vec2(0.01, 0.01);
+                particleComp->spawnVariance = 1.5;
 
 
-                float v = 0.00025f;
+                float v = 0.00075f;
                 particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
                 particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
                 particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
                 particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
                 particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
                 particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v / 5), 1);
+                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v/5), 1);
+                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v/5), 1);
                 particleComp->colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
                 particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
                 particleComp->colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
 
-                particleComp->emissionCount = 8192;
+                particleComp->emissionCount = 8192*2;
+                particleComp->cycle = false;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
 
@@ -141,6 +150,9 @@ namespace reach{
 
                 if(InputManager::isKeyPressed(KeyCodes::KEY_T))  particleComp->decayMagnitude -= 2.f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  particleComp->decayMagnitude += 2.f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  particleComp->spawnVariance -= .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  particleComp->spawnVariance += .2f * reach::DELTA_TIME;
 
                 if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  particleComp->cycle = !particleComp->cycle;
                 if(particleComp->decayVariance <= 0) particleComp->decayVariance = 0.000000001f;
