@@ -51,28 +51,27 @@ namespace reach{
                 movement->set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
+                auto e = m_registry.create();
+                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
+                auto& pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
+                pos.position = glm::vec2(0);
+                pos.scale = glm::vec2(1);
+                auto& rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
+                p.decayVariance = 2.0f;
+                p.decayMagnitude= 1000.0f;
 
-                //auto e = m_registry.create();
-                //auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
-                //auto& pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
-                //pos.position = glm::vec2(0);
-                //pos.scale = glm::vec2(1);
-                //auto& rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
-                //p.decayVariance = 2.0f;
-                //p.decayMagnitude= 1000.0f;
-//
-                //p.spawnOffset = glm::vec2(0.05, 0.02);
-                //p.spawnVariance = 0.0f;
-//
-//
-                //float v = 0.000025f;
-                //p.addVelocityWeight(glm::vec2(0, v), 1);
-                //p.addVelocityWeight(glm::vec2(0, v/20), 1);
-                //p.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
-                //p.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
-                //p.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
-//
-                //particleComp->emissionCount = 500;
+                p.spawnOffset = glm::vec2(0.05, 0.02);
+                p.spawnVariance = 0.0f;
+
+
+                float v = 0.000025f;
+                p.addVelocityWeight(glm::vec2(0, v), 1);
+                p.addVelocityWeight(glm::vec2(0, v/20), 1);
+                p.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
+                p.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
+                p.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
+
+                particleComp->emissionCount = 500;
                 
                 _system.init();
 
@@ -123,7 +122,7 @@ namespace reach{
                 particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
                 particleComp->colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
 
-                particleComp->emissionCount = 8192*2;
+                particleComp->emissionCount = 8192;
                 particleComp->cycle = false;
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return e;
