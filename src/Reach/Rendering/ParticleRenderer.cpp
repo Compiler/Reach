@@ -64,6 +64,7 @@ namespace reach{
     void ParticleRenderer::submit(entt::basic_registry<entt::entity>* registry){
         //submit particle systems as a component to render different batches
         auto group = registry->group<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
+        REACH_DEBUG("E Begin"); 
         for(auto entity: group) {
             reach::TransformComponent &transform = group.get<TransformComponent>(entity);
             reach::RenderableComponent &renderable = group.get<RenderableComponent>(entity);
@@ -74,6 +75,7 @@ namespace reach{
                 _instancesCreated += emitter.particles[i].active;
                 _instancedDataBuffer += emitter.particles[i].active; 
             }
+            REACH_WARN("Emitter count: " << emitter.emissionCount);
 
 
             glUnmapBuffer(GL_ARRAY_BUFFER);

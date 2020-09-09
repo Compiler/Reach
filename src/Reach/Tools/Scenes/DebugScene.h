@@ -52,11 +52,11 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 auto e = m_registry.create();
-                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
                 auto& pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
                 pos.position = glm::vec2(0);
                 pos.scale = glm::vec2(1);
                 auto& rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
+                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
                 p.decayVariance = 2.0f;
                 p.decayMagnitude= 1000.0f;
 
@@ -64,14 +64,22 @@ namespace reach{
                 p.spawnVariance = 0.0f;
 
 
-                float v = 0.000025f;
-                p.addVelocityWeight(glm::vec2(0, v), 1);
-                p.addVelocityWeight(glm::vec2(0, v/20), 1);
-                p.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
-                p.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
-                p.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
+                float v = 0.0025f;
 
-                particleComp->emissionCount = 500;
+                p.addVelocityWeight(glm::vec2(-v / 6, v), 1);
+                p.addVelocityWeight(glm::vec2(v / 6, v), 1);
+
+                p.addVelocityWeight(glm::vec2(-v / 3, v), 1);
+                p.addVelocityWeight(glm::vec2(v / 3, v), 1);
+
+                p.addVelocityWeight(glm::vec2(-v, v), 1);
+                p.addVelocityWeight(glm::vec2(v, v), 1);
+                
+                p.colors.push_back(glm::vec4(1.0, 0.0, 0.0, 1));
+                p.colors.push_back(glm::vec4(0, 1, 0, 1));
+                p.colors.push_back(glm::vec4(0, 0, 1.0, 1));
+
+                p.emissionCount = 4096;
                 
                 _system.init();
 
