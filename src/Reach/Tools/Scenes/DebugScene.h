@@ -14,7 +14,7 @@ namespace reach{
         private:
             ParticleSystem _updater;
             MovementSystem _movement;
-            ParticleEmitterComponent* particleComp;
+            entt::entity p1e;
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -40,23 +40,23 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto entity  = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
                 
 
-                auto movement = &m_registry.emplace<MovementComponent>(entity, MovementComponent());
+                auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement->set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement->set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
-                auto e = m_registry.create();
-                auto& pos = m_registry.emplace<TransformComponent>(e, TransformComponent());
-                pos.position = glm::vec2(0);
+                entt::entity entity2 = m_registry.create();
+                auto& pos = m_registry.emplace<TransformComponent>(entity2, TransformComponent());
+                pos.position = glm::vec2(-1, 0);
                 pos.scale = glm::vec2(1);
-                auto& rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
-                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent()); 
+                auto& rend = m_registry.emplace<RenderableComponent>(entity2, RenderableComponent());
+                auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(entity2, ParticleEmitterComponent()); 
                 p.decayVariance = 2.0f;
                 p.decayMagnitude= 1000.0f;
 
@@ -80,6 +80,8 @@ namespace reach{
                 p.colors.push_back(glm::vec4(0, 0, 1.0, 1));
 
                 p.emissionCount = 4096;
+                p._db_name = "Second\0";
+                REACH_DEBUG("created emitter '" << p._db_name << "'");
                 
                 _system.init();
 
@@ -88,52 +90,55 @@ namespace reach{
 
             }
             entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
-                auto e = m_registry.create();
+                p1e = m_registry.create();
                 //REACH_DEBUG("Created entity");
-                auto pos = &m_registry.emplace<TransformComponent>(e, TransformComponent());
-                pos->position = glm::vec2(x, y);
-                pos->scale = glm::vec2(s);
+                auto &pos = m_registry.emplace<TransformComponent>(p1e, TransformComponent());
+                pos.position = glm::vec2(x, y);
+                pos.scale = glm::vec2(s);
 
-                auto &rend = m_registry.emplace<RenderableComponent>(e, RenderableComponent());
+                auto &rend = m_registry.emplace<RenderableComponent>(p1e, RenderableComponent());
                 rend.color = glm::vec4(r,g,b,1.0f);
 
-                auto &texComp= m_registry.emplace<TextureComponent>(e, TextureComponent());
+                auto &texComp= m_registry.emplace<TextureComponent>(p1e, TextureComponent());
                 static bool flip = true;
                 texComp.bitsPerPixel = bpp;
                 texComp.fileName = str;
                 flip = !flip;
 
-                particleComp = &m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp->decayVariance = 2.0f;
-                particleComp->decayMagnitude= 1000.0f;
+                auto& particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(p1e, ParticleEmitterComponent());
+                particleComp.decayVariance = 2.0f;
+                particleComp.decayMagnitude= 1000.0f;
 
-                particleComp->spawnOffset = glm::vec2(0.01, 0.01);
-                particleComp->spawnVariance = 1.5;
+                particleComp.spawnOffset = glm::vec2(0.01, 0.01);
+                particleComp.spawnVariance = 1.5;
 
 
                 float v = 0.00075f;
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v / 5), 1);
-                particleComp->addVelocityWeight(glm::vec2(-v / 2.0f, v/5), 1);
-                particleComp->addVelocityWeight(glm::vec2(v / 2.0f, v/5), 1);
-                particleComp->colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
-                particleComp->colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
-                particleComp->colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v / 5), 1);
+                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v/5), 1);
+                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v/5), 1);
+                particleComp.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
+                particleComp.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
+                particleComp.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
 
-                particleComp->emissionCount = 8192;
-                particleComp->cycle = false;
+                particleComp.emissionCount = 8192;
+                particleComp.cycle = false;
+                particleComp._db_name = "addEntity()\0";
+                REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
+
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
-                return e;
+                return p1e;
 
 
 
@@ -152,20 +157,24 @@ namespace reach{
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
-                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  particleComp->decayVariance -= 0.02f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  particleComp->decayVariance += 0.02f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance -= 0.02f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance += 0.02f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  particleComp->decayMagnitude -= 2.f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  particleComp->decayMagnitude += 2.f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayMagnitude -= 2.f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayMagnitude += 2.f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  particleComp->spawnVariance -= .2f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  particleComp->spawnVariance += .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance -= .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance += .2f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  particleComp->emissionCount -= 10;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  particleComp->emissionCount += 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount -= 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount += 10;
+                
 
-                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  particleComp->cycle = !particleComp->cycle;
-                if(particleComp->decayVariance <= 0) particleComp->decayVariance = 0.000000001f;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle = !m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)){
+                    REACH_WARN("Name: " << m_registry.get<reach::ParticleEmitterComponent>(p1e)._db_name);
+                }
+                if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);

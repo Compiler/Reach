@@ -48,6 +48,7 @@ namespace reach{
 
     };
     struct ParticleEmitterComponent{
+        const char* _db_name  = "default\0";
         //how many particles to emit :D
         uint16_t emissionCount;
         //the value at which we divide the amount of lifetime decays 
