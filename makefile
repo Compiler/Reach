@@ -33,10 +33,15 @@ ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = StartupSystems.o
+
+#game
 PLAYER_SYSTEM_OBJS = InventorySystem.o
+GAME_SCENES_OBJS = MainMenu.o
+
+
 
 REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS)
-GAME_OBJS = $(PLAYER_SYSTEM_OBJS)
+GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS)
 
 OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS)
 
@@ -80,6 +85,9 @@ $(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
 
 
 $(PLAYER_SYSTEM_OBJS): %.o: src/Sandbox/PlayerSystems/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(GAME_SCENES_OBJS): %.o: src/Sandbox/GameScenes/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 

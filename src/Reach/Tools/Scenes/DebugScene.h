@@ -166,8 +166,9 @@ namespace reach{
                 if(InputManager::isKeyPressed(KeyCodes::KEY_C))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance -= .2f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_V))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance += .2f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount -= 10;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount += 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  if(m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount <= 10) m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount = 1;
+                else m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount -= 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount += 10;
                 
 
                 if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle = !m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle;
