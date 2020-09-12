@@ -11,15 +11,21 @@ ENTRY_POINT = src/main.cpp
 GLAD_ROOT = outsourced/glad/
 GLAD_INC = $(GLAD_ROOT)include
 GLAD_SRC = $(GLAD_ROOT)src
+
 GLFW_ROOT = outsourced/glfw-3.3.2/MinGWmingw32/
 GLFW_INC = $(GLFW_ROOT)include
 GLFW_LIB = $(GLFW_ROOT)lib
 GLFW_SRC = $(GLFW_ROOT)../src
+
 STBIMAGE_ROOT = outsourced/stbimage
 GLM_ROOT = outsourced/glm/
 ENTT_ROOT = outsourced/entt
 ENTT_SRC = $(ENTT_ROOT)
-INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC)
+
+IMGUI_ROOT = outsourced/imgui
+IMGUI_SRC = $(IMGUI_ROOT)/
+
+INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC) -I $(IMGUI_SRC)
 LIBS = -L $(GLFW_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
 

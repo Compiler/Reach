@@ -24,6 +24,7 @@ namespace reach{
 			REACH_LOG("Scene Loaded");
 	}
 	void Scene::update(){
+		
 	}
 	void Scene::render(){
 	}

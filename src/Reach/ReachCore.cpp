@@ -8,6 +8,7 @@ namespace reach{
        	_windowRef = new reach::Window(1920, 1080, "Reach", false);
         StartupSystems::_initGlad();
 		StartupSystems::_initTextureManager();
+		StartupSystems::_initImGUI(_windowRef->getWindow());
 		glfwSetWindowUserPointer(_windowRef->getWindow(), this);
 		glfwSetKeyCallback(_windowRef->getWindow(), GLFWCallbacks::keyCallback);
 		glfwSetCursorPosCallback(_windowRef->getWindow(), GLFWCallbacks::cursorPositionCallback);
