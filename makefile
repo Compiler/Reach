@@ -1,6 +1,6 @@
 CXX = g++
 C++_VERSION = c++17
-CXXFLAGS = -std=$(C++_VERSION) -Wall -w -g
+CXXFLAGS = -std=$(C++_VERSION) -Wall -w -g -static-libgcc -static-libstdc++
 
 OUT_DIR = bin
 LAUNCHER_NAME = Reach
