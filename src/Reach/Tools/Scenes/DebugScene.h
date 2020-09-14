@@ -19,6 +19,7 @@ namespace reach{
             entt::entity p1e;
             b2World* _world;
             b2Body* groundBody;
+            b2PolygonShape groundShape;
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -39,9 +40,8 @@ namespace reach{
             void initBox(entt::entity e, float x, float y, float w, float h){
                     b2BodyDef bodyDef;
                     bodyDef.position.Set(x,y);
+                    bodyDef.type = b2_dynamicBody;
                     groundBody = _world->CreateBody(&bodyDef);
-                    b2PolygonShape groundShape;
-
                     groundShape.SetAsBox(w, h);
                     groundBody->CreateFixture(&groundShape, 1.0f);
 
@@ -57,10 +57,10 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
                 _world = new b2World(b2Vec2(0, -9.81f));
-
+                initBox(ee, 0, 0, 1,1);
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -167,7 +167,7 @@ namespace reach{
 
             }
             void update()override{
-                //_world->Step(1.0f/500.0f, 8, 3);
+                _world->Step(1.0f/5000.0f, 8, 3);
                 m_systemManager->update(&m_registry);
 
             }
@@ -193,11 +193,15 @@ namespace reach{
                     REACH_WARN("Name: " << m_registry.get<reach::ParticleEmitterComponent>(p1e)._db_name);
                 }
                 if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
-                static bool flip = false;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) flip = !flip;
+                static bool flip = true;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_RIGHT_SHIFT)) flip = !flip;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) groundBody->ApplyForceToCenter(b2Vec2(10, 0), true);
                 if(flip){
+                    b2Transform transform = groundBody->GetTransform();
                     m_registry.get<reach::TransformComponent>(p1e).position.x = groundBody->GetPosition().x;
                     m_registry.get<reach::TransformComponent>(p1e).position.y = groundBody->GetPosition().y;
+                    //groundBody->GetFixtureList()->GetShape()->m_radius;
+                    REACH_DEBUG("(" << groundBody->GetWorldPoint(b2Vec2(0,0)).x << ", " << groundBody->GetWorldPoint(b2Vec2(0,0)).y << ")");
                 }
                 _particleShader.use();
                 _system.begin();
