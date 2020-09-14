@@ -30,12 +30,12 @@ namespace reach{
 
 
 	void StartupSystems::_initImGUI(GLFWwindow* window){
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGui_ImplOpenGL3_Init("#version 460");
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui::StyleColorsDark();
-
+		//IMGUI_CHECKVERSION();
+		//ImGui::CreateContext();
+		//ImGui_ImplOpenGL3_Init("#version 460");
+		//ImGui_ImplGlfw_InitForOpenGL(window, true);
+		//ImGui::StyleColorsDark();
+//
 	}
 
 	void StartupSystems::initSubSystems(){

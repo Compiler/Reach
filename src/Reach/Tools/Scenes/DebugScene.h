@@ -8,6 +8,8 @@
 #include <Reach/ECS/ParticleSystem.h>
 #include <Reach/ECS/MovementSystem.h>
 
+#include <Box2D/box2d.h>
+
 namespace reach{
 
     class DebugScene : public Scene{
@@ -15,6 +17,8 @@ namespace reach{
             ParticleSystem _updater;
             MovementSystem _movement;
             entt::entity p1e;
+            b2World* _world;
+            b2Body* groundBody;
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -31,6 +35,19 @@ namespace reach{
                 }
 
             }
+
+            void initBox(entt::entity e, float x, float y, float w, float h){
+                    b2BodyDef bodyDef;
+                    bodyDef.position.Set(x,y);
+                    groundBody = _world->CreateBody(&bodyDef);
+                    b2PolygonShape groundShape;
+
+                    groundShape.SetAsBox(w, h);
+                    groundBody->CreateFixture(&groundShape, 1.0f);
+
+                    
+
+            }
         public:
 
             explicit DebugScene(){
@@ -42,7 +59,7 @@ namespace reach{
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
                 addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
-                
+                _world = new b2World(b2Vec2(0, -9.81f));
 
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
@@ -134,7 +151,7 @@ namespace reach{
 
                 particleComp.emissionCount = 8192;
                 particleComp.cycle = false;
-                particleComp._db_name = "addEntity()\0";
+                particleComp.lerpColors = false;
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
@@ -150,7 +167,7 @@ namespace reach{
 
             }
             void update()override{
-
+                //_world->Step(1.0f/500.0f, 8, 3);
                 m_systemManager->update(&m_registry);
 
             }
@@ -176,6 +193,12 @@ namespace reach{
                     REACH_WARN("Name: " << m_registry.get<reach::ParticleEmitterComponent>(p1e)._db_name);
                 }
                 if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
+                static bool flip = false;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) flip = !flip;
+                if(flip){
+                    m_registry.get<reach::TransformComponent>(p1e).position.x = groundBody->GetPosition().x;
+                    m_registry.get<reach::TransformComponent>(p1e).position.y = groundBody->GetPosition().y;
+                }
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);

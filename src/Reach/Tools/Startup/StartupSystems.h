@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/TextureManager.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_opengl3.h>
+// #include <imgui/imgui.h>
+// #include <imgui/imgui_impl_opengl3.h>
+// #include <imgui/imgui_impl_glfw.h>
 namespace reach{
     //static class
     class StartupSystems{

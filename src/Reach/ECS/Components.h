@@ -47,6 +47,11 @@ namespace reach{
         glm::vec4 color;
 
     };
+
+    struct CollidableComponent{
+        bool isCollidable = true;
+
+    };
     struct ParticleEmitterComponent{
         const char* _db_name  = "default\0";
         //how many particles to emit :D
@@ -66,6 +71,7 @@ namespace reach{
         std::vector<RenderableParticle> particles;
         std::vector<glm::vec2> velocities;
         std::vector<glm::vec4> colors;
+        bool lerpColors = false, lerpVelocities = false;
 
 
         void addColorWeight(glm::vec4 color, uint16_t weight){

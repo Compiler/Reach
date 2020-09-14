@@ -59,6 +59,7 @@
         "set": "cpp",
         "unordered_set": "cpp",
         "xtree": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "filesystem": "cpp"
     }
 }

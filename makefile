@@ -22,12 +22,15 @@ GLM_ROOT = outsourced/glm/
 ENTT_ROOT = outsourced/entt
 ENTT_SRC = $(ENTT_ROOT)
 
+BOX2D_INC = outsourced/box2d/include
+BOX2D_LIB = outsourced/box2d/
+
 IMGUI_ROOT = outsourced/imgui
 IMGUI_SRC = $(IMGUI_ROOT)/
 
-INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC) -I $(IMGUI_SRC)
-LIBS = -L $(GLFW_LIB)
-LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32
+INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC) -I $(IMGUI_SRC) -I $(BOX2D_INC)
+LIBS = -L $(GLFW_LIB) -L $(BOX2D_LIB)
+LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 -lbox2d
 
 OUT_DIR = bin
 CALLBACK_OBJS = GLFWCallbacks.o
@@ -44,12 +47,14 @@ STARTUP_OBJS = StartupSystems.o
 PLAYER_SYSTEM_OBJS = InventorySystem.o
 GAME_SCENES_OBJS = MainMenu.o
 
+#IMGUI
+IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o 
 
 
 REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS)
 GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS)
 
-OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS)
+OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS) #$(IMGUI_OBJS)
 
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
@@ -94,6 +99,9 @@ $(PLAYER_SYSTEM_OBJS): %.o: src/Sandbox/PlayerSystems/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(GAME_SCENES_OBJS): %.o: src/Sandbox/GameScenes/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(IMGUI_OBJS): %.o: outsourced/imgui/imgui/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 

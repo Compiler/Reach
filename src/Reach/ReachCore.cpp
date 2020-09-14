@@ -42,7 +42,29 @@ namespace reach{
 
     }
     void ReachCore::render(){
+		// ImGui_ImplOpenGL3_NewFrame();
+		// ImGui_ImplGlfw_NewFrame();
+		// ImGui::NewFrame();
+
+		
+		// bool open = true;
+		// ImGui::ShowDemoWindow(&open);
+		// if(ImGui::BeginMainMenuBar()){
+		// 	if(ImGui::BeginMenu("File")){
+		// 		ImGui::EndMenu();
+		// 	}
+		// 	ImGui::EndMainMenuBar();
+		// }
+
+		// ImGui::Begin("Demo window");
+    	// ImGui::Button("Hello!");
+    	// ImGui::End();
+
+		// ImGui::Render();
+		// ImGui::EndFrame();
 		_sceneManager.render();
+
+
         glfwSwapBuffers(_windowRef->getWindow());
         
 		InputManager::clear();
