@@ -37,15 +37,17 @@ namespace reach{
 
             }
 
-            void initBox(entt::entity e, float x, float y, float w, float h){
+            b2Body* initBox(entt::entity e, float x, float y, float w, float h, float density = 0.0){
                     b2BodyDef bodyDef;
                     bodyDef.position.Set(x,y);
-                    bodyDef.type = b2_dynamicBody;
-                    groundBody = _world->CreateBody(&bodyDef);
-                    groundShape.SetAsBox(w, h);
-                    groundBody->CreateFixture(&groundShape, 1.0f);
-
                     
+                    if(density != 0.0)bodyDef.type = b2_dynamicBody;
+                    else bodyDef.type = b2_staticBody;
+                    b2Body* body = _world->CreateBody(&bodyDef);
+                    groundShape.SetAsBox(w, h);
+                    body->CreateFixture(&groundShape, density);
+
+                    return body;
 
             }
         public:
@@ -57,10 +59,10 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(0, 1, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
                 _world = new b2World(b2Vec2(0, -9.81f));
-                initBox(ee, 0, 0, 1,1);
+                groundBody = initBox(ee, 0, 1, 0.01f, 0.01f, 1);
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -69,6 +71,7 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 entt::entity entity2 = m_registry.create();
+                initBox(entity2, 0, -1.0,  0.01f, 0.01f);
                 auto& pos = m_registry.emplace<TransformComponent>(entity2, TransformComponent());
                 pos.position = glm::vec2(-1, 0);
                 pos.scale = glm::vec2(1);
@@ -167,7 +170,7 @@ namespace reach{
 
             }
             void update()override{
-                _world->Step(1.0f/5000.0f, 8, 3);
+                _world->Step(1.0f/1000.0f, 8, 3);
                 m_systemManager->update(&m_registry);
 
             }
@@ -195,7 +198,7 @@ namespace reach{
                 if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
                 static bool flip = true;
                 if(InputManager::isKeyReleased(KeyCodes::KEY_RIGHT_SHIFT)) flip = !flip;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) groundBody->ApplyForceToCenter(b2Vec2(10, 0), true);
+                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) groundBody->ApplyLinearImpulseToCenter(b2Vec2(0.0001f, 0), true);
                 if(flip){
                     b2Transform transform = groundBody->GetTransform();
                     m_registry.get<reach::TransformComponent>(p1e).position.x = groundBody->GetPosition().x;
