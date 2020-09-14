@@ -57,14 +57,16 @@ namespace reach{
 		GLint textureUnits;
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &textureUnits);
 		for(int i = 0; i < textureUnits; i++){
-			this->uniform_set1Integer(std::string(std::string("u_textures[") + std::to_string(i) + "]").c_str(), i);
+			this->uniform_set1Integer(std::string(std::string("u_textures[") + std::to_string(i) + "]").c_str(), i, false);
 		}
+
+		REACH_DEBUG("Loaded Shader '" << vertexFile << "' and '" << fragmentFile << "'");
 
     }
 
 
-    void ShaderProgram::uniform_set1Integer(const char* name, int32_t value){
-        int id = _check_uniform_(name);
+    void ShaderProgram::uniform_set1Integer(const char* name, int32_t value, bool print){
+        int id = _check_uniform_(name, print);
 		//REACH_LOG("setting uniform '" << name << "' to value " << value << " at uniform id " << id);
         glUniform1i(id, value);
         GLenum error = glGetError();

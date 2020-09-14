@@ -9,6 +9,7 @@
 #include <Reach/ECS/MovementSystem.h>
 
 #include <Box2D/box2d.h>
+#include <Reach/Rendering/Box2DDebugRenderer.h>
 
 namespace reach{
 
@@ -17,9 +18,11 @@ namespace reach{
             ParticleSystem _updater;
             MovementSystem _movement;
             entt::entity p1e;
-            b2World* _world;
             b2Body* groundBody;
             b2PolygonShape groundShape;
+
+            Box2DDebugRenderer* debugDraw;
+
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -43,7 +46,7 @@ namespace reach{
                     
                     if(density != 0.0)bodyDef.type = b2_dynamicBody;
                     else bodyDef.type = b2_staticBody;
-                    b2Body* body = _world->CreateBody(&bodyDef);
+                    b2Body* body = m_world->CreateBody(&bodyDef);
                     groundShape.SetAsBox(w, h);
                     body->CreateFixture(&groundShape, density);
 
@@ -61,7 +64,18 @@ namespace reach{
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
                 auto ee = addEntity(0, 1, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
-                _world = new b2World(b2Vec2(0, -9.81f));
+                debugDraw = new Box2DDebugRenderer();
+                m_world = new b2World(b2Vec2(0, -9.81f));
+                m_world->SetDebugDraw(debugDraw);
+                uint32 flags = 0;
+                flags += b2Draw::e_shapeBit;
+                flags += b2Draw::e_jointBit;
+                flags += b2Draw::e_centerOfMassBit;
+                flags += b2Draw::e_aabbBit;
+                flags += b2Draw::e_pairBit;
+                debugDraw->SetFlags(flags);
+
+
                 groundBody = initBox(ee, 0, 1, 0.01f, 0.01f, 1);
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
@@ -170,13 +184,17 @@ namespace reach{
 
             }
             void update()override{
-                _world->Step(1.0f/1000.0f, 8, 3);
+                m_world->Step(1.0f/1000.0f, 8, 3);
                 m_systemManager->update(&m_registry);
 
             }
             void render()override{
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 glClearColor(col.r, col.g, col.b, col.a);
+                
+                
+
+
                 if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance -= 0.02f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance += 0.02f * reach::DELTA_TIME;
 
@@ -203,14 +221,15 @@ namespace reach{
                     b2Transform transform = groundBody->GetTransform();
                     m_registry.get<reach::TransformComponent>(p1e).position.x = groundBody->GetPosition().x;
                     m_registry.get<reach::TransformComponent>(p1e).position.y = groundBody->GetPosition().y;
-                    //groundBody->GetFixtureList()->GetShape()->m_radius;
-                    REACH_DEBUG("(" << groundBody->GetWorldPoint(b2Vec2(0,0)).x << ", " << groundBody->GetWorldPoint(b2Vec2(0,0)).y << ")");
                 }
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);
                 _system.end();
                 _system.flush();
+
+
+                m_world->DebugDraw();
                 //m_shaderProgram->use();
                 //m_renderer->begin();
                 //m_renderer->submit(&m_registry);

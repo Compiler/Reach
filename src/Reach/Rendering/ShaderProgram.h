@@ -15,9 +15,9 @@ namespace reach{
             uint32_t _loadShader(const char* fileName, int type);
             uint32_t _shaderProgram;
 
-            int _check_uniform_(const char* name){
+            int _check_uniform_(const char* name, bool print = true){
                 GLint uniformID = glGetUniformLocation(_shaderProgram, name);
-                if(uniformID == -1) REACH_WARN("'" << name << "' name not found in shader");
+                if(uniformID == -1 && print) REACH_WARN("'" << name << "' name not found in shader");
                 return uniformID;
             }
         public:
@@ -28,7 +28,7 @@ namespace reach{
             void use(){glUseProgram(_shaderProgram);}
 
 
-            void uniform_set1Integer(const char* name, int32_t value);
+            void uniform_set1Integer(const char* name, int32_t value, bool print = true);
 
 
     };
