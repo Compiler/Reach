@@ -28,15 +28,15 @@ BOX2D_LIB = outsourced/box2d/
 IMGUI_ROOT = outsourced/imgui
 IMGUI_SRC = $(IMGUI_ROOT)/
 
-INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC) -I $(IMGUI_SRC) -I $(BOX2D_INC)
-LIBS = -L $(GLFW_LIB) -L $(BOX2D_LIB)
-LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 -lbox2d
+INC=-I $(SRC_DIR)  -I $(GLAD_INC) -I $(GLFW_INC) -I $(GLM_ROOT) -I $(STBIMAGE_ROOT) -I $(ENTT_SRC) -I $(IMGUI_SRC) #-I $(BOX2D_INC)
+LIBS = -L $(GLFW_LIB) #-L $(BOX2D_LIB)
+LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 #-lbox2d
 
 OUT_DIR = bin
 CALLBACK_OBJS = GLFWCallbacks.o
 INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
-RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleRenderer.o Box2DDebugRenderer.o
+RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleRenderer.o #Box2DDebugRenderer.o
 FILE_OBJS = FileLoaderFactory.o
 ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o
 UTIL_OBJS = Random.o

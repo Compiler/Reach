@@ -5,7 +5,6 @@
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/ShaderProgram.h>
 #include <Reach/ECS/SystemManager.h>
-#include <Box2D/box2d.h>
 namespace reach{
 
 
@@ -22,11 +21,6 @@ namespace reach{
 		    const char* m_sceneName;
             reach::BatchRenderer* m_renderer;
             entt::basic_registry<entt::entity> m_registry;
-
-    //may not be initialized in every scene
-        protected:
-            b2World* m_world;
-
 
         public:
             explicit Scene();

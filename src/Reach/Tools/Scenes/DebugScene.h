@@ -8,9 +8,6 @@
 #include <Reach/ECS/ParticleSystem.h>
 #include <Reach/ECS/MovementSystem.h>
 
-#include <Box2D/box2d.h>
-#include <Reach/Rendering/Box2DDebugRenderer.h>
-
 namespace reach{
 
     class DebugScene : public Scene{
@@ -18,11 +15,6 @@ namespace reach{
             ParticleSystem _updater;
             MovementSystem _movement;
             entt::entity p1e;
-            b2Body* groundBody;
-            b2PolygonShape groundShape;
-
-            Box2DDebugRenderer* debugDraw;
-
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
             ParticleRenderer _system;
@@ -40,19 +32,7 @@ namespace reach{
 
             }
 
-            b2Body* initBox(entt::entity e, float x, float y, float w, float h, float density = 0.0){
-                    b2BodyDef bodyDef;
-                    bodyDef.position.Set(x,y);
-                    
-                    if(density != 0.0)bodyDef.type = b2_dynamicBody;
-                    else bodyDef.type = b2_staticBody;
-                    b2Body* body = m_world->CreateBody(&bodyDef);
-                    groundShape.SetAsBox(w, h);
-                    body->CreateFixture(&groundShape, density);
 
-                    return body;
-
-            }
         public:
 
             explicit DebugScene(){
@@ -62,21 +42,10 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0, 1, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-
-                debugDraw = new Box2DDebugRenderer();
-                m_world = new b2World(b2Vec2(0, -9.81f));
-                m_world->SetDebugDraw(debugDraw);
-                uint32 flags = 0;
-                flags += b2Draw::e_shapeBit;
-                flags += b2Draw::e_jointBit;
-                flags += b2Draw::e_centerOfMassBit;
-                flags += b2Draw::e_aabbBit;
-                flags += b2Draw::e_pairBit;
-                debugDraw->SetFlags(flags);
+                auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
 
-                groundBody = initBox(ee, 0, 1, 0.01f, 0.01f, 1);
+
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -85,9 +54,8 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 entt::entity entity2 = m_registry.create();
-                initBox(entity2, 0, -1.0,  0.01f, 0.01f);
                 auto& pos = m_registry.emplace<TransformComponent>(entity2, TransformComponent());
-                pos.position = glm::vec2(-1, 0);
+                pos.position = glm::vec2(-0.75, 0);
                 pos.scale = glm::vec2(1);
                 auto& rend = m_registry.emplace<RenderableComponent>(entity2, RenderableComponent());
                 auto& p = m_registry.emplace<reach::ParticleEmitterComponent>(entity2, ParticleEmitterComponent()); 
@@ -184,7 +152,6 @@ namespace reach{
 
             }
             void update()override{
-                m_world->Step(1.0f/1000.0f, 8, 3);
                 m_systemManager->update(&m_registry);
 
             }
@@ -214,14 +181,6 @@ namespace reach{
                     REACH_WARN("Name: " << m_registry.get<reach::ParticleEmitterComponent>(p1e)._db_name);
                 }
                 if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
-                static bool flip = true;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_RIGHT_SHIFT)) flip = !flip;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_ENTER)) groundBody->ApplyLinearImpulseToCenter(b2Vec2(0.0001f, 0), true);
-                if(flip){
-                    b2Transform transform = groundBody->GetTransform();
-                    m_registry.get<reach::TransformComponent>(p1e).position.x = groundBody->GetPosition().x;
-                    m_registry.get<reach::TransformComponent>(p1e).position.y = groundBody->GetPosition().y;
-                }
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);
@@ -229,7 +188,6 @@ namespace reach{
                 _system.flush();
 
 
-                m_world->DebugDraw();
                 //m_shaderProgram->use();
                 //m_renderer->begin();
                 //m_renderer->submit(&m_registry);
