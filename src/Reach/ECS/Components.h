@@ -90,4 +90,10 @@ namespace reach{
         void set(uint16_t key, glm::vec2 vel){keys.push_back(key);velocities.push_back(vel);}
 
     };
+
+    struct PhysicsComponent{
+        glm::vec2 velocity = glm::vec2(0);
+        float friction = 0.0f;
+
+    };
 }

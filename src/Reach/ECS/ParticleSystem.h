@@ -13,6 +13,7 @@ namespace reach{
         public:
 
             virtual void update(entt::basic_registry<entt::entity>* registry) override;
+            virtual ~ParticleSystem(){};
 
 
     };

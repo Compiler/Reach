@@ -6,6 +6,7 @@
 #include <Reach/Rendering/ParticleRenderer.h>
 
 #include <Reach/ECS/ParticleSystem.h>
+#include <Reach/ECS/PhysicsSystem.h>
 #include <Reach/ECS/MovementSystem.h>
 
 namespace reach{
@@ -14,6 +15,7 @@ namespace reach{
         private:
             ParticleSystem _updater;
             MovementSystem _movement;
+            PhysicsSystem _physics;
             entt::entity p1e;
         private:
             glm::vec4 col = glm::vec4(0.4, 0.2, 0.4, 1.0);
@@ -45,7 +47,6 @@ namespace reach{
                 auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
 
-
                 auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
                 float m = 0.001f;
                 movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -54,6 +55,8 @@ namespace reach{
                 movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 entt::entity entity2 = m_registry.create();
+                auto& physics = m_registry.emplace<PhysicsComponent>(entity2, PhysicsComponent());
+                
                 auto& pos = m_registry.emplace<TransformComponent>(entity2, TransformComponent());
                 pos.position = glm::vec2(-0.75, 0);
                 pos.scale = glm::vec2(1);
@@ -89,6 +92,7 @@ namespace reach{
 
                 m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
+                m_systemManager->addSystem(&_physics);
 
             }
             entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
