@@ -49,7 +49,10 @@ namespace reach{
     };
 
     struct CollidableComponent{
-        bool isCollidable = true;
+        uint16_t maskingBit, collidingBit;
+        //box collider
+        float width, height;
+        float x, y;
 
     };
     struct ParticleEmitterComponent{

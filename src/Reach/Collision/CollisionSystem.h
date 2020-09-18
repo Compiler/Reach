@@ -8,7 +8,7 @@ namespace reach{
 
 
         public:
-
+            static void getProjectedPosition(entt::basic_registry<entt::entity>* registry, glm::vec2& placeToGo);
             virtual void update(entt::basic_registry<entt::entity>* registry) override;
             virtual ~CollisionSystem(){};
 

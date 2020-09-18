@@ -47,12 +47,12 @@ namespace reach{
                 auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
 
-                auto movement = &m_registry.emplace<MovementComponent>(p1e, MovementComponent());
-                float m = 0.0001f;
-                movement->set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
-                movement->set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
-                movement->set(KeyCodes::KEY_W, glm::vec2(0, m));
-                movement->set(KeyCodes::KEY_S, glm::vec2(0, -m ));
+                auto& movement = m_registry.emplace<MovementComponent>(p1e, MovementComponent());
+                float m = 0.001f;
+                movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
+                movement.set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
+                movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
+                movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 entt::entity entity2 = m_registry.create();
                 auto& physics = m_registry.emplace<PhysicsComponent>(entity2, PhysicsComponent());
