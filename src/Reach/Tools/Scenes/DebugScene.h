@@ -87,6 +87,33 @@ namespace reach{
                 p.emissionCount = 4096;
                 p._db_name = "Second\0";
                 REACH_DEBUG("created emitter '" << p._db_name << "'");
+
+
+                auto ent = m_registry.create();
+                auto& trans = m_registry.emplace<TransformComponent>(ent);
+                trans.position = glm::vec2(0, -0.75);
+                trans.scale = glm::vec2(0.25f);
+                auto& renderable = m_registry.emplace<RenderableComponent>(ent);
+                renderable.color = glm::vec4(1,0,0,1);
+                
+                auto &texComp= m_registry.emplace<TextureComponent>(ent);
+                texComp.bitsPerPixel = 4;
+                texComp.fileName = "src/Resources/Textures/topgrass.png";
+
+
+
+                auto ent2 = m_registry.create();
+                auto& trans1 = m_registry.emplace<TransformComponent>(ent2);
+                trans1.position = glm::vec2(-1);
+                trans1.scale = glm::vec2(1);
+                auto& renderable1 = m_registry.emplace<RenderableComponent>(ent2);
+                renderable1.color = glm::vec4(1,0,0,1);
+                
+                auto &texComp1= m_registry.emplace<TextureComponent>(ent2);
+                texComp1.bitsPerPixel = 4;
+                texComp1.fileName = "landscape.png";
+
+
                 
                 _system.init();
 
@@ -206,11 +233,11 @@ namespace reach{
                 _system.flush();
 
 
-                //m_shaderProgram->use();
-                //m_renderer->begin();
-                //m_renderer->submit(&m_registry);
-                //m_renderer->end();
-                //m_renderer->flush();
+                m_shaderProgram->use();
+                m_renderer->begin();
+                m_renderer->submit(&m_registry);
+                m_renderer->end();
+                m_renderer->flush();
 
             }
             void unload()override{
