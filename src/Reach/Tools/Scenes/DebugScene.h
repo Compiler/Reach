@@ -98,8 +98,8 @@ namespace reach{
                 
                 auto &texComp= m_registry.emplace<TextureComponent>(ent);
                 texComp.bitsPerPixel = 4;
-                texComp.fileName = "src/Resources/Textures/topgrass.png";
-
+                texComp.fileName = REACH_INTERNAL_TEXTURE("topgrass.png");
+                TextureManager::registerTexture(texComp);
 
 
                 auto ent2 = m_registry.create();
@@ -111,8 +111,8 @@ namespace reach{
                 
                 auto &texComp1= m_registry.emplace<TextureComponent>(ent2);
                 texComp1.bitsPerPixel = 4;
-                texComp1.fileName = "landscape.png";
-
+                texComp1.fileName = REACH_INTERNAL_TEXTURE("landscape.png");
+                TextureManager::registerTexture(texComp1);
 
                 
                 _system.init();
