@@ -44,7 +44,7 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0, 0, 0.00725f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(0, 0, 0.00125f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
 
                 auto& movement = m_registry.emplace<MovementComponent>(p1e, MovementComponent());
@@ -120,26 +120,22 @@ namespace reach{
 
 
                 float v = 0.00075f;
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
-                particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v / 5), 1);
+                constexpr int COUNTER = 50000;
+                for(int i = 0; i < COUNTER; i++){
+                    particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
+                    particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v), 1);
+                }
                 particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v/5), 1);
                 particleComp.addVelocityWeight(glm::vec2(v / 2.0f, v/5), 1);
-                particleComp.colors.push_back(glm::vec4(1.0, 0.2, 0.1, 1));
-                particleComp.colors.push_back(glm::vec4(0.5, 0.2, 0.1, 0.8));
-                particleComp.colors.push_back(glm::vec4(0.2, 0.2, 0.2, 0.2));
 
-                particleComp.emissionCount = 8192;
-                particleComp.cycle = false;
+                particleComp.colors.push_back(glm::vec4(1.0, 0.2, 0.0, 1));
+                particleComp.addColorWeight(glm::vec4(1.0, 0.4, 0.1, 1), 2);
+                particleComp.addColorWeight(glm::vec4(0.6, 0.3, 0.1, 0.8), 2);
+                particleComp.addColorWeight(glm::vec4(0.2, 0.2, 0.2, 0.2), 3);
+                
+
+                particleComp.emissionCount = REACH_MAX_RENDERABLE / 4 - 1;
+                particleComp.cycle = true;
                 particleComp.lerpColors = false;
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
@@ -165,26 +161,44 @@ namespace reach{
                 
                 
 
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance -= 0.02f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance += 0.02f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayMagnitude -= 2.f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  m_registry.get<reach::ParticleEmitterComponent>(p1e).decayMagnitude += 2.f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance -= .2f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  m_registry.get<reach::ParticleEmitterComponent>(p1e).spawnVariance += .2f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_O))  if(m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount <= 10) m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount = 1;
-                else m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount -= 10;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  m_registry.get<reach::ParticleEmitterComponent>(p1e).emissionCount += 10;
-                
-
-                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle = !m_registry.get<reach::ParticleEmitterComponent>(p1e).cycle;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)){
-                    REACH_WARN("Name: " << m_registry.get<reach::ParticleEmitterComponent>(p1e)._db_name);
+                //debug code!
+                auto& emitter = m_registry.get<reach::ParticleEmitterComponent>(p1e);
+                auto& trans = m_registry.get<reach::TransformComponent>(p1e);
+                static bool toggle = false;
+                if(toggle){
+                    trans.position.x = (InputManager::getMouseMovedPosition().x - 960)/ 1920.0f;
+                    trans.position.y = ((InputManager::getMouseMovedPosition().y - 540)/ -1080.0f);
                 }
-                if(m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance <= 0) m_registry.get<reach::ParticleEmitterComponent>(p1e).decayVariance = 0.000000001f;
+                //REACH_DEBUG( trans.position.x << ", " <<  trans.position.y);
+                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  emitter.decayVariance -= 0.02f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  emitter.decayVariance += 0.02f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  emitter.decayMagnitude -= 2.f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  emitter.decayMagnitude += 2.f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  emitter.spawnVariance -= .002f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  emitter.spawnVariance += .002f * reach::DELTA_TIME;
+
+                if(InputManager::isKeyPressed(KeyCodes::KEY_O))
+                    if(emitter.emissionCount <= 10)
+                        emitter.emissionCount = 1;
+                    else
+                        emitter.emissionCount -= 10;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  
+                    if(emitter.emissionCount >= REACH_MAX_RENDERABLE - 10)
+                        emitter.emissionCount = REACH_MAX_RENDERABLE - 1;
+                    else
+                        emitter.emissionCount += 10;
+
+
+                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  emitter.cycle = !emitter.cycle;
+                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)){
+                    REACH_WARN("Name: " <<emitter._db_name);
+                    REACH_DEBUG(emitter.emissionCount);
+                    toggle = !toggle;
+                }
+                if(emitter.decayVariance <= 0) emitter.decayVariance = 0.000000001f;
+                
                 _particleShader.use();
                 _system.begin();
                 _system.submit(&m_registry);
