@@ -42,6 +42,7 @@ namespace reach{
     struct RenderableParticle{
         float lifeTime = 1.0f;
         float timeAlive;
+        float timeDead = 0;
         bool active = true;
         glm::vec2 position;//todo: xy = position, zw = last position
         glm::vec4 color;
@@ -57,6 +58,7 @@ namespace reach{
     };
     struct ParticleEmitterComponent{
         const char* _db_name  = "default\0";
+        glm::vec2 anchor = glm::vec2(0);
         //how many particles to emit :D
         uint16_t emissionCount;
         //the value at which we divide the amount of lifetime decays 

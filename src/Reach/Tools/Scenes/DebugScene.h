@@ -44,7 +44,7 @@ namespace reach{
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader = ShaderProgram();
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0, 0, 0.00125f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(0, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
 
                 auto& movement = m_registry.emplace<MovementComponent>(p1e, MovementComponent());
@@ -116,7 +116,7 @@ namespace reach{
                 particleComp.decayMagnitude= 1000.0f;
 
                 particleComp.spawnOffset = glm::vec2(0.01, 0.01);
-                particleComp.spawnVariance = 1.5;
+                particleComp.spawnVariance = 0.15;
 
 
                 float v = 0.00075f;
