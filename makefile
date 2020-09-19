@@ -36,6 +36,7 @@ OUT_DIR = bin
 CALLBACK_OBJS = GLFWCallbacks.o
 INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
+LAYER_OBJS = LayerManager.o Layer.o
 RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleRenderer.o #Box2DDebugRenderer.o
 FILE_OBJS = FileLoaderFactory.o
 ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o
@@ -96,6 +97,9 @@ $(ECS_OBJS): %.o: src/Reach/ECS/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(LAYER_OBJS): %.o: src/Reach/Tools/Scenes/Layers/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 

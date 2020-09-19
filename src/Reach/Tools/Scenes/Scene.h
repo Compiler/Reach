@@ -16,11 +16,9 @@ namespace reach{
         
         protected:
 
-            ShaderProgram* m_shaderProgram;
             SystemManager* m_systemManager;
 		    const char* m_sceneName;
-            reach::BatchRenderer* m_renderer;
-            entt::basic_registry<entt::entity> m_registry;
+
 
         public:
             explicit Scene();
