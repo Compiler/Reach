@@ -5,21 +5,16 @@
 #include <Reach/Tools/Logging/Logger.h>
 #include <Reach/Rendering/ShaderProgram.h>
 #include <Reach/ECS/SystemManager.h>
+#include <Reach/Tools/Scenes/Layers/LayerManager.h>
 namespace reach{
 
 
     class Scene{
-
-
         private:
 		    static uint8_t _COUNT;
-        
         protected:
-
-            SystemManager* m_systemManager;
 		    const char* m_sceneName;
-
-
+            LayerManager m_layerManager;
         public:
             explicit Scene();
             explicit Scene(const char* name);

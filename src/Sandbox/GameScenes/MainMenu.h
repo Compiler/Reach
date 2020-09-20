@@ -1,6 +1,6 @@
 #pragma once
 #include <Reach/Tools/Scenes/Scene.h>
-
+#include <Reach/Tools/Scenes/SceneManager.h>
 namespace sandbox{
 
     class MainMenu : public reach::Scene{

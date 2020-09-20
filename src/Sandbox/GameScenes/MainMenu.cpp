@@ -11,7 +11,7 @@ void sandbox::MainMenu::load(){
 }
 
 void sandbox::MainMenu::update(){
-    m_systemManager->update(&m_registry);
+    //m_systemManager->update(&m_registry);
 
 }
 
