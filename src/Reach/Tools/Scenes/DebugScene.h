@@ -14,8 +14,8 @@ namespace reach{
                 m_sceneName = "Debug Scene";
                 REACH_DEBUG(layer1.getName() << " initialized.");
                 REACH_DEBUG(layer2.getName() << " initialized.");
-                m_layerManager.addLayer(&layer1);
                 m_layerManager.addLayer(&layer2);
+                m_layerManager.addLayer(&layer1);
             }
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");

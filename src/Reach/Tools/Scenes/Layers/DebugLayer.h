@@ -77,30 +77,6 @@ namespace reach{
                 REACH_DEBUG("created emitter '" << p._db_name << "'");
 
 
-                auto ent = m_registry.create();
-                auto& trans = m_registry.emplace<TransformComponent>(ent);
-                trans.position = glm::vec2(0, -0.75);
-                trans.scale = glm::vec2(0.25f);
-                auto& renderable = m_registry.emplace<RenderableComponent>(ent);
-                renderable.color = glm::vec4(1,0,0,1);
-                
-                auto &texComp= m_registry.emplace<TextureComponent>(ent);
-                texComp.bitsPerPixel = 4;
-                texComp.fileName = REACH_INTERNAL_TEXTURE("topgrass.png");
-                TextureManager::registerTexture(texComp);
-
-
-                auto ent2 = m_registry.create();
-                auto& trans1 = m_registry.emplace<TransformComponent>(ent2);
-                trans1.position = glm::vec2(-1);
-                trans1.scale = glm::vec2(2);
-                auto& renderable1 = m_registry.emplace<RenderableComponent>(ent2);
-                renderable1.color = glm::vec4(1,0,0,1);
-                
-                auto &texComp1= m_registry.emplace<TextureComponent>(ent2);
-                texComp1.bitsPerPixel = 4;
-                texComp1.fileName = REACH_INTERNAL_TEXTURE("landscape.png");
-                TextureManager::registerTexture(texComp1);
 
                 
                 _system.init();
@@ -171,8 +147,7 @@ namespace reach{
             }
 
              void render()override{
-                glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-                glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+
                 
                 
 

@@ -68,7 +68,7 @@ link: $(ENTRY_POINT)
 main: $(ENTRY_POINT) $(OBJS)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
-ds:
+ds: $(LAYER_OBJS)
 	make ReachCore.o
 	make link
 	make run

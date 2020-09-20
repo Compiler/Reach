@@ -14,6 +14,8 @@ namespace reach{
 		uint8_t _nextLayer = 0;
 
 		bool _dirty = true;
+
+		glm::vec4 _clearColor;
 	public:
 
 		LayerManager() = default;
@@ -39,6 +41,7 @@ namespace reach{
 		void addLayerRef(const Layer& scene);
 		void addLayer(Layer scene);
 
+		void setClearColor(glm::vec4);
 
 		template<typename T>
 		T* emplaceLayer(){

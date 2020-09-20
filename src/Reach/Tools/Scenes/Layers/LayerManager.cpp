@@ -4,18 +4,14 @@ namespace reach{
 
 
     void LayerManager::update() {
-		//swap scene requested
-		if (_nextLayer != _currentLayer) _dirty = true;
-		if (_dirty) {
-			if(_nextLayer != _currentLayer) _layers[_currentLayer]->unload();
-			_dirty = false;
-			_currentLayer = _nextLayer;
-			_layers[_currentLayer]->load();
-		}
-		_layers[_currentLayer]->update();
+		for(int i = 0; i < _layers.size(); i++)
+			_layers[i]->update();
 	}
 	void LayerManager::render(){
-		_layers[_currentLayer]->render();
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        glClearColor(_clearColor.r, _clearColor.g, _clearColor.b, _clearColor.a);
+		for(int i = 0; i < _layers.size(); i++)
+			_layers[i]->render();
 	}
 
 	void LayerManager::addLayer(Layer* scene) {
@@ -43,6 +39,11 @@ namespace reach{
 	}
 	void LayerManager::setCurrentLayer(uint8_t sceneIndex) {
 		if (sceneIndex >= 0 && sceneIndex < _layers.size()) _currentLayer = sceneIndex;
+	}
+
+	void LayerManager::setClearColor(glm::vec4 newColor){
+		this->_clearColor = newColor;
+
 	}
 
 

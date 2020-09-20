@@ -18,7 +18,7 @@ namespace reach{
         public:
             explicit DebugBackgroundLayer(){
                     m_layerName = "DebugBackgroundLayer";
-
+                    m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                     auto ent = m_registry.create();
                     auto& trans = m_registry.emplace<TransformComponent>(ent);
                     trans.position = glm::vec2(0, -0.75);
@@ -35,7 +35,7 @@ namespace reach{
                     auto ent2 = m_registry.create();
                     auto& trans1 = m_registry.emplace<TransformComponent>(ent2);
                     trans1.position = glm::vec2(-1);
-                    trans1.scale = glm::vec2(2);
+                    trans1.scale = glm::vec2(0.5);
                     auto& renderable1 = m_registry.emplace<RenderableComponent>(ent2);
                     renderable1.color = glm::vec4(1,0,0,1);
                     
@@ -56,8 +56,6 @@ namespace reach{
                 }
 
                 void render()override{
-                    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-                    glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
                     m_shaderProgram->use();
                     m_renderer->begin();
                     m_renderer->submit(&m_registry);

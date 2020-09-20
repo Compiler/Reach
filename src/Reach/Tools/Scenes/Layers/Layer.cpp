@@ -34,8 +34,4 @@ namespace reach{
 	}
 
 
-	void Layer::setClearColor(glm::vec4 color){
-        m_clearColor = color;
-
-	}
 }

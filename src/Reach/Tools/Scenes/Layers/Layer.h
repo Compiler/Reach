@@ -20,8 +20,6 @@ namespace reach{
             ShaderProgram* m_shaderProgram;
             entt::basic_registry<entt::entity> m_registry;
 
-            glm::vec4 m_clearColor = glm::vec4(0.1);
-
 
         public:
             explicit Layer();
@@ -34,7 +32,6 @@ namespace reach{
 
             const char* getName(){return m_layerName;}
 
-            void setClearColor(glm::vec4 color);
 
     };
 
