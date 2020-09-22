@@ -5,7 +5,7 @@ namespace reach{
 	float DELTA_TIME = 0.0f;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
-       	_windowRef = new reach::Window(1920, 1080, "Reach", false);
+       	_windowRef = new reach::Window(720, 480, "Reach", false);
         StartupSystems::_initGlad();
 		StartupSystems::_initTextureManager();
 		StartupSystems::_initImGUI(_windowRef->getWindow());

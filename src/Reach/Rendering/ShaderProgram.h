@@ -29,6 +29,7 @@ namespace reach{
 
 
             void uniform_set1Integer(const char* name, int32_t value, bool print = true);
+            void uniform_set1Float(const char* name, float value);
 
 
     };

@@ -49,6 +49,7 @@ namespace reach{
 			if(!success) {
 				glGetProgramInfoLog(_shaderProgram, 512, NULL, infoLog);
 				REACH_ERROR("ERROR::SHADER::COMP::COMPILATION_FAILED\t "<< infoLog );
+				assert(false);
 			}
 		}
 
@@ -74,6 +75,15 @@ namespace reach{
 			REACH_ERROR("OpenGL Error 'uniform_set1Integer' : " << error);
         
     }
+
+    void ShaderProgram::uniform_set1Float(const char* name, float value){
+  		int id = _check_uniform_(name, true);
+        glUniform1fv(id, 1, &value);
+        GLenum error = glGetError();
+		if(error != GL_NO_ERROR)
+			REACH_ERROR("OpenGL Error 'uniform_set1float' : " << error);
+
+	}
 
 
 

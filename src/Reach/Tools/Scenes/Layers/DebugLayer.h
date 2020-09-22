@@ -169,6 +169,9 @@ namespace reach{
                 if(InputManager::isKeyPressed(KeyCodes::KEY_C))  emitter.spawnVariance -= .002f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_V))  emitter.spawnVariance += .002f * reach::DELTA_TIME;
 
+                if(InputManager::isKeyPressed(KeyCodes::KEY_F))  emitter.spawnVariance -= .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_G))  emitter.spawnVariance += .2f * reach::DELTA_TIME;
+
                 if(InputManager::isKeyPressed(KeyCodes::KEY_O))
                     if(emitter.emissionCount <= 10)
                         emitter.emissionCount = 1;

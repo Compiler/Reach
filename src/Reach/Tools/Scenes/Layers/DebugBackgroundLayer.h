@@ -18,7 +18,7 @@ namespace reach{
         public:
             explicit DebugBackgroundLayer(){
                     m_layerName = "DebugBackgroundLayer";
-                    m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
+                    m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("dimmer.frag"));
                     auto ent = m_registry.create();
                     auto& trans = m_registry.emplace<TransformComponent>(ent);
                     trans.position = glm::vec2(0, -0.75);
@@ -56,7 +56,11 @@ namespace reach{
                 }
 
                 void render()override{
+                    static int count = 0;
+                    count++;
+                    assert(count < 2);
                     m_shaderProgram->use();
+                    m_shaderProgram->uniform_set1Float("u_dimmer", 0.4f);
                     m_renderer->begin();
                     m_renderer->submit(&m_registry);
                     m_renderer->end();
