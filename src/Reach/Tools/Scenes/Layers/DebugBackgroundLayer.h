@@ -57,8 +57,8 @@ namespace reach{
 
                 void render()override{
                     static int count = 0;
-                    count++;
-                    assert(count < 2);
+                    //count++;
+                    //assert(count < 3);
                     m_shaderProgram->use();
                     m_shaderProgram->uniform_set1Float("u_dimmer", 0.4f);
                     m_renderer->begin();
