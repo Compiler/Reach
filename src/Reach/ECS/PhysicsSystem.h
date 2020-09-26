@@ -3,6 +3,7 @@
 #include <Reach/ECS/System.h>
 #include <Reach/ECS/Components.h>
 #include <entt/entt.hpp>
+#include <Reach/Tools/Input/InputManager.h>
 
 namespace reach{
 

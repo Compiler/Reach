@@ -81,7 +81,7 @@ namespace reach{
         glUniform1fv(id, 1, &value);
         GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
-			REACH_ERROR(""OpenGL Error 'uniform_set1float' : " << error");
+			REACH_ERROR("OpenGL Error 'uniform_set1float' : " << error);
 
 	}
 

@@ -42,6 +42,7 @@ FILE_OBJS = FileLoaderFactory.o
 ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
+COLLISION_OBJS = CollisionSystem.o
 STARTUP_OBJS = StartupSystems.o
 
 #game
@@ -100,6 +101,9 @@ $(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(LAYER_OBJS): %.o: src/Reach/Tools/Scenes/Layers/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(COLLISION_OBJS): %.o: src/Reach/Collision/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
