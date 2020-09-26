@@ -14,11 +14,8 @@ void reach::CollisionSystem::update(entt::basic_registry<entt::entity>* registry
 void reach::CollisionSystem::getProjectedPosition(entt::basic_registry<entt::entity>* registry, glm::vec2& placeToGo){
     auto group = registry->view<TransformComponent, CollidableComponent>();
     for(auto entity: group) {
-        auto&&[transform, physics] = group.get<TransformComponent, PhysicsComponent>(entity);
-        if(reach::InputManager::isKeyPressed(KeyCodes::KEY_8)){
-            physics.velocity += glm::vec2(0, -0.0000000981f);
-            REACH_LOG("POG!");
-        }
+        auto&&[transform, collidable] = group.get<TransformComponent, CollidableComponent>(entity);
+        if(collidable.x)
         //transform.position += physics.velocity;
     }
 

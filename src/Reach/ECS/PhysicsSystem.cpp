@@ -9,6 +9,5 @@ void reach::PhysicsSystem::update(entt::basic_registry<entt::entity>* registry){
     for(auto entity: group) {
         auto&&[transform, physics] = group.get<TransformComponent, PhysicsComponent>(entity);
         physics.velocity += _GRAVITY_;
-        transform.position += physics.velocity;
     }
 }

@@ -9,6 +9,7 @@
 
 #include <Reach/ECS/ParticleSystem.h>
 #include <Reach/ECS/PhysicsSystem.h>
+#include <Reach/ECS/WorldSystem.h>
 #include <Reach/ECS/MovementSystem.h>
 namespace reach{
 
@@ -16,9 +17,11 @@ namespace reach{
     class DebugLayer : public Layer{
 
         private:
+            WorldComponent _world;
             ParticleSystem _updater;
             MovementSystem _movement;
             PhysicsSystem _physics;
+            WorldSystem _worldSystem;
             entt::entity p1e;
 
             ParticleRenderer _system;
@@ -34,8 +37,12 @@ namespace reach{
 
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                auto& movement = m_registry.emplace<MovementComponent>(p1e, MovementComponent());
+                auto ee = addEntity(0.0, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto eee = addEntity(-0.625, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto eeee = addEntity(-0.75, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                addParticleEmitter(ee);
+                p1e = ee;
+                auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
                 float m = 0.001f;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement.set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
@@ -43,7 +50,7 @@ namespace reach{
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
                 entt::entity entity2 = m_registry.create();
-                auto& physics = m_registry.emplace<PhysicsComponent>(entity2, PhysicsComponent());
+                //auto& physics = m_registry.emplace<PhysicsComponent>(entity2, PhysicsComponent());
                 
                 auto& pos = m_registry.emplace<TransformComponent>(entity2, TransformComponent());
                 pos.position = glm::vec2(-0.75, 0);
@@ -84,25 +91,17 @@ namespace reach{
                 m_systemManager->addSystem(&_updater);
                 m_systemManager->addSystem(&_movement);
                 m_systemManager->addSystem(&_physics);
+                m_systemManager->addSystem(&_worldSystem);
+
+
+
+                auto worldEntity = m_registry.create();
+                auto& w = m_registry.emplace<WorldComponent>(worldEntity);
+                _world = w;
 
             }
-            entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
-                p1e = m_registry.create();
-                //REACH_DEBUG("Created entity");
-                auto &pos = m_registry.emplace<TransformComponent>(p1e, TransformComponent());
-                pos.position = glm::vec2(x, y);
-                pos.scale = glm::vec2(s);
-
-                auto &rend = m_registry.emplace<RenderableComponent>(p1e, RenderableComponent());
-                rend.color = glm::vec4(r,g,b,1.0f);
-
-                auto &texComp= m_registry.emplace<TextureComponent>(p1e, TextureComponent());
-                static bool flip = true;
-                texComp.bitsPerPixel = bpp;
-                texComp.fileName = str;
-                flip = !flip;
-
-                auto& particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(p1e, ParticleEmitterComponent());
+            void addParticleEmitter(entt::entity e){
+                auto& particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
                 particleComp.decayVariance = 2.0f;
                 particleComp.decayMagnitude= 1000.0f;
 
@@ -130,8 +129,28 @@ namespace reach{
                 particleComp.lerpColors = false;
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
+            }
+            entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
+                auto currentEntity = m_registry.create();
+                //REACH_DEBUG("Created entity");
+                auto &pos = m_registry.emplace<TransformComponent>(currentEntity, TransformComponent());
+                pos.position = glm::vec2(x, y);
+                pos.scale = glm::vec2(s);
+                auto& collidable = m_registry.emplace<reach::CollidableComponent>(currentEntity, CollidableComponent());
+
+                auto &rend = m_registry.emplace<RenderableComponent>(currentEntity, RenderableComponent());
+                rend.color = glm::vec4(r,g,b,1.0f);
+
+                auto &texComp= m_registry.emplace<TextureComponent>(currentEntity, TextureComponent());
+                static bool flip = true;
+                texComp.bitsPerPixel = bpp;
+                texComp.fileName = str;
+                flip = !flip;
+
+               
+
                 TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
-                return p1e;
+                return currentEntity;
 
 
 
@@ -144,6 +163,10 @@ namespace reach{
             }
             void update()override{
                 m_systemManager->update(&m_registry);
+
+                //auto& trans = m_registry.get<reach::TransformComponent>(p1e);
+                //trans.position = glm::vec2(0,0);
+                
             }
 
              void render()override{

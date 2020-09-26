@@ -15,6 +15,8 @@ namespace reach{
 
     class DebugBackgroundLayer : public Layer{
 
+
+
         public:
             explicit DebugBackgroundLayer(){
                     m_layerName = "DebugBackgroundLayer";
@@ -46,6 +48,10 @@ namespace reach{
                     texComp1.fileName = REACH_INTERNAL_TEXTURE("landscape.png");
                     TextureManager::registerTexture(texComp1);
 
+
+
+                    
+
                     
                 }
 
@@ -55,6 +61,8 @@ namespace reach{
                 }
                 void update()override{
                     m_systemManager->update(&m_registry);
+
+
                 }
 
                 void render()override{

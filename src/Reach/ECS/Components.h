@@ -3,6 +3,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <vector>
+#include <entt/entt.hpp>
 namespace reach{
 
 
@@ -55,6 +56,22 @@ namespace reach{
         float width, height;
         float x, y;
 
+    };
+    struct WorldComponent{
+        struct _SpatialSegment{
+            std::vector<entt::entity> entities;
+        };
+        std::vector<_SpatialSegment> spacialEntities;//strat array
+        uint16_t rowLimit = 4;
+        uint16_t columnLimit = 4;
+
+        WorldComponent(){
+            spacialEntities.resize(rowLimit * columnLimit);
+        }
+
+        WorldComponent(int newRowLimit, int newColumnLimit): rowLimit(newRowLimit), columnLimit(newColumnLimit){
+            spacialEntities.resize(newRowLimit * newColumnLimit);
+        }
     };
     struct ParticleEmitterComponent{
         const char* _db_name  = "default\0";
