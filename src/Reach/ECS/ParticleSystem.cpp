@@ -25,7 +25,7 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry)
 
                 index1 = (int)(t * emitter.colors.size());
                 index2 = index1 == emitter.colors.size()-1 ? index1 * !emitter.cycle : index1 + 1;
-                if(emitter.lerpColors) particle.color =  reach::lerp(emitter.colors[index1], emitter.colors[index2], glm::vec4(t));
+                if(emitter.lerpColors) particle.color =  reach::lerp(emitter.colors[index1], emitter.colors[index2], glm::vec4(t / emitter.colors.size()));
                 else particle.color = emitter.colors[index1];
 
                 particle.timeAlive += reach::DELTA_TIME / ((emitter.decayMagnitude) * emitter.decayVariance * Random::GenerateFloat());
