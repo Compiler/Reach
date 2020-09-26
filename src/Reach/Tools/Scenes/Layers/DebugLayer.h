@@ -37,7 +37,7 @@ namespace reach{
 
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
-                auto ee = addEntity(0.0, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(0.1, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto eee = addEntity(-0.625, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto eeee = addEntity(-0.75, 0, 0.003f, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addParticleEmitter(ee);
