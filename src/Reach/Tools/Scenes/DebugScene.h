@@ -3,6 +3,7 @@
 #include <Reach/Tools/Scenes/Layers/DebugLayer.h>
 #include <Reach/Tools/Scenes/Layers/DebugBackgroundLayer.h>
 #include <Reach/Tools/Files/FileLoaderFactory.h>
+#include <Reach/Tools/Utils/MathHelpers.h>
 namespace reach{
 
     class DebugScene : public Scene{
@@ -16,6 +17,9 @@ namespace reach{
                 REACH_DEBUG(layer2.getName() << " initialized.");
                 m_layerManager.addLayer(&layer2);
                 m_layerManager.addLayer(&layer1);
+                REACH_LOG(reach::roundInterval(1.45, 0.22));
+                REACH_LOG(reach::roundInterval(3.3, 2));
+                REACH_LOG(reach::roundInterval(3.3, 0.6));
             }
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");

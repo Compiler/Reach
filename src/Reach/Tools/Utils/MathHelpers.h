@@ -1,6 +1,18 @@
 #pragma once
+#include <math.h>
+#include <iostream>
 
 namespace reach{
+
+    constexpr float roundInterval(float number, float interval){
+        float n = number / interval;
+        float whole = floor(n );
+        float decimal = n - whole;
+        float returnedValue = interval * whole;
+        if(decimal >= 0.5) returnedValue += interval;
+        return returnedValue;
+        
+    }
 
     constexpr float lerp(float a, float b, float t) {
         if(a<=0 && b>=0 || a>=0 && b<=0) return t*b + (1-t)*a;
