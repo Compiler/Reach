@@ -11,7 +11,9 @@ namespace reach{
             float _zoom = 1.0f;
             glm::vec2 _dimensions = glm::vec2(1920, 1080);//defaults
             glm::vec2 _position = glm::vec2(0);
-            glm::mat4 _camera;
+            glm::mat4 _projection;
+            glm::mat4 _view;
+            glm::mat4 _combined;
 
             float _left, _right;
             float _top, _bottom;
@@ -31,8 +33,13 @@ namespace reach{
             void update();
 
 
-            inline glm::mat4 getCamera(){return _camera;}
-
+            inline glm::mat4 getCombined(){return _combined;}
+            inline float getWidth(){ return _dimensions.x;};
+            inline float getHeight(){ return _dimensions.y;};
+            inline float getTop(){ return _top;};
+            inline float getBottom(){ return _bottom;};
+            inline float getLeft(){ return _left;};
+            inline float getRight(){ return _right;};
 
     };
 

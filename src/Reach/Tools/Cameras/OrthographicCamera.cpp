@@ -3,28 +3,31 @@
 namespace reach{
 
 
-    explicit OrthographicCamera::OrthographicCamera(){
+    OrthographicCamera::OrthographicCamera(){
         _setBounds();
         update();
         
 
     }
     
-    explicit OrthographicCamera::OrthographicCamera(glm::vec2& position, float width, float height):_position(position), _dimensions(glm::vec2(width, height)){
+    OrthographicCamera::OrthographicCamera(glm::vec2& position, float width, float height):_position(position), _dimensions(glm::vec2(width, height)){
         _setBounds();
         update();
 
 
     }
     
-    explicit OrthographicCamera::OrthographicCamera(float xPos, float yPos, float width, float height): _position(glm::vec2(xPos, yPos)), _dimensions(glm::vec2(width, height)){
+    OrthographicCamera::OrthographicCamera(float xPos, float yPos, float width, float height): _position(glm::vec2(xPos, yPos)), _dimensions(glm::vec2(width, height)){
         _setBounds();
         update();
     }
 
     void OrthographicCamera::update(){
-        if(_cameraDirty){
-            _camera = glm::ortho(_left, _right, _bottom, _top, _nearClip, _farClip);
+        if(true/*_cameraDirty*/){
+            _projection = glm::ortho(_left, _right, _bottom, _top, _nearClip, _farClip);
+            _view = glm::mat4(1);
+            _view = glm::translate(_view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+            _combined = _projection * _view;
             _cameraDirty = false;
         }
         

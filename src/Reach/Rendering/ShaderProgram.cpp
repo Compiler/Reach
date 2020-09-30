@@ -85,6 +85,15 @@ namespace reach{
 
 	}
 
+	void ShaderProgram::uniform_set1Mat4(const char* name, const float* value){
+  		int id = _check_uniform_(name, true);
+        glUniformMatrix4fv(id, 1, GL_FALSE, value);
+        GLenum error = glGetError();
+		if(error != GL_NO_ERROR)
+			REACH_ERROR("OpenGL Error 'uniform_set1Mat4' : " << error);
+
+	}
+
 
 
 }

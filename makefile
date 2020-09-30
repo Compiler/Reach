@@ -39,6 +39,7 @@ SCENE_OBJS = SceneManager.o Scene.o
 LAYER_OBJS = LayerManager.o Layer.o
 RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleRenderer.o #Box2DDebugRenderer.o
 FILE_OBJS = FileLoaderFactory.o
+CAMERA_OBJS = OrthographicCamera.o
 ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o WorldSystem.o
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
@@ -53,7 +54,7 @@ GAME_SCENES_OBJS = MainMenu.o
 IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o 
 
 
-REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS)
+REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
 GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS)
 
 OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS) #$(IMGUI_OBJS)
@@ -69,7 +70,7 @@ link: $(ENTRY_POINT)
 main: $(ENTRY_POINT) $(OBJS)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
-ds: $(LAYER_OBJS)
+ds: $(LAYER_OBJS) 
 	make ReachCore.o
 	make link
 	make run
@@ -104,6 +105,9 @@ $(LAYER_OBJS): %.o: src/Reach/Tools/Scenes/Layers/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(COLLISION_OBJS): %.o: src/Reach/Collision/%.cpp
+	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+
+$(CAMERA_OBJS): %.o: src/Reach/Tools/Cameras/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
