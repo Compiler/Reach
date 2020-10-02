@@ -44,9 +44,9 @@ namespace reach{
                 
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(50, 500, 1, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                auto eee = addEntity(125, 500, _SZ_, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                auto eeee = addEntity(200, 500, _SZ_, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(800, 500, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto eee = addEntity(300, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4);
+                auto eeee = addEntity(500, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addParticleEmitter(ee);
                 p1e = ee;
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
@@ -57,7 +57,10 @@ namespace reach{
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
                 //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
+                for(int i = -cam.getWidth(); i < cam.getWidth(); i += (cam.getWidth() / 4)){
+                    addEntity(i, -cam.getHeight(), glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
+                }
                 
                 _system.init();
 
@@ -103,7 +106,7 @@ namespace reach{
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
             }
-            entt::entity addEntity(float x, float y, float s = 1.0f, float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
+            entt::entity addEntity(float x, float y, glm::vec2 s = glm::vec2(1), float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
                 auto currentEntity = m_registry.create();
                 //REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(currentEntity, TransformComponent());
@@ -144,51 +147,6 @@ namespace reach{
 
              void render()override{
 
-                
-                
-
-                //debug code!
-                auto& emitter = m_registry.get<reach::ParticleEmitterComponent>(p1e);
-                auto& trans = m_registry.get<reach::TransformComponent>(p1e);
-                static bool toggle = false;
-                if(toggle){
-                    //trans.position.x = (InputManager::getMouseMovedPosition().x - 960)/ 1920.0f;
-                    //trans.position.y = ((InputManager::getMouseMovedPosition().y - 540)/ -1080.0f);
-                    trans.position.x = InputManager::getMouseMovedPosition().x;
-                    trans.position.y = glm::abs(SCREEN_TOP - InputManager::getMouseMovedPosition().y);
-                }
-                //REACH_DEBUG( trans.position.x << ", " <<  trans.position.y);
-                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  emitter.decayVariance -= 0.02f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT))  emitter.decayVariance += 0.02f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_T))  emitter.decayMagnitude -= 2.f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  emitter.decayMagnitude += 2.f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  emitter.spawnVariance -= .02f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  emitter.spawnVariance += .02f * reach::DELTA_TIME;
-
-                if(InputManager::isKeyPressed(KeyCodes::KEY_F))  emitter.spawnOffset -= .2f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_G))  emitter.spawnOffset += .2f * reach::DELTA_TIME;
-//
-                if(InputManager::isKeyPressed(KeyCodes::KEY_O))
-                    if(emitter.emissionCount <= 10)
-                        emitter.emissionCount = 1;
-                    else
-                        emitter.emissionCount -= 10;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_P))  
-                    if(emitter.emissionCount >= REACH_MAX_RENDERABLE - 10)
-                        emitter.emissionCount = REACH_MAX_RENDERABLE - 1;
-                    else
-                        emitter.emissionCount += 10;
-//
-//
-                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE))  emitter.cycle = !emitter.cycle;
-                if(InputManager::isKeyReleased(KeyCodes::KEY_SPACE)){
-                    REACH_WARN("Name: " <<emitter._db_name);
-                    REACH_DEBUG(emitter.emissionCount);
-                    toggle = !toggle;
-                }
-                if(emitter.decayVariance <= 0) emitter.decayVariance = 0.000000001f;
                 
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
