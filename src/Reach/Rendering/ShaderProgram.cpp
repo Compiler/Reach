@@ -86,7 +86,9 @@ namespace reach{
 	}
 
 	void ShaderProgram::uniform_set1Mat4(const char* name, const float* value){
+		static int COUNT = 0;
   		int id = _check_uniform_(name, true);
+		REACH_DEBUG(COUNT++);
         glUniformMatrix4fv(id, 1, GL_FALSE, value);
         GLenum error = glGetError();
 		if(error != GL_NO_ERROR)

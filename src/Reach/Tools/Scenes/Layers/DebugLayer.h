@@ -44,13 +44,13 @@ namespace reach{
                 
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(50, 500, _SZ_, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(50, 500, 1, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto eee = addEntity(125, 500, _SZ_, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 auto eeee = addEntity(200, 500, _SZ_, 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                 addParticleEmitter(ee);
                 p1e = ee;
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
-                float m = 0.001f;
+                float m = 10;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement.set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
@@ -78,8 +78,8 @@ namespace reach{
                 particleComp.decayVariance = 2.0f;
                 particleComp.decayMagnitude= 1000.0f;
 
-                particleComp.spawnOffset = glm::vec2(0.01, 0.01);
-                particleComp.spawnVariance = 0.15;
+                particleComp.spawnOffset = glm::vec2(50);
+                particleComp.spawnVariance = 10;
 
 
                 float v = 15.75f;
@@ -99,7 +99,7 @@ namespace reach{
 
                 particleComp.emissionCount = REACH_MAX_RENDERABLE / 4 - 1;
                 particleComp.cycle = true;
-                particleComp.lerpColors = false;
+                particleComp.lerpColors = true;
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
             }
@@ -155,8 +155,7 @@ namespace reach{
                     //trans.position.x = (InputManager::getMouseMovedPosition().x - 960)/ 1920.0f;
                     //trans.position.y = ((InputManager::getMouseMovedPosition().y - 540)/ -1080.0f);
                     trans.position.x = InputManager::getMouseMovedPosition().x;
-                    trans.position.y = SCREEN_TOP - InputManager::getMouseMovedPosition().y;
-                    REACH_LOG(trans.position.y);
+                    trans.position.y = glm::abs(SCREEN_TOP - InputManager::getMouseMovedPosition().y);
                 }
                 //REACH_DEBUG( trans.position.x << ", " <<  trans.position.y);
                 if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT))  emitter.decayVariance -= 0.02f * reach::DELTA_TIME;
@@ -165,11 +164,11 @@ namespace reach{
                 if(InputManager::isKeyPressed(KeyCodes::KEY_T))  emitter.decayMagnitude -= 2.f * reach::DELTA_TIME;
                 if(InputManager::isKeyPressed(KeyCodes::KEY_Y))  emitter.decayMagnitude += 2.f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  emitter.spawnVariance -= .002f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  emitter.spawnVariance += .002f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_C))  emitter.spawnVariance -= .02f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_V))  emitter.spawnVariance += .02f * reach::DELTA_TIME;
 
-                if(InputManager::isKeyPressed(KeyCodes::KEY_F))  emitter.spawnVariance -= .2f * reach::DELTA_TIME;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_G))  emitter.spawnVariance += .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_F))  emitter.spawnOffset -= .2f * reach::DELTA_TIME;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_G))  emitter.spawnOffset += .2f * reach::DELTA_TIME;
 //
                 if(InputManager::isKeyPressed(KeyCodes::KEY_O))
                     if(emitter.emissionCount <= 10)
