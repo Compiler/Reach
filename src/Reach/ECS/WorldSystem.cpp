@@ -6,19 +6,21 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
         auto collidables = registry->view<TransformComponent, CollidableComponent>();
         for(auto entity: group) {
             auto& world = group.get<WorldComponent>(entity);
+            auto camera = world.worldCamera;
+            camera->update();
             float rLimit = world.rowLimit;
             float cLimit = world.columnLimit;
-            float ratioX = (SCREEN_RIGHT - SCREEN_LEFT) / rLimit;
-            float ratioY = (SCREEN_TOP - SCREEN_BOTTOM) / cLimit;
-            //REACH_WARN("Ratios: " << ratioX << ", " << ratioY);
+            float ratioX = (camera->getRight() - camera->getLeft()) / rLimit;
+            float ratioY = (camera->getTop() - camera->getBottom()) / cLimit;
+            REACH_WARN("Ratios: " << ratioX << ", " << ratioY);
             float segmentChunkStartX, segmentChunkStartY;
             for(int r = 0; r < world.rowLimit; r++){
                 for(int c = 0; c < world.columnLimit; c++){
                     int segmentIndex = (c*world.rowLimit) + r;
                     auto& segment = world.spacialEntities[segmentIndex];
                     segment.entities.clear();//FIX THIS
-                    segmentChunkStartX = SCREEN_LEFT + (ratioX * ((float)r));
-                    segmentChunkStartY = SCREEN_BOTTOM + (ratioY * ((float)c));
+                    segmentChunkStartX = camera->getLeft() + (ratioX * ((float)r));
+                    segmentChunkStartY = camera->getBottom() + (ratioY * ((float)c));
                     //REACH_DEBUG("SegmentChunkStart Position: " << segmentChunkStartX << ", " << segmentChunkStartY);
             
 
@@ -40,6 +42,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
+                    REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         auto bodyA = segment[k-1];
                         auto bodyB = segment[k];

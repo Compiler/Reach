@@ -4,6 +4,7 @@
 #include <glm/vec4.hpp>
 #include <vector>
 #include <entt/entt.hpp>
+#include <Reach/Tools/Cameras/OrthographicCamera.h>
 namespace reach{
 
 
@@ -64,7 +65,7 @@ namespace reach{
         std::vector<_SpatialSegment> spacialEntities;//strat array
         uint16_t rowLimit = 4;
         uint16_t columnLimit = 4;
-
+        OrthographicCamera* worldCamera;
         WorldComponent(){
             spacialEntities.resize(rowLimit * columnLimit);
         }

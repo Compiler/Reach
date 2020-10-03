@@ -50,15 +50,19 @@ namespace reach{
                 addParticleEmitter(ee);
                 p1e = ee;
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
-                float m = 10;
+                float m = 2.5f;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement.set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
-                //addEntity(0.1 , -0.9, 0.25f, 1, 0, 0, "src/Resources/Textures/tdirt.png", 4);
 
                 for(int i = -cam.getWidth(); i < cam.getWidth(); i += (cam.getWidth() / 4)){
                     addEntity(i, -cam.getHeight(), glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+
+                }
+
+                for(int i = -cam.getHeight(); i < cam.getHeight(); i += (cam.getHeight() / 4)){
+                    addEntity(-cam.getWidth(), i, glm::vec2(1000000, 1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
                 }
                 
@@ -73,6 +77,7 @@ namespace reach{
 
                 auto worldEntity = m_registry.create();
                 auto& w = m_registry.emplace<WorldComponent>(worldEntity);
+                w.worldCamera = &cam;
                 _world = w;
 
             }
@@ -138,16 +143,12 @@ namespace reach{
 
             }
             void update()override{
-                m_systemManager->update(&m_registry);
                 cam.update();
-                //auto& trans = m_registry.get<reach::TransformComponent>(p1e);
-                //trans.position = glm::vec2(0,0);
                 
+                m_systemManager->update(&m_registry);
             }
 
              void render()override{
-
-                
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 _system.begin();
@@ -155,18 +156,15 @@ namespace reach{
                 _system.end();
                 _system.flush();
 
-
                 m_shaderProgram->use();
                 m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 m_renderer->begin();
                 m_renderer->submit(&m_registry);
                 m_renderer->end();
                 m_renderer->flush();
-
             }
             void unload()override{
                 REACH_WARN(m_layerName << " Unloaded...");
-
             }
 
     };

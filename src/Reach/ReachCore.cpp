@@ -3,10 +3,10 @@
 namespace reach{
 
 	float DELTA_TIME = 0.0f;
-	float SCREEN_LEFT = -1;
-	float SCREEN_RIGHT = 1;
-	float SCREEN_BOTTOM = -1;
-	float SCREEN_TOP = 1;
+	float SCREEN_LEFT = 0;
+	float SCREEN_RIGHT = 1920;
+	float SCREEN_BOTTOM = 0;
+	float SCREEN_TOP = 1080;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
        	_windowRef = new reach::Window(1920, 1080, "Reach", false);
