@@ -41,12 +41,16 @@ namespace reach{
                 cam = OrthographicCamera(0, 0, 1920, 1080);
                 cam.update();
                 m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("pass.frag"));
+                m_shaderProgram->use();
+                m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 
                 _particleShader.loadShader(REACH_INTERNAL_SHADER("particle_pass.vert"), REACH_INTERNAL_SHADER("particle_pass.frag"));
+                _particleShader.use();
+                _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(800, 500, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                auto eee = addEntity(300, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4);
-                auto eeee = addEntity(500, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                auto ee = addEntity(800, 500, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
+                auto eee = addEntity(300, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4, true);
+                auto eeee = addEntity(1900, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
                 addParticleEmitter(ee);
                 p1e = ee;
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
@@ -111,13 +115,14 @@ namespace reach{
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
             }
-            entt::entity addEntity(float x, float y, glm::vec2 s = glm::vec2(1), float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3){
+            entt::entity addEntity(float x, float y, glm::vec2 s = glm::vec2(1), float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3, bool col = false){
                 auto currentEntity = m_registry.create();
                 //REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(currentEntity, TransformComponent());
                 pos.position = glm::vec2(x, y);
                 pos.scale = glm::vec2(s);
-                auto& collidable = m_registry.emplace<reach::CollidableComponent>(currentEntity, CollidableComponent());
+                if(col)
+                    auto& collidable = m_registry.emplace<reach::CollidableComponent>(currentEntity, CollidableComponent());
 
                 auto &rend = m_registry.emplace<RenderableComponent>(currentEntity, RenderableComponent());
                 rend.color = glm::vec4(r,g,b,1.0f);
@@ -150,14 +155,14 @@ namespace reach{
 
              void render()override{
                 _particleShader.use();
-                _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
+                //_particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 _system.begin();
                 _system.submit(&m_registry);
                 _system.end();
                 _system.flush();
 
                 m_shaderProgram->use();
-                m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
+                //m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 m_renderer->begin();
                 m_renderer->submit(&m_registry);
                 m_renderer->end();

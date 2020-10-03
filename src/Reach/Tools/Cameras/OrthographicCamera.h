@@ -34,12 +34,13 @@ namespace reach{
 
 
             inline glm::mat4 getCombined(){return _combined;}
-            inline float getWidth(){ return _dimensions.x;};
-            inline float getHeight(){ return _dimensions.y;};
-            inline float getTop(){ return _top;};
-            inline float getBottom(){ return _bottom;};
-            inline float getLeft(){ return _left;};
-            inline float getRight(){ return _right;};
+            inline float getWidth(){ return _dimensions.x;}
+            inline float getHeight(){ return _dimensions.y;}
+            inline float getTop(){ return _top;}
+            inline float getBottom(){ return _bottom;}
+            inline float getLeft(){ return _left;}
+            inline float getRight(){ return _right;}
+            inline bool needsUpdate(){ return _cameraDirty;}
 
     };
 

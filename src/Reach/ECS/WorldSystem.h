@@ -4,6 +4,7 @@
 #include <Reach/ECS/Components.h>
 #include <entt/entt.hpp>
 #include <Reach/Tools/Input/InputManager.h>
+#include <Reach/Tools/Utils/MathHelpers.h>
 
 namespace reach{
 

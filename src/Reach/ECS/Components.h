@@ -73,6 +73,11 @@ namespace reach{
         WorldComponent(int newRowLimit, int newColumnLimit): rowLimit(newRowLimit), columnLimit(newColumnLimit){
             spacialEntities.resize(newRowLimit * newColumnLimit);
         }
+
+        void clearSegments(){
+            for(int i = 0; i < spacialEntities.size(); i++) spacialEntities[i].entities.clear();
+
+        }
     };
     struct ParticleEmitterComponent{
         const char* _db_name  = "default\0";

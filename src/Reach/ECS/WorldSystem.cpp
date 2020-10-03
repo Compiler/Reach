@@ -12,9 +12,32 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             float cLimit = world.columnLimit;
             float ratioX = (camera->getRight() - camera->getLeft()) / rLimit;
             float ratioY = (camera->getTop() - camera->getBottom()) / cLimit;
-            REACH_WARN("Ratios: " << ratioX << ", " << ratioY);
+            if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE))
+                REACH_WARN("Ratios: " << ratioX << ", " << ratioY);
             float segmentChunkStartX, segmentChunkStartY;
-            for(int r = 0; r < world.rowLimit; r++){
+            world.clearSegments();
+            //Figure out why the segments arent starting at the correct ratios.. instead its off by a uniform amount
+            for(auto eCollidable: collidables) {
+                auto&&[transform, collidable] = collidables.get<TransformComponent, CollidableComponent>(eCollidable);
+                if( transform.position.x <= camera->getLeft() || transform.position.x >= camera->getRight() ||
+                    transform.position.y <= camera->getBottom() || transform.position.y >= camera->getTop() ){
+                    REACH_ERROR("Skipped");
+                    continue;
+                }
+                if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
+                    REACH_DEBUG("PositionX: " << transform.position.x);
+                    REACH_DEBUG("PositionY: " << transform.position.y);
+                    //REACH_DEBUG("RoundIntervalX: " << roundInterval(transform.position.x, ratioX));
+                    //REACH_DEBUG("RoundIntervalY: " << roundInterval(transform.position.y, ratioY));
+                }
+                int columnIndex = abs(roundInterval(transform.position.y, ratioY) / ratioY);
+                int rowIndex = abs(roundInterval(transform.position.x, ratioX) / ratioX);
+                int segmentIndex = (columnIndex*world.rowLimit) + rowIndex;
+                //REACH_LOG("ColInd: " << columnIndex << "\tRowInd: " << rowIndex << "\tSegINd: " << segmentIndex);
+                auto& segment = world.spacialEntities[segmentIndex];
+                segment.entities.push_back(eCollidable);
+            }
+            /*for(int r = 0; r < world.rowLimit; r++){
                 for(int c = 0; c < world.columnLimit; c++){
                     int segmentIndex = (c*world.rowLimit) + r;
                     auto& segment = world.spacialEntities[segmentIndex];
@@ -36,7 +59,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
 
                 }
 
-            }
+            }*/
 
             //begin doing things with segments
             for(int i = 0; i < world.spacialEntities.size(); i++){
@@ -49,8 +72,12 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         auto collidables = registry->view<TransformComponent, CollidableComponent>();
                         auto& bodyATrans = collidables.get<TransformComponent>(bodyA); 
                         auto& bodyBTrans = collidables.get<TransformComponent>(bodyB); 
+                        REACH_MAGENTA("_");
+                        REACH_DEBUG("(" << bodyATrans.position.x << ", " << bodyATrans.position.y << ")");
+                        REACH_DEBUG("(" << bodyBTrans.position.x << ", " << bodyBTrans.position.y << ")");
                         glm::vec2 bodyACenter = bodyATrans.position + (bodyATrans.scale / 2.0f);
                         glm::vec2 bodyBCenter = bodyBTrans.position + (bodyBTrans.scale / 2.0f);
+                        if(bodyACenter == bodyBCenter) REACH_ERROR("Same entity");
                         if(bodyATrans.position.x >= bodyBTrans.position.x && bodyATrans.position.x <= bodyBTrans.position.x + bodyBTrans.scale.x){
                             REACH_WARN("Collision");
                         }
