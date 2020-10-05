@@ -58,6 +58,12 @@ namespace reach{
         bool topAxis = true;
         bool bottomAxis = true;
         
+        void reset(){
+            leftAxis = true;
+            rightAxis = true;
+            topAxis = true;
+            bottomAxis = true;
+        }
 
     };
     struct WorldComponent{
