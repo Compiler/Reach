@@ -13,12 +13,13 @@ void reach::MovementSystem::update(entt::basic_registry<entt::entity>* registry)
             
         }
 
-        auto group2 = registry->view<MovementComponent, TransformComponent>(entt::exclude<PhysicsComponent>);
+        auto group2 = registry->view<MovementComponent, TransformComponent, CollidableComponent>(entt::exclude<PhysicsComponent>);
         for(auto entity: group2) {
-            auto&&[movement, transform] = group2.get<MovementComponent, TransformComponent>(entity);
+            auto&&[movement, transform, collidable] = group2.get<MovementComponent, TransformComponent, CollidableComponent>(entity);
             assert(movement.keys.size() == movement.velocities.size());
             for(int key = 0; key < movement.keys.size(); key++)
                 if(InputManager::isKeyPressed(movement.keys[key])){
+                    if(movement.velocities[key].x < 0 && !collidable.leftAxis) movement.velocities[key].x = 0;
                     transform.position += movement.velocities[key];
                 }
             

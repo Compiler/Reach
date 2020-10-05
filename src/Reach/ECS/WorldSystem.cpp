@@ -65,22 +65,29 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    REACH_LOG("2 is same sector");
+                    //REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         auto bodyA = segment[k-1];
                         auto bodyB = segment[k];
                         auto collidables = registry->view<TransformComponent, CollidableComponent>();
                         auto& bodyATrans = collidables.get<TransformComponent>(bodyA); 
                         auto& bodyBTrans = collidables.get<TransformComponent>(bodyB); 
-                        REACH_MAGENTA("_");
-                        REACH_DEBUG("(" << bodyATrans.position.x << ", " << bodyATrans.position.y << ")");
-                        REACH_DEBUG("(" << bodyBTrans.position.x << ", " << bodyBTrans.position.y << ")");
-                        glm::vec2 bodyACenter = bodyATrans.position + (bodyATrans.scale / 2.0f);
-                        glm::vec2 bodyBCenter = bodyBTrans.position + (bodyBTrans.scale / 2.0f);
-                        if(bodyACenter == bodyBCenter) REACH_ERROR("Same entity");
-                        if(bodyATrans.position.x >= bodyBTrans.position.x && bodyATrans.position.x <= bodyBTrans.position.x + bodyBTrans.scale.x){
-                            REACH_WARN("Collision");
+                        auto& bodyACollidable = collidables.get<CollidableComponent>(bodyA); 
+                        auto& bodyBCollidable = collidables.get<CollidableComponent>(bodyB); 
+                        //REACH_MAGENTA("_");
+                        //REACH_DEBUG("(" << bodyATrans.scale.x << ", " << bodyATrans.scale.y << ")");
+                        //REACH_DEBUG("(" << bodyBTrans.scale.x << ", " << bodyBTrans.scale.y << ")");
+                        if(bodyATrans.position == bodyBTrans.position) REACH_ERROR("Same entity");
+                        if((bodyATrans.position.x >= bodyBTrans.position.x && bodyATrans.position.x <= bodyBTrans.position.x + bodyBTrans.scale.x) ||
+                            (bodyBTrans.position.x >= bodyATrans.position.x && bodyBTrans.position.x <= bodyATrans.position.x + bodyATrans.scale.x)){
+                            if(bodyATrans.position.y >= bodyBTrans.position.y && bodyATrans.position.y <= bodyBTrans.position.y + bodyBTrans.scale.y||
+                            (bodyBTrans.position.y >= bodyATrans.position.y && bodyBTrans.position.y <= bodyATrans.position.y + bodyATrans.scale.y)){
+                                                          
+
+                            }  
                         }
+                        
+
                     }
 
                 }

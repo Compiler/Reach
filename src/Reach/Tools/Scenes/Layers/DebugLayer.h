@@ -60,14 +60,15 @@ namespace reach{
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
 
-                for(int i = -cam.getWidth(); i < cam.getWidth(); i += (cam.getWidth() / 4)){
-                    addEntity(i, -cam.getHeight(), glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                for(int i = 0; i < cam.getWidth(); i += (cam.getWidth() / 4)){
+                    addEntity(i, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                    REACH_DEBUG(i << ", 0)");
 
                 }
 
-                for(int i = -cam.getHeight(); i < cam.getHeight(); i += (cam.getHeight() / 4)){
-                    addEntity(-cam.getWidth(), i, glm::vec2(1000000, 1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-
+                for(int i = 0; i < cam.getHeight(); i += (cam.getHeight() / 4)){
+                    addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                    REACH_DEBUG("(0," << i);
                 }
                 
                 _system.init();

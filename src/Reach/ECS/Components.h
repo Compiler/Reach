@@ -53,9 +53,11 @@ namespace reach{
 
     struct CollidableComponent{
         uint16_t maskingBit, collidingBit;
-        //box collider
-        float width, height;
-        float x, y;
+        bool leftAxis = true;
+        bool rightAxis = true;
+        bool topAxis = true;
+        bool bottomAxis = true;
+        
 
     };
     struct WorldComponent{
