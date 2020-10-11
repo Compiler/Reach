@@ -88,10 +88,10 @@ namespace reach{
             }
             void addParticleEmitter(entt::entity e){
                 auto& particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.decayVariance = 2.0f;
+                particleComp.decayVariance = 0.250f;
                 particleComp.decayMagnitude= 1000.0f;
 
-                particleComp.spawnOffset = glm::vec2(50);
+                particleComp.spawnOffset = glm::vec2(1);
                 particleComp.spawnVariance = 10;
 
 

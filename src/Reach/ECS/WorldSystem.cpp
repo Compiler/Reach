@@ -107,9 +107,9 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         if(bodyAIsLeft){
                             leftBodyCollidable = &bodyACollidable;
                             rightBodyCollidable = &bodyBCollidable;
-                        }if(bodyAIsTop){
-                            topBodyCollidable = &bodyACollidable;
-                            bottomBodyCollidable = &bodyBCollidable;
+                        }if(!bodyAIsTop){
+                            topBodyCollidable = &bodyBCollidable;
+                            bottomBodyCollidable = &bodyACollidable;
                         }
                         bodyACollidable.reset();
                         bodyBCollidable.reset();
@@ -118,15 +118,15 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         //REACH_DEBUG("(" << bodyBTrans.scale.x << ", " << bodyBTrans.scale.y << ")");
                         if(leftPosition == rightPosition) REACH_ERROR("Same entity");
                         if(rightPosition.x >= leftPosition.x && rightPosition.x <= leftPosition.x + leftScale.x){ 
-                            if(topPosition.y >= bottomPosition.y && topPosition.y <= bottomPosition.y + bottomScale.x){
+                            if(topPosition.y >= bottomPosition.y && topPosition.y <= bottomPosition.y + bottomScale.y){
                                 leftBodyCollidable->rightAxis = false;
                                 rightBodyCollidable->leftAxis = false;
-                            }else if(bottomPosition.y >= topPosition.y && bottomPosition.y <= topPosition.y + topPosition.x){
+                            }else if(bottomPosition.y >= topPosition.y && bottomPosition.y <= topPosition.y + topPosition.y){
                                 rightBodyCollidable->rightAxis = false;
                                 leftBodyCollidable->leftAxis = false;
                             }
                         }else if(leftPosition.x >= rightPosition.x && leftPosition.x <= rightPosition.x + rightScale.x){
-                            if(topPosition.y >= bottomPosition.y && topPosition.y <= bottomPosition.y + bottomScale.x){
+                            if(topPosition.y >= bottomPosition.y && topPosition.y <= bottomPosition.y + bottomScale.y){
                                 rightBodyCollidable->rightAxis = false;
                                 leftBodyCollidable->leftAxis = false;
                             }else if(bottomPosition.y >= topPosition.y && bottomPosition.y <= topPosition.y + topPosition.x){
