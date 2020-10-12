@@ -57,23 +57,32 @@ IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_d
 REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
 GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS)
 
+LIB_OBJS = $(RENDERING_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
 OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS) #$(IMGUI_OBJS)
-
+LIB_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(LIB_OBJS))
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
-all: main
+all: main 
+
+static_lib:
+	ar ru bin/libreachengine.a $(OUT_OBJECTS)
+
+
 
 link: $(ENTRY_POINT)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
 main: $(ENTRY_POINT) $(OBJS)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
+	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 
 ds: $(LAYER_OBJS) 
 	make ReachCore.o
 	make link
+	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 	make run
+
 $(RENDERING_OBJS): %.o: src/Reach/Rendering/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
