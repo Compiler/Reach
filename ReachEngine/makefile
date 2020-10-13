@@ -33,18 +33,28 @@ LIBS = -L $(GLFW_LIB) #-L $(BOX2D_LIB)
 LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 #-lbox2d
 
 OUT_DIR = bin
-CALLBACK_OBJS = GLFWCallbacks.o
+
+CALLBACK_OBJS = 
+P_CALLBACK_OBJS = GLFWCallbacks.o
 INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
 LAYER_OBJS = LayerManager.o Layer.o
-RENDERING_OBJS = Window.o BatchRenderer.o ShaderProgram.o TextureManager.o ParticleRenderer.o #Box2DDebugRenderer.o
-FILE_OBJS = FileLoaderFactory.o
-CAMERA_OBJS = OrthographicCamera.o
-ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o WorldSystem.o
+
+RENDERING_OBJS = ParticleRenderer.o #Box2DDebugRenderer.o
+P_RENDERING_OBJS = BatchRenderer.o ShaderProgram.o TextureManager.o Window.o
+
+FILE_OBJS = 
+P_FILE_OBJS = FileLoaderFactory.o
+
+CAMERA_OBJS = 
+P_CAMERA_OBJS = OrthographicCamera.o
+
+ECS_OBJS = 
+P_ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o WorldSystem.o
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
-COLLISION_OBJS = CollisionSystem.o
-STARTUP_OBJS = StartupSystems.o
+STARTUP_OBJS = 
+P_STARTUP_OBJS = StartupSystems.o
 
 #game
 PLAYER_SYSTEM_OBJS = InventorySystem.o
@@ -52,15 +62,16 @@ GAME_SCENES_OBJS = MainMenu.o
 
 #IMGUI
 IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o 
-
-
+P_REACH_ENGINE_OBJS = $(P_RENDERING_OBJS) $(P_FILE_OBJS) $(P_STARTUP_OBJS) $(P_CAMERA_OBJS) $(P_CALLBACK_OBJS) $(P_ECS_OBJS)
 REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
-GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS)
+GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS) 
 
 LIB_OBJS = $(RENDERING_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
-OBJS =  $(REACH_ENGINE_OBJS) $(GAME_OBJS) #$(IMGUI_OBJS)
+OBJS =  $(REACH_ENGINE_OBJS) #$(GAME_OBJS) #$(IMGUI_OBJS)
+P_OBJS = $(P_REACH_ENGINE_OBJS)
 LIB_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(LIB_OBJS))
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
+P_OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(P_OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
 all: main 
@@ -74,7 +85,7 @@ link: $(ENTRY_POINT)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
 main: $(ENTRY_POINT) $(OBJS)
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $(P_OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 
 ds: $(LAYER_OBJS) 
