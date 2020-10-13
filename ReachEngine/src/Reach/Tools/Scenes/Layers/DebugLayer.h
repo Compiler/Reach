@@ -49,7 +49,7 @@ namespace reach{
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
                 auto ee = addEntity(800, 500, glm::vec2(25), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
-                auto eee = addEntity(300, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4, true);
+                auto eee = addEntity(300, 500, glm::vec2(100,400), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4, true);
                 //auto eeee = addEntity(1900, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
                 addParticleEmitter(ee);
                 p1e = ee;

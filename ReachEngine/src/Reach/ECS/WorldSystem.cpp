@@ -12,6 +12,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             float cLimit = world.columnLimit;
             float segmentSizeX = (camera->getRight() - camera->getLeft()) / rLimit;
             float segmentSizeY = (camera->getTop() - camera->getBottom()) / cLimit;
+            //Debug code
             if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE))
                 REACH_WARN("SegmentDimensions: (" << segmentSizeX << ", " << segmentSizeY << ")");
             float segmentChunkStartX, segmentChunkStartY;
@@ -24,6 +25,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     REACH_ERROR("Skipped");
                     continue;
                 }
+                //Debug code
                 if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
                     if(transform.position.x == 300 && transform.position.y == 500){
                         REACH_ERROR("Position: (" << transform.position.x << ", " << transform.position.y << ")");
@@ -41,37 +43,46 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 auto& segment = world.spacialEntities[segmentIndex];
                 segment.entities.push_back(eCollidable);
             }
-            /*for(int r = 0; r < world.rowLimit; r++){
-                for(int c = 0; c < world.columnLimit; c++){
-                    int segmentIndex = (c*world.rowLimit) + r;
-                    auto& segment = world.spacialEntities[segmentIndex];
-                    segment.entities.clear();//FIX THIS
-                    segmentChunkStartX = camera->getLeft() + (segmentSizeX * ((float)r));
-                    segmentChunkStartY = camera->getBottom() + (segmentSizeY * ((float)c));
-                    //REACH_DEBUG("SegmentChunkStart Position: " << segmentChunkStartX << ", " << segmentChunkStartY);
-            
-
-                    for(auto eCollidable: collidables) {
-                        auto&&[transform, collidable] = collidables.get<TransformComponent, CollidableComponent>(eCollidable);
-                        if(transform.position.x <= segmentChunkStartX + segmentSizeX && transform.position.x >= segmentChunkStartX) 
-                            if(transform.position.y <= segmentChunkStartY + segmentSizeY && transform.position.y >= segmentChunkStartY){
-                                segment.entities.push_back(eCollidable);
-                                //REACH_LOG("Added entity x,y = " << transform.position.x << ", " << transform.position.y <<  "to c,r = " << c << ", " << r);
-                            }
-                        
-                    }
-
-                }
-
-            }*/
 
             //begin doing things with segments
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    REACH_LOG("2 is same sector");
-                    for(int k = 0; k < segment.size(); k++){
-                        
+                    //REACH_LOG("2 is same sector");
+                    for(int k = 1; k < segment.size(); k++){
+                        auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
+                        auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
+                        TransformComponent* leftMostEntity, *rightMostEntity, *topMostEntity, *bottomMostEntity;
+                        if(bodyATransform.position.x <= bodyBTransform.position.x){
+                            leftMostEntity = &bodyATransform;
+                            rightMostEntity = &bodyBTransform;
+                        }else{
+                            leftMostEntity = &bodyBTransform;
+                            rightMostEntity = &bodyATransform;
+                        }
+                        if(bodyATransform.position.y > bodyBTransform.position.y){
+                            topMostEntity = &bodyATransform;
+                            bottomMostEntity = &bodyBTransform;
+                        }else{
+                            topMostEntity = &bodyBTransform;
+                            bottomMostEntity = &bodyATransform;
+                        }
+                        glm::vec2& leftMostPosition = leftMostEntity->position;
+                        glm::vec2& rightMostPosition = rightMostEntity->position;
+                        glm::vec2& topMostPosition = topMostEntity->position;
+                        glm::vec2& bottomMostPosition = bottomMostEntity->position;
+                        glm::vec2& leftMostScale = leftMostEntity->scale;
+                        glm::vec2& rightMostScale = rightMostEntity->scale;
+                        glm::vec2& topMostScale = topMostEntity->scale;
+                        glm::vec2& bottomMostScale = bottomMostEntity->scale;
+
+                        //if horizontal axis collision
+                        if(rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x){
+                            if(topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y){
+                                REACH_DEBUG("HIT");
+                            }
+
+                        }
                     }
 
                 }
