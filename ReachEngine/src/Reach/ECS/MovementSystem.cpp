@@ -20,8 +20,10 @@ void reach::MovementSystem::update(entt::basic_registry<entt::entity>* registry)
             for(int key = 0; key < movement.keys.size(); key++)
                 if(InputManager::isKeyPressed(movement.keys[key])){
                     glm::vec2 velocity = movement.velocities[key];
-                    if(velocity.x < 0 && !collidable.leftAxis) velocity.x = 0;
-                    if(velocity.x > 0 && !collidable.rightAxis) velocity.x = 0;
+                    if(velocity.x < 0) velocity.x *= collidable.leftAxis;
+                    if(velocity.x > 0) velocity.x *= collidable.rightAxis;
+                    if(velocity.y < 0) velocity.y *= collidable.bottomAxis;
+                    if(velocity.y > 0) velocity.y *= collidable.topAxis;
                     transform.position += velocity;
                 }
             

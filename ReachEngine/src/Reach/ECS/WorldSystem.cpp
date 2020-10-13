@@ -20,6 +20,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             //Figure out why the segments arent starting at the correct ratios.. instead its off by a uniform amount
             for(auto eCollidable: collidables) {
                 auto&&[transform, collidable] = collidables.get<TransformComponent, CollidableComponent>(eCollidable);
+                collidable.reset();
                 if( transform.position.x <= camera->getLeft() || transform.position.x >= camera->getRight() ||
                     transform.position.y <= camera->getBottom() || transform.position.y >= camera->getTop() ){
                     REACH_ERROR("Skipped");
@@ -52,36 +53,48 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     for(int k = 1; k < segment.size(); k++){
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
                         auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
-                        TransformComponent* leftMostEntity, *rightMostEntity, *topMostEntity, *bottomMostEntity;
+                        TransformComponent* leftMostEntityTransform, *rightMostEntityTransform, *topMostEntityTransform, *bottomMostEntityTransform;
+                        CollidableComponent* leftMostEntityCollidable, *rightMostEntityCollidable, *topMostEntityCollidable, *bottomMostEntityCollidable;
                         if(bodyATransform.position.x <= bodyBTransform.position.x){
-                            leftMostEntity = &bodyATransform;
-                            rightMostEntity = &bodyBTransform;
+                            leftMostEntityTransform = &bodyATransform;
+                            leftMostEntityCollidable = &bodyACollidable;
+                            rightMostEntityTransform = &bodyBTransform;
+                            rightMostEntityCollidable = &bodyBCollidable;
                         }else{
-                            leftMostEntity = &bodyBTransform;
-                            rightMostEntity = &bodyATransform;
+                            leftMostEntityTransform = &bodyBTransform;
+                            leftMostEntityCollidable = &bodyBCollidable;
+                            rightMostEntityTransform = &bodyATransform;
+                            rightMostEntityCollidable = &bodyACollidable;
                         }
                         if(bodyATransform.position.y > bodyBTransform.position.y){
-                            topMostEntity = &bodyATransform;
-                            bottomMostEntity = &bodyBTransform;
+                            topMostEntityTransform = &bodyATransform;
+                            topMostEntityCollidable = &bodyACollidable;
+                            bottomMostEntityTransform = &bodyBTransform;
+                            bottomMostEntityCollidable = &bodyBCollidable;
                         }else{
-                            topMostEntity = &bodyBTransform;
-                            bottomMostEntity = &bodyATransform;
+                            topMostEntityTransform = &bodyBTransform;
+                            topMostEntityCollidable = &bodyBCollidable;
+                            bottomMostEntityTransform = &bodyATransform;
+                            bottomMostEntityCollidable = &bodyACollidable;
+
                         }
-                        glm::vec2& leftMostPosition = leftMostEntity->position;
-                        glm::vec2& rightMostPosition = rightMostEntity->position;
-                        glm::vec2& topMostPosition = topMostEntity->position;
-                        glm::vec2& bottomMostPosition = bottomMostEntity->position;
-                        glm::vec2& leftMostScale = leftMostEntity->scale;
-                        glm::vec2& rightMostScale = rightMostEntity->scale;
-                        glm::vec2& topMostScale = topMostEntity->scale;
-                        glm::vec2& bottomMostScale = bottomMostEntity->scale;
-
-                        //if horizontal axis collision
-                        if(rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x){
-                            if(topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y){
-                                REACH_DEBUG("HIT");
+                        glm::vec2& leftMostPosition = leftMostEntityTransform->position;
+                        glm::vec2& rightMostPosition = rightMostEntityTransform->position;
+                        glm::vec2& topMostPosition = topMostEntityTransform->position;
+                        glm::vec2& bottomMostPosition = bottomMostEntityTransform->position;
+                        glm::vec2& leftMostScale = leftMostEntityTransform->scale;
+                        glm::vec2& rightMostScale = rightMostEntityTransform->scale;
+                        glm::vec2& topMostScale = topMostEntityTransform->scale;
+                        glm::vec2& bottomMostScale = bottomMostEntityTransform->scale;
+                        
+                        //TODO: Fix when u collide from underneath but cant move left or right during
+                        if(topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y){ //if vertical collision
+                            topMostEntityCollidable->bottomAxis = false;
+                            bottomMostEntityCollidable->topAxis = false;
+                            if(rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x){//if horizontal axis collision
+                                    rightMostEntityCollidable->leftAxis = false;
+                                    leftMostEntityCollidable-> rightAxis = false;
                             }
-
                         }
                     }
 
