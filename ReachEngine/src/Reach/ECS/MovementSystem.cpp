@@ -20,6 +20,8 @@ void reach::MovementSystem::update(entt::basic_registry<entt::entity>* registry)
             for(int key = 0; key < movement.keys.size(); key++)
                 if(InputManager::isKeyPressed(movement.keys[key])){
                     glm::vec2 velocity = movement.velocities[key];
+
+                    //TODO: make this work without if statements (implicitly through having a float posVelX, negVelX, posVelY, negVelY)
                     if(velocity.x < 0) velocity.x *= collidable.leftAxis;
                     if(velocity.x > 0) velocity.x *= collidable.rightAxis;
                     if(velocity.y < 0) velocity.y *= collidable.bottomAxis;
