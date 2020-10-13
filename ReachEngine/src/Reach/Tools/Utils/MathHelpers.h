@@ -4,12 +4,14 @@
 
 namespace reach{
 
-    constexpr float roundInterval(float number, float interval){
+    constexpr float roundInterval(float number, float interval, bool roundNearest=false){
         float n = number / interval;
         float whole = floor(n );
         float decimal = n - whole;
         float returnedValue = interval * whole;
-        if(decimal >= 0.5) returnedValue += interval;
+        if(roundNearest) {
+            if(decimal >= 0.5) returnedValue += interval;
+        }
         return returnedValue;
         
     }
