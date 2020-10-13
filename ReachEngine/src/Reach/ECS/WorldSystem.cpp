@@ -87,14 +87,13 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         glm::vec2& topMostScale = topMostEntityTransform->scale;
                         glm::vec2& bottomMostScale = bottomMostEntityTransform->scale;
                         
-                        //TODO: Fix when u collide from underneath but cant move left or right during
                         static constexpr int _SEP_ = 0;
                         if(topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y){ //if vertical collision
                             if(rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x){//if horizontal axis collision
-                                if(leftMostPosition.x + leftMostScale.x > rightMostPosition.x){ //a bottom only collision
+                                if(leftMostPosition.x + leftMostScale.x > rightMostPosition.x){ //a vertical only collision
                                     topMostEntityCollidable->bottomAxis = false;
                                     bottomMostEntityCollidable->topAxis = false;
-                                }else{
+                                }else{                                                          //a horizontal collision
                                     leftMostEntityCollidable-> rightAxis = false;
                                     rightMostEntityCollidable->leftAxis = false;
                                 }
