@@ -49,8 +49,11 @@ P_FILE_OBJS = FileLoaderFactory.o
 CAMERA_OBJS = 
 P_CAMERA_OBJS = OrthographicCamera.o
 
-ECS_OBJS = 
-P_ECS_OBJS = Components.o SystemManager.o ParticleSystem.o MovementSystem.o PhysicsSystem.o WorldSystem.o
+ECS_OBJS = PhysicsSystem.o WorldSystem.o MovementSystem.o 
+P_ECS_OBJS = Components.o SystemManager.o ParticleSystem.o 
+
+ECS_COLLISION_OBJS = CollisionSystem.o
+
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
 STARTUP_OBJS = 
@@ -63,15 +66,15 @@ GAME_SCENES_OBJS = MainMenu.o
 #IMGUI
 IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o 
 P_REACH_ENGINE_OBJS = $(P_RENDERING_OBJS) $(P_FILE_OBJS) $(P_STARTUP_OBJS) $(P_CAMERA_OBJS) $(P_CALLBACK_OBJS) $(P_ECS_OBJS)
-REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
+REACH_ENGINE_OBJS = $(RENDERING_OBJS) $(REACH_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS) $(ECS_COLLISION_OBJS)
 GAME_OBJS = $(PLAYER_SYSTEM_OBJS) $(GAME_SCENES_OBJS) 
 
 LIB_OBJS = $(RENDERING_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INPUT_OBJS) $(SCENE_OBJS) $(ECS_OBJS) $(UTIL_OBJS) $(LAYER_OBJS) $(CAMERA_OBJS)
-OBJS =  $(REACH_ENGINE_OBJS) #$(GAME_OBJS) #$(IMGUI_OBJS)
+OBJS =  $(REACH_ENGINE_OBJS) $(P_OBJS)#$(GAME_OBJS) #$(IMGUI_OBJS)
 P_OBJS = $(P_REACH_ENGINE_OBJS)
 LIB_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(LIB_OBJS))
 OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
-P_OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(P_OBJS))
+P_OUT_OBJECTS = #$(patsubst %.o, $(OUT_DIR)/%.o, $(P_OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
 all: main 
@@ -124,7 +127,7 @@ $(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
 $(LAYER_OBJS): %.o: src/Reach/Tools/Scenes/Layers/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
-$(COLLISION_OBJS): %.o: src/Reach/Collision/%.cpp
+$(ECS_COLLISION_OBJS): %.o: src/Reach/ECS/Collision/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 $(CAMERA_OBJS): %.o: src/Reach/Tools/Cameras/%.cpp
