@@ -8,4 +8,5 @@ namespace reach{
     extern float SCREEN_RIGHT;
     extern float SCREEN_BOTTOM;
     extern float SCREEN_TOP;
+    extern double MAX_FPS;
 }

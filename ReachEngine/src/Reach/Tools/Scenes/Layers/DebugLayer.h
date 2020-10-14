@@ -24,7 +24,6 @@ namespace reach{
             MovementSystem _movement;
             PhysicsSystem _physics;
             WorldSystem _worldSystem;
-            entt::entity p1e;
 
             ParticleRenderer _system;
             ShaderProgram _particleShader;
@@ -48,11 +47,10 @@ namespace reach{
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(800, 500, glm::vec2(25), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
-                auto eee = addEntity(300, 500, glm::vec2(100,400), 0, 0, 1, "src/Resources/Textures/pixeldirt.png", 4, true);
-                //auto eeee = addEntity(1900, 500, glm::vec2(_SZ_), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
-                //addParticleEmitter(ee);
-                p1e = ee;
+                auto ee = addEntity(800, 500, glm::vec2(25), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                auto eee = addEntity(300, 500, glm::vec2(100,400), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
+                auto eeee = addEntity(400, 20, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
+                addParticleEmitter(eeee);
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
                 float m = 2.25f;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
@@ -69,7 +67,7 @@ namespace reach{
                 }
 
                 for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
-                    addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                    addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
                     REACH_DEBUG("(0," << i);
                 }
                 
@@ -91,14 +89,14 @@ namespace reach{
             }
             void addParticleEmitter(entt::entity e){
                 auto& particleComp = m_registry.emplace<reach::ParticleEmitterComponent>(e, ParticleEmitterComponent());
-                particleComp.decayVariance = 0.250f;
+                particleComp.decayVariance = .0050f;
                 particleComp.decayMagnitude= 1000.0f;
 
-                particleComp.spawnOffset = glm::vec2(1);
-                particleComp.spawnVariance = 10;
+                particleComp.spawnOffset = glm::vec2(10);
+                particleComp.spawnVariance = 1;
 
 
-                float v = 15.75f;
+                float v = 1.75f;
                 constexpr int COUNTER = 50000;
                 for(int i = 0; i < COUNTER; i++){
                     particleComp.addVelocityWeight(glm::vec2(-v / 2.0f, v), 1);
@@ -113,8 +111,8 @@ namespace reach{
                 particleComp.addColorWeight(glm::vec4(0.2, 0.2, 0.2, 0.2), 3);
                 
 
-                //particleComp.emissionCount = REACH_MAX_RENDERABLE / 4 - 1;
-                particleComp.emissionCount = 1000;
+                particleComp.emissionCount = REACH_MAX_RENDERABLE / 4 - 1;
+                //particleComp.emissionCount = 1000;
                 particleComp.cycle = true;
                 particleComp.lerpColors = true;
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");

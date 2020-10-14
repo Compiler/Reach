@@ -27,6 +27,7 @@ namespace reach{
 		//a->setName("scene 1");
 		//a->_set_color_(0,0,1,1);
 		auto b = _sceneManager.emplaceScene<DebugScene>();
+	
 		_sceneManager.setCurrentScene(b);
     }
     void ReachCore::update(){

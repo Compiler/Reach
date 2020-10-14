@@ -17,21 +17,15 @@ namespace reach{
                 REACH_DEBUG(layer2.getName() << " initialized.");
                 m_layerManager.addLayer(&layer2);
                 m_layerManager.addLayer(&layer1);
-                REACH_LOG(reach::roundInterval(1.45, 0.22));
-                REACH_LOG(reach::roundInterval(3.3, 2));
-                REACH_LOG(reach::roundInterval(3.3, 0.6));
             }
             void load()override{
                 REACH_WARN(m_sceneName << " Loading...");
             }
             void update()override{
                 m_layerManager.update();
-
             }
             void render()override{
                 m_layerManager.render();
-                
-
             }
             void unload()override{
                 REACH_WARN(m_sceneName << " Unloaded...");

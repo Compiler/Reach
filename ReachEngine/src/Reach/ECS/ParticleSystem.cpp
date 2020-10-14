@@ -11,7 +11,6 @@ void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry)
             reach::RenderableComponent &renderable = renderables.get<RenderableComponent>(entity);
             reach::ParticleEmitterComponent &emitter = renderables.get<ParticleEmitterComponent>(entity);
             if(emitter.particles.size() != emitter.emissionCount) emitter.particles.resize(emitter.emissionCount);
-            static constexpr float _MAG_ = 0.0001f;
             for (int currentParticleIndex = 0; currentParticleIndex < emitter.emissionCount; currentParticleIndex++){
                 auto& particle = emitter.particles[currentParticleIndex];
                 float t = particle.timeAlive;

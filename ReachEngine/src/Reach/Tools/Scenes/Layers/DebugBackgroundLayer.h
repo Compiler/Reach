@@ -15,18 +15,23 @@ namespace reach{
 
     class DebugBackgroundLayer : public Layer{
 
+        private:
+            OrthographicCamera cam;
 
 
         public:
             explicit DebugBackgroundLayer(){
                     m_layerName = "DebugBackgroundLayer";
                     m_shaderProgram->loadShader(REACH_INTERNAL_SHADER("pass.vert"), REACH_INTERNAL_SHADER("dimmer.frag"));
+                     cam = OrthographicCamera(0, 0, 1920, 1080);
+                    cam.update();
                     m_shaderProgram->use();
                     m_shaderProgram->uniform_set1Float("u_dimmer", 0.4f);
+                    m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                     auto ent = m_registry.create();
                     auto& trans = m_registry.emplace<TransformComponent>(ent);
-                    trans.position = glm::vec2(0, -0.75);
-                    trans.scale = glm::vec2(0.25f);
+                    trans.position = glm::vec2(0,0);
+                    trans.scale = glm::vec2(100,100);
                     auto& renderable = m_registry.emplace<RenderableComponent>(ent);
                     renderable.color = glm::vec4(1,0,0,1);
                     
@@ -38,8 +43,8 @@ namespace reach{
 
                     auto ent2 = m_registry.create();
                     auto& trans1 = m_registry.emplace<TransformComponent>(ent2);
-                    trans1.position = glm::vec2(-1);
-                    trans1.scale = glm::vec2(2);
+                    trans1.position = glm::vec2(0);
+                    trans1.scale = glm::vec2(2400,1920);
                     auto& renderable1 = m_registry.emplace<RenderableComponent>(ent2);
                     renderable1.color = glm::vec4(1,0,0,1);
                     
