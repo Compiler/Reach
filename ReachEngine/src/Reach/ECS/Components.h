@@ -67,13 +67,15 @@ namespace reach{
 
     };
     struct WorldComponent{
-        struct _SpatialSegment{
-            std::vector<entt::entity> entities;
-        };
-        std::vector<_SpatialSegment> spacialEntities;//strat array
-        uint16_t rowLimit = 4;
-        uint16_t columnLimit = 4;
-        OrthographicCamera* worldCamera;
+        private:
+            struct _SpatialSegment{
+                std::vector<entt::entity> entities;
+            };
+            uint16_t rowLimit = 4;
+            uint16_t columnLimit = 4;
+        public:
+            OrthographicCamera* worldCamera;
+            std::vector<_SpatialSegment> spacialEntities;//strat array
         WorldComponent(){
             spacialEntities.resize(rowLimit * columnLimit);
         }
@@ -85,6 +87,27 @@ namespace reach{
         void clearSegments(){
             for(int i = 0; i < spacialEntities.size(); i++) spacialEntities[i].entities.clear();
 
+        }
+
+        void setLimits(int newRowLimit, int newColumnLimit){
+            rowLimit = newRowLimit;
+            columnLimit = newColumnLimit;
+            spacialEntities.resize(rowLimit * columnLimit);
+        }
+        void setRowLimit(int newRowLimit){
+            rowLimit = newRowLimit;
+            spacialEntities.resize(rowLimit * columnLimit);
+        }
+        void setColumnLimit(int newColumnLimit){
+            columnLimit = newColumnLimit;
+            spacialEntities.resize(rowLimit * columnLimit);
+        }
+
+        uint16_t getRowLimit(){
+            return rowLimit;
+        }
+        uint16_t getColumnLimit(){
+            return columnLimit;
         }
     };
     struct ParticleEmitterComponent{

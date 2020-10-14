@@ -54,13 +54,13 @@ namespace reach{
                 //addParticleEmitter(ee);
                 p1e = ee;
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
-                float m = 0.25f;
+                float m = 2.25f;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
                 movement.set(KeyCodes::KEY_D, glm::vec2(m, 0 ));
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
 
-                constexpr int _WORLD_GRID_LIMIT_ = 4;
+                constexpr int _WORLD_GRID_LIMIT_ = 16;
                 for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_)){
                     addEntity(i, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                     REACH_DEBUG(i << ", 0)");
@@ -84,7 +84,7 @@ namespace reach{
                 auto worldEntity = m_registry.create();
                 auto& w = m_registry.emplace<WorldComponent>(worldEntity);
                 w.worldCamera = &cam;
-                w.rowLimit = w.columnLimit = _WORLD_GRID_LIMIT_;
+                w.setLimits(_WORLD_GRID_LIMIT_, _WORLD_GRID_LIMIT_);
                 _world = w;
 
             }

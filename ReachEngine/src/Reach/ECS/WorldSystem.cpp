@@ -2,14 +2,15 @@
 
 //TODO: no loops for this
 void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
+        int count = 0;
         auto group = registry->view<WorldComponent>();
         auto collidables = registry->view<TransformComponent, CollidableComponent>();
         for(auto entity: group) {
             auto& world = group.get<WorldComponent>(entity);
             auto camera = world.worldCamera;
             camera->update();
-            float rLimit = world.rowLimit;
-            float cLimit = world.columnLimit;
+            float rLimit = world.getRowLimit();
+            float cLimit = world.getColumnLimit();
             float segmentSizeX = (camera->getRight() - camera->getLeft()) / rLimit;
             float segmentSizeY = (camera->getTop() - camera->getBottom()) / cLimit;
             //Debug code
@@ -17,7 +18,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 REACH_WARN("SegmentDimensions: (" << segmentSizeX << ", " << segmentSizeY << ")");
             float segmentChunkStartX, segmentChunkStartY;
             world.clearSegments();
-            //Figure out why the segments arent starting at the correct ratios.. instead its off by a uniform amount
+            //Figure out why the segments arent starting at the correct ratios.. instead its off by a uniform amountasw
             for(auto eCollidable: collidables) {
                 auto&&[transform, collidable] = collidables.get<TransformComponent, CollidableComponent>(eCollidable);
                 collidable.reset();
@@ -26,6 +27,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     REACH_ERROR("Skipped");
                     continue;
                 }
+
                 //Debug code
                 if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
                     if(transform.position.x == 300 && transform.position.y == 500){
@@ -39,17 +41,16 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 }
                 int columnIndex = abs(roundInterval(transform.position.y, segmentSizeY) / segmentSizeY);
                 int rowIndex = abs(roundInterval(transform.position.x, segmentSizeX) / segmentSizeX);
-                int segmentIndex = (columnIndex*world.rowLimit) + rowIndex;
-                //REACH_LOG("ColInd: " << columnIndex << "\tRowInd: " << rowIndex << "\tSegINd: " << segmentIndex);
+                int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
+
                 auto& segment = world.spacialEntities[segmentIndex];
                 segment.entities.push_back(eCollidable);
             }
-
-            //begin doing things with segments
+            //TODO: FAILED FOR >4 SEGMENTS
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    //REACH_LOG("2 is same sector");
+                    REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
                         auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
@@ -103,6 +104,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
 
                 }
             }
+
         }
 
         
