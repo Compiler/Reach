@@ -33,13 +33,7 @@ namespace reach{
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
 		msPerFrame = (glfwGetTime() * 1000.0f) - previousMSPerFrame;
 		previousMSPerFrame = glfwGetTime() * 1000.0f;
-		float elapsed = msPerFrame;
-		float current = glfwGetTime();
-		while(elapsed < 100000000.0/144.0){
-			//REACH_LOG(elapsed << ", " <<((glfwGetTime() - current) *1000) << ", " << 1000.0/144.0);
-			elapsed+=((glfwGetTime() - current) *1000);
-		}
-			accumMSFPS += msPerFrame;
+		accumMSFPS += msPerFrame;
 		if(accumMSFPS >= 1000){
 			static std::string title;
 			_windowRef->setTitle(std::string("Reach - fps " + std::to_string((int)framesPerSecond) + " - ms " + std::to_string(msPerFrame)).c_str());
@@ -47,37 +41,13 @@ namespace reach{
 			framesPerSecond = 0;
 			accumMSFPS = 0;
 		}
-		reach::DELTA_TIME = msPerFrame;
         glfwPollEvents();
 		_sceneManager.update();
 
     }
     void ReachCore::render(){
-		// ImGui_ImplOpenGL3_NewFrame();
-		// ImGui_ImplGlfw_NewFrame();
-		// ImGui::NewFrame();
-
-		
-		// bool open = true;
-		// ImGui::ShowDemoWindow(&open);
-		// if(ImGui::BeginMainMenuBar()){
-		// 	if(ImGui::BeginMenu("File")){
-		// 		ImGui::EndMenu();
-		// 	}
-		// 	ImGui::EndMainMenuBar();
-		// }
-
-		// ImGui::Begin("Demo window");
-    	// ImGui::Button("Hello!");
-    	// ImGui::End();
-
-		// ImGui::Render();
-		// ImGui::EndFrame();
 		_sceneManager.render();
-
-
         glfwSwapBuffers(_windowRef->getWindow());
-        
 		InputManager::clear();
 		framesPerSecond ++;
     }

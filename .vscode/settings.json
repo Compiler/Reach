@@ -60,6 +60,7 @@
         "unordered_set": "cpp",
         "xtree": "cpp",
         "random": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "chrono": "cpp"
     }
 }

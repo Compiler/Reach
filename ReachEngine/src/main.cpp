@@ -14,9 +14,16 @@ int main(){
     reach::ReachCore core;
     core.load();
     REACH_BGREEN("Beginning Render loop");
+    double lastTime = glfwGetTime();
     while(core.isRunning()){
-        core.update();
-        core.render();
+        double time = glfwGetTime();
+        double deltaTime = time - lastTime;
+        reach::DELTA_TIME = deltaTime;
+        if( deltaTime >= 1.0/144.0 ) {
+            lastTime = time;
+            core.update();
+            core.render();
+        }
     }
     REACH_BGREEN("Unloading Reach...");
     core.unload();
