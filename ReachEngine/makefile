@@ -34,30 +34,30 @@ LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 #-lbox2d
 
 OUT_DIR = bin
 
-CALLBACK_OBJS = 
-P_CALLBACK_OBJS = GLFWCallbacks.o
+CALLBACK_OBJS = GLFWCallbacks.o
+P_CALLBACK_OBJS = 
 INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
 LAYER_OBJS = LayerManager.o Layer.o
 
-RENDERING_OBJS = ParticleRenderer.o #Box2DDebugRenderer.o
-P_RENDERING_OBJS = BatchRenderer.o ShaderProgram.o TextureManager.o Window.o
+RENDERING_OBJS = ParticleRenderer.o BatchRenderer.o ShaderProgram.o TextureManager.o Window.o #Box2DDebugRenderer.o
+P_RENDERING_OBJS = 
 
-FILE_OBJS = 
-P_FILE_OBJS = FileLoaderFactory.o
+FILE_OBJS = FileLoaderFactory.o
+P_FILE_OBJS = 
 
-CAMERA_OBJS = 
-P_CAMERA_OBJS = OrthographicCamera.o
+CAMERA_OBJS = OrthographicCamera.o
+P_CAMERA_OBJS = 
 
-ECS_OBJS = PhysicsSystem.o WorldSystem.o MovementSystem.o 
-P_ECS_OBJS = Components.o SystemManager.o ParticleSystem.o 
+ECS_OBJS = PhysicsSystem.o WorldSystem.o MovementSystem.o ParticleSystem.o Components.o SystemManager.o 
+P_ECS_OBJS =
 
 ECS_COLLISION_OBJS = CollisionSystem.o
 
 UTIL_OBJS = Random.o
 REACH_OBJS = ReachCore.o
-STARTUP_OBJS = 
-P_STARTUP_OBJS = StartupSystems.o
+STARTUP_OBJS = StartupSystems.o
+P_STARTUP_OBJS = 
 
 #game
 PLAYER_SYSTEM_OBJS = InventorySystem.o
@@ -88,7 +88,7 @@ link: $(ENTRY_POINT)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
 main: $(ENTRY_POINT) $(OBJS)
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $(P_OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 
 ds: $(LAYER_OBJS) 

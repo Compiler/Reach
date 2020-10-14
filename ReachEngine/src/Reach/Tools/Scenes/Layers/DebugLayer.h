@@ -60,14 +60,15 @@ namespace reach{
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
 
-                constexpr int _WORLD_GRID_LIMIT_ = 16;
-                for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_)){
+                constexpr int _WORLD_GRID_LIMIT_ROW_ = 8;
+                constexpr int _WORLD_GRID_LIMIT_COL_ = 8;
+                for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_ROW_)){
                     addEntity(i, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                     REACH_DEBUG(i << ", 0)");
 
                 }
 
-                for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_)){
+                for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
                     addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
                     REACH_DEBUG("(0," << i);
                 }
@@ -84,7 +85,7 @@ namespace reach{
                 auto worldEntity = m_registry.create();
                 auto& w = m_registry.emplace<WorldComponent>(worldEntity);
                 w.worldCamera = &cam;
-                w.setLimits(_WORLD_GRID_LIMIT_, _WORLD_GRID_LIMIT_);
+                w.setLimits(_WORLD_GRID_LIMIT_ROW_, _WORLD_GRID_LIMIT_COL_);
                 _world = w;
 
             }

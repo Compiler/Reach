@@ -1,4 +1,5 @@
 #include <Reach/ReachCore.h>
+#include <Reach/Reach.h>
 #include <Reach/Tools/Logging/Logger.h>
 #include <iostream>
 //picking dedicated gpu

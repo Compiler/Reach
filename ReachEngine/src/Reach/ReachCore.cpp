@@ -7,6 +7,7 @@ namespace reach{
 	float SCREEN_RIGHT = 1920;
 	float SCREEN_BOTTOM = 0;
 	float SCREEN_TOP = 1080;
+	int CUR_FPS = 0;
     void ReachCore::load(){
         StartupSystems::_initGLFW();
        	_windowRef = new reach::Window(1920, 1080, "Reach", false);
@@ -32,10 +33,17 @@ namespace reach{
 		if(glfwWindowShouldClose(_windowRef->getWindow())) _running = 0;
 		msPerFrame = (glfwGetTime() * 1000.0f) - previousMSPerFrame;
 		previousMSPerFrame = glfwGetTime() * 1000.0f;
-		accumMSFPS += msPerFrame;
+		float elapsed = msPerFrame;
+		float current = glfwGetTime();
+		while(elapsed < 100000000.0/144.0){
+			//REACH_LOG(elapsed << ", " <<((glfwGetTime() - current) *1000) << ", " << 1000.0/144.0);
+			elapsed+=((glfwGetTime() - current) *1000);
+		}
+			accumMSFPS += msPerFrame;
 		if(accumMSFPS >= 1000){
 			static std::string title;
 			_windowRef->setTitle(std::string("Reach - fps " + std::to_string((int)framesPerSecond) + " - ms " + std::to_string(msPerFrame)).c_str());
+			reach::CUR_FPS = (int)framesPerSecond;
 			framesPerSecond = 0;
 			accumMSFPS = 0;
 		}
