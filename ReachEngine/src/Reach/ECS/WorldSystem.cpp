@@ -104,16 +104,20 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         glm::vec2& topMostScale = topMostEntityTransform->scale;
                         glm::vec2& bottomMostScale = bottomMostEntityTransform->scale;
                         
-                        static constexpr int _SEP_ = 0;
-                        if(topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y){ //if vertical collision
-                            if(rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x){//if horizontal axis collision
-                                if(leftMostPosition.x + leftMostScale.x > rightMostPosition.x){ //a vertical only collision
-                                    topMostEntityCollidable->bottomAxis = false;
-                                    bottomMostEntityCollidable->topAxis = false;
-                                } //a horizontal collision
-                                    rightMostEntityCollidable->leftAxis = false;
-                                    leftMostEntityCollidable-> rightAxis = false;
-                                                                                         
+                        static constexpr int _SEP_ = 5;
+                        bool verticalCollision = topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y;
+                        bool horizontalCollision = rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x;
+                        if(verticalCollision){ //if vertical collision
+                            if(horizontalCollision){//if horizontal axis collision
+                                    if(topMostPosition.y < bottomMostPosition.y + bottomMostScale.y - _SEP_){
+                                        rightMostEntityCollidable->leftAxis = false;
+                                        leftMostEntityCollidable-> rightAxis = false;
+                                    }
+                                    if(leftMostPosition.x + leftMostScale.x - _SEP_ > rightMostPosition.x ){
+                                        topMostEntityCollidable->bottomAxis = false;
+                                        bottomMostEntityCollidable->topAxis = false;
+                                    }
+                                    
                             }
                         }
                     }

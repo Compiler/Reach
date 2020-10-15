@@ -24,6 +24,7 @@ namespace reach{
 
     void OrthographicCamera::update(){
         if(true/*_cameraDirty*/){
+            _setBounds();
             _projection = glm::ortho(_left, _right, _bottom, _top, _nearClip, _farClip);
             _view = glm::mat4(1);
             _view = glm::translate(_view, glm::vec3(0.0f, 0.0f, -3.0f)); 
