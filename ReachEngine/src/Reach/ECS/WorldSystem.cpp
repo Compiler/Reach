@@ -50,7 +50,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    REACH_LOG("2 is same sector");
+                    //REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
                         auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
@@ -94,10 +94,9 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                                 if(leftMostPosition.x + leftMostScale.x > rightMostPosition.x){ //a vertical only collision
                                     topMostEntityCollidable->bottomAxis = false;
                                     bottomMostEntityCollidable->topAxis = false;
-                                }else{                                                          //a horizontal collision
-                                    leftMostEntityCollidable-> rightAxis = false;
-                                    rightMostEntityCollidable->leftAxis = false;
-                                }
+                                }                                                          //a horizontal collision
+                                rightMostEntityCollidable->leftAxis = false;
+                                leftMostEntityCollidable-> rightAxis = false;
                             }
                         }
                     }
