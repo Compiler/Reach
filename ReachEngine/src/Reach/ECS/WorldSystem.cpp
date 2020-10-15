@@ -22,8 +22,8 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             for(auto eCollidable: collidables) {
                 auto&&[transform, collidable] = collidables.get<TransformComponent, CollidableComponent>(eCollidable);
                 collidable.reset();
-                if( transform.position.x <= camera->getLeft() || transform.position.x >= camera->getRight() ||
-                    transform.position.y <= camera->getBottom() || transform.position.y >= camera->getTop() ){
+                if( transform.position.x + transform.scale.x <= camera->getLeft() || transform.position.x >= camera->getRight() ||
+                    transform.position.y + transform.scale.y <= camera->getBottom() || transform.position.y >= camera->getTop() ){
                     REACH_ERROR("Skipped");
                     continue;
                 }

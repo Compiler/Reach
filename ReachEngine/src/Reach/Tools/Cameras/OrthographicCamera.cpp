@@ -23,7 +23,7 @@ namespace reach{
     }
 
     void OrthographicCamera::update(){
-        if(true/*_cameraDirty*/){
+        if(_cameraDirty){
             _setBounds();
             _projection = glm::ortho(_left, _right, _bottom, _top, _nearClip, _farClip);
             _view = glm::mat4(1);
@@ -35,6 +35,16 @@ namespace reach{
 
     }
 
+    void OrthographicCamera::translate(glm::vec2 translation){
+        _position += translation;
+        _cameraDirty = true;
+    }
+
+
+    void OrthographicCamera::setPosition(glm::vec2 position){
+        _position = position;
+        _cameraDirty = true;
+    }
     void OrthographicCamera::_setBounds(){
         _left = _position.x;
         _right= _position.x + _dimensions.x;

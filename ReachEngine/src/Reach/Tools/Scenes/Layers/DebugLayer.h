@@ -153,6 +153,11 @@ namespace reach{
             }
             void update()override{
                 cam.update();
+                static constexpr float _SPEED_ = 1.0f;
+                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT)) cam.translate(glm::vec2(-_SPEED_, 0));
+                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT)) cam.translate(glm::vec2(_SPEED_, 0));
+                if(InputManager::isKeyPressed(KeyCodes::KEY_DOWN)) cam.translate(glm::vec2(0, -_SPEED_));
+                if(InputManager::isKeyPressed(KeyCodes::KEY_UP)) cam.translate(glm::vec2(0, _SPEED_));
                 
                 m_systemManager->update(&m_registry);
             }
@@ -166,7 +171,7 @@ namespace reach{
                 _system.flush();
 
                 m_shaderProgram->use();
-                //m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
+                m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 m_renderer->begin();
                 m_renderer->submit(&m_registry);
                 m_renderer->end();
