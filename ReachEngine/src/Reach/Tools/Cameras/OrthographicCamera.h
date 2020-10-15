@@ -32,8 +32,8 @@ namespace reach{
 
             void update();
             void setPosition(glm::vec2 position);
+            void setPositionCenteredOn(glm::vec2 position);
             void translate(glm::vec2 translation);
-            
             inline glm::mat4 getCombined(){return _combined;}
             inline float getWidth(){ return _dimensions.x;}
             inline float getHeight(){ return _dimensions.y;}

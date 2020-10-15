@@ -1,5 +1,60 @@
 #include "GLFWCallbacks.h"
 
+
+void GLAPIENTRY MessageCallback(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam){
+	std::string errorDetails = "Other Error";
+	if(type == GL_DEBUG_TYPE_ERROR)
+		errorDetails = "General Error";
+	else if(type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR)
+		errorDetails = "Deprecated Behavior Error";
+	else if(type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR)
+		errorDetails = "Undefined Behavior Error";
+	else if(type == GL_DEBUG_TYPE_PORTABILITY)
+		errorDetails = "Portability Error";
+	else if(type == GL_DEBUG_TYPE_PERFORMANCE)
+		errorDetails = "Performance Error";
+
+	std::string errorSource = "Other source";
+	if(source == GL_DEBUG_SOURCE_API)
+		errorSource = "OpenGL API";
+	else if(source == GL_DEBUG_SOURCE_WINDOW_SYSTEM)
+		errorSource = "Window-Systems API";
+	else if(source == GL_DEBUG_SOURCE_SHADER_COMPILER)
+		errorSource = "Shader Compiler";
+	else if(source == GL_DEBUG_SOURCE_THIRD_PARTY)
+		errorSource = "Third-Party OpenGL";
+	else if(source == GL_DEBUG_SOURCE_APPLICATION)
+		errorSource = "Vofog";
+
+	if(severity == GL_DEBUG_SEVERITY_HIGH){//ignore pedantic errors/msgs
+		REACH_ERROR("OpenGL " << errorDetails << "\tSeverity: HIGH. \t ID: " << id << "\n\t\"" << message << "\"\n");
+	}
+	if(severity == GL_DEBUG_SEVERITY_MEDIUM){//ignore pedantic errors/msgs
+		REACH_ERROR("OpenGL " << errorDetails << "\tSeverity: Medium. \t ID: " << id << "\n\t\"" << message << "\"\n");
+	}
+	if(severity == GL_DEBUG_SEVERITY_LOW){//ignore pedantic errors/msgs
+		//REACH_ERROR("OpenGL " << errorDetails << "\tSeverity: Low. \t ID: " << id << "\n\t\"" << message << "\"\n");
+	}
+}
+
+void GLFWCallbacks::initCallBacks(reach::Window* _windowRef){
+	glfwSetKeyCallback(_windowRef->getWindow(), GLFWCallbacks::keyCallback);
+	glfwSetCursorPosCallback(_windowRef->getWindow(), GLFWCallbacks::cursorPositionCallback);
+	glfwSetMouseButtonCallback(_windowRef->getWindow(), GLFWCallbacks::mouseClickCallback);
+	int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT){
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
+		glDebugMessageCallback(MessageCallback, 0);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+	} 
+
+	glDebugMessageControl(GL_DEBUG_SOURCE_API, 
+                      GL_DEBUG_TYPE_ERROR, 
+                      GL_DEBUG_SEVERITY_HIGH,
+                      0, nullptr, GL_TRUE); 
+
+}
 void GLFWCallbacks::mouseClickCallback(GLFWwindow* window, int button, int action, int mods) {
 	static uint16_t mouseKey;
 	mouseKey = reach::MouseKeys::MOUSE_BUTTON_1;

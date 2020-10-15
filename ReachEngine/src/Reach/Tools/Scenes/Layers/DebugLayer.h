@@ -20,10 +20,11 @@ namespace reach{
 
         private:
             WorldComponent _world;
-            ParticleSystem _updater;
+            ParticleSystem _particleUpdater;
             MovementSystem _movement;
             PhysicsSystem _physics;
             WorldSystem _worldSystem;
+            TransformComponent _tmpPlayerPosition;
 
             ParticleRenderer _system;
             ShaderProgram _particleShader;
@@ -32,7 +33,7 @@ namespace reach{
 
         public:
 
-        
+        entt::entity ee;
 
         explicit DebugLayer(){
                 m_layerName = "Debug Scene";
@@ -47,7 +48,7 @@ namespace reach{
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(800, 500, glm::vec2(75, 150), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                ee = addEntity(800, 500, glm::vec2(75, 150), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
                 auto eee = addEntity(300, 500, glm::vec2(300,400), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 auto eqweee = addEntity(500, 400, glm::vec2(50), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 auto eeee = addEntity(400, 20, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
@@ -59,22 +60,21 @@ namespace reach{
                 movement.set(KeyCodes::KEY_W, glm::vec2(0, m));
                 movement.set(KeyCodes::KEY_S, glm::vec2(0, -m ));
 
+
                 constexpr int _WORLD_GRID_LIMIT_ROW_ = 8;
                 constexpr int _WORLD_GRID_LIMIT_COL_ = 8;
                 for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_ROW_)){
                     addEntity(i, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
-                    REACH_DEBUG(i << ", 0)");
 
                 }
 
                 for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
                     addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
-                    REACH_DEBUG("(0," << i);
                 }
                 
                 _system.init();
 
-                m_systemManager->addSystem(&_updater);
+                //m_systemManager->addSystem(&_particleUpdater);
                 m_systemManager->addSystem(&_movement);
                 m_systemManager->addSystem(&_physics);
                 m_systemManager->addSystem(&_worldSystem);
@@ -154,21 +154,23 @@ namespace reach{
             void update()override{
                 cam.update();
                 static constexpr float _SPEED_ = 1.0f;
-                if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT)) cam.translate(glm::vec2(-_SPEED_, 0));
-                if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT)) cam.translate(glm::vec2(_SPEED_, 0));
-                if(InputManager::isKeyPressed(KeyCodes::KEY_DOWN)) cam.translate(glm::vec2(0, -_SPEED_));
-                if(InputManager::isKeyPressed(KeyCodes::KEY_UP)) cam.translate(glm::vec2(0, _SPEED_));
+                // if(InputManager::isKeyPressed(KeyCodes::KEY_LEFT)) cam.translate(glm::vec2(-_SPEED_, 0));
+                // if(InputManager::isKeyPressed(KeyCodes::KEY_RIGHT)) cam.translate(glm::vec2(_SPEED_, 0));
+                // if(InputManager::isKeyPressed(KeyCodes::KEY_DOWN)) cam.translate(glm::vec2(0, -_SPEED_));
+                // if(InputManager::isKeyPressed(KeyCodes::KEY_UP)) cam.translate(glm::vec2(0, _SPEED_));
                 
+                cam.setPositionCenteredOn(m_registry.get<TransformComponent>(ee).position);
+
                 m_systemManager->update(&m_registry);
             }
 
              void render()override{
-                _particleShader.use();
+                //_particleShader.use();
                 //_particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
-                _system.begin();
-                _system.submit(&m_registry);
-                _system.end();
-                _system.flush();
+                //_system.begin();
+                //_system.submit(&m_registry);
+                //_system.end();
+                //_system.flush();
 
                 m_shaderProgram->use();
                 m_shaderProgram->uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);

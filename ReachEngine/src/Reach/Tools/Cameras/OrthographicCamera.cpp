@@ -45,6 +45,10 @@ namespace reach{
         _position = position;
         _cameraDirty = true;
     }
+    void OrthographicCamera::setPositionCenteredOn(glm::vec2 position){
+        _position = glm::vec2(position.x - (_dimensions.x / 2.0f), position.y - (_dimensions.y / 2.0f));
+        _cameraDirty = true;
+    }
     void OrthographicCamera::_setBounds(){
         _left = _position.x;
         _right= _position.x + _dimensions.x;

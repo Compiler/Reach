@@ -15,9 +15,7 @@ namespace reach{
 		StartupSystems::_initTextureManager();
 		StartupSystems::_initImGUI(_windowRef->getWindow());
 		glfwSetWindowUserPointer(_windowRef->getWindow(), this);
-		glfwSetKeyCallback(_windowRef->getWindow(), GLFWCallbacks::keyCallback);
-		glfwSetCursorPosCallback(_windowRef->getWindow(), GLFWCallbacks::cursorPositionCallback);
-		glfwSetMouseButtonCallback(_windowRef->getWindow(), GLFWCallbacks::mouseClickCallback);
+		GLFWCallbacks::initCallBacks(_windowRef);
 		glfwSwapInterval(0);
 		// glEnable(GL_CULL_FACE);
 		// glCullFace(GL_BACK);

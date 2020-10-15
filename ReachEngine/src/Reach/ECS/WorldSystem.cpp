@@ -2,7 +2,6 @@
 
 //TODO: no loops for this
 void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
-        int count = 0;
         auto group = registry->view<WorldComponent>();
         auto collidables = registry->view<TransformComponent, CollidableComponent>();
         for(auto entity: group) {
@@ -24,7 +23,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 collidable.reset();
                 if( transform.position.x + transform.scale.x <= camera->getLeft() || transform.position.x >= camera->getRight() ||
                     transform.position.y + transform.scale.y <= camera->getBottom() || transform.position.y >= camera->getTop() ){
-                    REACH_ERROR("Skipped");
+                    //REACH_ERROR("Skipped");
                     continue;
                 }
 
