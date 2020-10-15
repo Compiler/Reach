@@ -47,8 +47,9 @@ namespace reach{
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                auto ee = addEntity(800, 500, glm::vec2(25), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
-                auto eee = addEntity(300, 500, glm::vec2(100,400), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
+                auto ee = addEntity(800, 500, glm::vec2(75), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                auto esdae = addEntity(800, 500, glm::vec2(175), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                auto eee = addEntity(300, 500, glm::vec2(300,400), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 auto eeee = addEntity(400, 20, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
                 addParticleEmitter(eeee);
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());

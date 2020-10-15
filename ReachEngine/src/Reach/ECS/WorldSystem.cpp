@@ -31,20 +31,24 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 
                 int rowIndex = abs(roundInterval(transform.position.x, segmentSizeX) / segmentSizeX);
                 int columnIndex = abs(roundInterval(transform.position.y, segmentSizeY) / segmentSizeY);
+                int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
+                //world.spacialEntities[segmentIndex].entities.push_back(eCollidable);
 
                 int widthIndex = abs(roundInterval(transform.position.x + transform.scale.x, segmentSizeX) / segmentSizeX);
                 int heightIndex = abs(roundInterval(transform.position.y + transform.scale.y, segmentSizeY) / segmentSizeY);
 
-                int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
+                //REACH_LOG("Added " << rowIndex<< ", " << columnIndex );
 
-                auto& segment = world.spacialEntities[segmentIndex];
-                segment.entities.push_back(eCollidable);
-                for(int i = 1; i <= widthIndex - rowIndex; i++){
-                    world.spacialEntities[(columnIndex*world.getRowLimit()) + rowIndex + i].entities.push_back(eCollidable);
+                for(int k = 0; k <= heightIndex - columnIndex; k++){
+                    for(int i = 0; i <= widthIndex - rowIndex; i++){
+                        //REACH_LOG("Added " << rowIndex + i << ", " << columnIndex + k);
+                        int index = ((columnIndex + k)*world.getRowLimit()) + rowIndex + i;
+                        if(index > world.spacialEntities.size()) continue;
+                        world.spacialEntities[index].entities.push_back(eCollidable);
+                    }
+
                 }
-                for(int i = 1; i <= heightIndex - columnIndex; i++){
-                    world.spacialEntities[((columnIndex + i)*world.getRowLimit()) + rowIndex].entities.push_back(eCollidable);
-                }
+                
 
                 //Debug code
                 if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
@@ -58,15 +62,14 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     }
                 }
             }
-            //TODO: FAILED FOR >4 SEGMENTS
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
                     //REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
-                        auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
-                        auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
-                        if(&bodyATransform == &bodyBTransform) continue;
+                        auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k-1]);
+                        auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k]);
+                        assert(&bodyATransform != &bodyBTransform);
                         TransformComponent* leftMostEntityTransform, *rightMostEntityTransform, *topMostEntityTransform, *bottomMostEntityTransform;
                         CollidableComponent* leftMostEntityCollidable, *rightMostEntityCollidable, *topMostEntityCollidable, *bottomMostEntityCollidable;
                         if(bodyATransform.position.x <= bodyBTransform.position.x){
@@ -107,9 +110,10 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                                 if(leftMostPosition.x + leftMostScale.x > rightMostPosition.x){ //a vertical only collision
                                     topMostEntityCollidable->bottomAxis = false;
                                     bottomMostEntityCollidable->topAxis = false;
-                                }                                                          //a horizontal collision
-                                rightMostEntityCollidable->leftAxis = false;
-                                leftMostEntityCollidable-> rightAxis = false;
+                                } //a horizontal collision
+                                    rightMostEntityCollidable->leftAxis = false;
+                                    leftMostEntityCollidable-> rightAxis = false;
+                                                                                         
                             }
                         }
                     }
