@@ -28,6 +28,24 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     continue;
                 }
 
+                
+                int rowIndex = abs(roundInterval(transform.position.x, segmentSizeX) / segmentSizeX);
+                int columnIndex = abs(roundInterval(transform.position.y, segmentSizeY) / segmentSizeY);
+
+                int widthIndex = abs(roundInterval(transform.position.x + transform.scale.x, segmentSizeX) / segmentSizeX);
+                int heightIndex = abs(roundInterval(transform.position.y + transform.scale.y, segmentSizeY) / segmentSizeY);
+
+                int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
+
+                auto& segment = world.spacialEntities[segmentIndex];
+                segment.entities.push_back(eCollidable);
+                for(int i = 1; i <= widthIndex - rowIndex; i++){
+                    world.spacialEntities[(columnIndex*world.getRowLimit()) + rowIndex + i].entities.push_back(eCollidable);
+                }
+                for(int i = 1; i <= heightIndex - columnIndex; i++){
+                    world.spacialEntities[((columnIndex + i)*world.getRowLimit()) + rowIndex].entities.push_back(eCollidable);
+                }
+
                 //Debug code
                 if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
                     if(transform.position.x == 300 && transform.position.y == 500){
@@ -39,12 +57,6 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         REACH_DEBUG("RoundIntervalPosition: (" << roundInterval(transform.position.x, segmentSizeX) / segmentSizeX << ", " << roundInterval(transform.position.y, segmentSizeY) / segmentSizeY << ")");
                     }
                 }
-                int columnIndex = abs(roundInterval(transform.position.y, segmentSizeY) / segmentSizeY);
-                int rowIndex = abs(roundInterval(transform.position.x, segmentSizeX) / segmentSizeX);
-                int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
-
-                auto& segment = world.spacialEntities[segmentIndex];
-                segment.entities.push_back(eCollidable);
             }
             //TODO: FAILED FOR >4 SEGMENTS
             for(int i = 0; i < world.spacialEntities.size(); i++){
@@ -54,6 +66,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     for(int k = 1; k < segment.size(); k++){
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[0]);
                         auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[1]);
+                        if(&bodyATransform == &bodyBTransform) continue;
                         TransformComponent* leftMostEntityTransform, *rightMostEntityTransform, *topMostEntityTransform, *bottomMostEntityTransform;
                         CollidableComponent* leftMostEntityCollidable, *rightMostEntityCollidable, *topMostEntityCollidable, *bottomMostEntityCollidable;
                         if(bodyATransform.position.x <= bodyBTransform.position.x){

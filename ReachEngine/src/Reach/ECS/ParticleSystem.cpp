@@ -4,6 +4,9 @@
 
 void reach::ParticleSystem::update(entt::basic_registry<entt::entity>* registry){
         auto renderables = registry->view<TransformComponent, RenderableComponent, ParticleEmitterComponent>();
+        //
+        //
+        //
         double current = glfwGetTime();
         double elapsed = glfwGetTime() - current;
         for(auto entity: renderables) {
