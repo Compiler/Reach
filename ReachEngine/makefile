@@ -1,3 +1,4 @@
+
 CXX = g++
 C++_VERSION = c++17
 CXXFLAGS = -std=$(C++_VERSION) -Wall -w -g -static-libgcc -static-libstdc++
@@ -40,7 +41,7 @@ INPUT_OBJS = InputManager.o
 SCENE_OBJS = SceneManager.o Scene.o 
 LAYER_OBJS = LayerManager.o Layer.o
 
-RENDERING_OBJS = ParticleRenderer.o BatchRenderer.o ShaderProgram.o TextureManager.o Window.o #Box2DDebugRenderer.o
+RENDERING_OBJS = $(OUT_DIR)/ParticleRenderer.o $(OUT_DIR)/BatchRenderer.o $(OUT_DIR)/ShaderProgram.o $(OUT_DIR)/TextureManager.o $(OUT_DIR)/Window.o #Box2DDebugRenderer.o
 P_RENDERING_OBJS = 
 
 FILE_OBJS = FileLoaderFactory.o
@@ -73,23 +74,22 @@ LIB_OBJS = $(RENDERING_OBJS) $(STARTUP_OBJS) $(FILE_OBJS) $(CALLBACK_OBJS) $(INP
 OBJS =  $(REACH_ENGINE_OBJS) $(P_OBJS)#$(GAME_OBJS) #$(IMGUI_OBJS)
 P_OBJS = $(P_REACH_ENGINE_OBJS)
 LIB_OUT_OBJS = $(patsubst %.o, $(OUT_DIR)/%.o, $(LIB_OBJS))
-OUT_OBJECTS = $(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
+OUT_OBJECTS = $(OBJS)#$(patsubst %.o, $(OUT_DIR)/%.o, $(OBJS))
 P_OUT_OBJECTS = #$(patsubst %.o, $(OUT_DIR)/%.o, $(P_OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
-all: main 
+
+main: $(ENTRY_POINT) 
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
+	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
+
 
 static_lib:
 	ar ru bin/libreachengine.a $(OUT_OBJECTS)
 
-
-
 link: $(ENTRY_POINT)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
 
-main: $(ENTRY_POINT) $(OBJS)
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
-	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 
 ds: $(LAYER_OBJS) 
 	make ReachCore.o
@@ -97,8 +97,8 @@ ds: $(LAYER_OBJS)
 	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 	make run
 
-$(RENDERING_OBJS): %.o: src/Reach/Rendering/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(RENDERING_OBJS): $(OUT_DIR)/%.o: src/Reach/Rendering/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
 $(REACH_OBJS): %.o: src/Reach/%.cpp
 	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
