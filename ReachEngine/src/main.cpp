@@ -9,7 +9,7 @@
 //     _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 // }
 
-double MAX_FPS=144;
+//double reach::MAX_FPS=144;
 int main(){
 
     REACH_BGREEN("Initializing Reach...");
@@ -21,7 +21,7 @@ int main(){
         double time = glfwGetTime();
         double deltaTime = time - lastTime;
         reach::DELTA_TIME = deltaTime;
-        if( deltaTime >= 1.0/MAX_FPS ) {
+        if( deltaTime >= 1.0/144.0 ) {
             lastTime = time;
             core.update();
             core.render();

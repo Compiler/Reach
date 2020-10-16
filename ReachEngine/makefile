@@ -35,34 +35,34 @@ LINKS = -lglfw3 -lglu32 -lopengl32 -lgdi32 #-lbox2d
 
 OUT_DIR = bin
 
-CALLBACK_OBJS = GLFWCallbacks.o
+CALLBACK_OBJS = $(OUT_DIR)/GLFWCallbacks.o
 P_CALLBACK_OBJS = 
-INPUT_OBJS = InputManager.o
-SCENE_OBJS = SceneManager.o Scene.o 
-LAYER_OBJS = LayerManager.o Layer.o
+INPUT_OBJS = $(OUT_DIR)/InputManager.o
+SCENE_OBJS = $(OUT_DIR)/SceneManager.o $(OUT_DIR)/Scene.o 
+LAYER_OBJS = $(OUT_DIR)/LayerManager.o $(OUT_DIR)/Layer.o
 
 RENDERING_OBJS = $(OUT_DIR)/ParticleRenderer.o $(OUT_DIR)/BatchRenderer.o $(OUT_DIR)/ShaderProgram.o $(OUT_DIR)/TextureManager.o $(OUT_DIR)/Window.o #Box2DDebugRenderer.o
 P_RENDERING_OBJS = 
 
-FILE_OBJS = FileLoaderFactory.o
+FILE_OBJS = $(OUT_DIR)/FileLoaderFactory.o
 P_FILE_OBJS = 
 
-CAMERA_OBJS = OrthographicCamera.o
+CAMERA_OBJS = $(OUT_DIR)/OrthographicCamera.o
 P_CAMERA_OBJS = 
 
-ECS_OBJS = PhysicsSystem.o WorldSystem.o MovementSystem.o ParticleSystem.o Components.o SystemManager.o 
+ECS_OBJS = $(OUT_DIR)/PhysicsSystem.o $(OUT_DIR)/WorldSystem.o $(OUT_DIR)/MovementSystem.o $(OUT_DIR)/ParticleSystem.o $(OUT_DIR)/Components.o $(OUT_DIR)/SystemManager.o 
 P_ECS_OBJS =
 
-ECS_COLLISION_OBJS = CollisionSystem.o
+ECS_COLLISION_OBJS = $(OUT_DIR)/CollisionSystem.o
 
-UTIL_OBJS = Random.o
-REACH_OBJS = ReachCore.o
-STARTUP_OBJS = StartupSystems.o
+UTIL_OBJS = $(OUT_DIR)/Random.o
+REACH_OBJS = $(OUT_DIR)/ReachCore.o
+STARTUP_OBJS = $(OUT_DIR)/StartupSystems.o
 P_STARTUP_OBJS = 
 
 #game
-PLAYER_SYSTEM_OBJS = InventorySystem.o
-GAME_SCENES_OBJS = MainMenu.o
+PLAYER_SYSTEM_OBJS = $(OUT_DIR)/InventorySystem.o
+GAME_SCENES_OBJS = $(OUT_DIR)/MainMenu.o
 
 #IMGUI
 IMGUI_OBJS = imgui_impl_glfw.o imgui_impl_opengl3.o imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o 
@@ -79,8 +79,8 @@ P_OUT_OBJECTS = #$(patsubst %.o, $(OUT_DIR)/%.o, $(P_OBJS))
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
 
-main: $(ENTRY_POINT) 
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $(OUT_OBJECTS) $< $(GLAD_SRC)/glad.c $(LINKS)
+main: $(ENTRY_POINT) $(OBJS)
+	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $^ $(GLAD_SRC)/glad.c $(LINKS)
 	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
 
 
@@ -100,48 +100,46 @@ ds: $(LAYER_OBJS)
 $(RENDERING_OBJS): $(OUT_DIR)/%.o: src/Reach/Rendering/%.cpp
 	$(ALL_SETTINGS) -c $< -o $@  
 
-$(REACH_OBJS): %.o: src/Reach/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(REACH_OBJS): $(OUT_DIR)/%.o: src/Reach/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(STARTUP_OBJS): %.o: src/Reach/Tools/Startup/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@ 
+$(STARTUP_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Startup/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@ 
 
-$(FILE_OBJS): %.o: src/Reach/Tools/Files/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(FILE_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Files/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(CALLBACK_OBJS): %.o: src/Reach/Tools/Callbacks/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(CALLBACK_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Callbacks/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(INPUT_OBJS): %.o: src/Reach/Tools/Input/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(INPUT_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Input/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(SCENE_OBJS): %.o: src/Reach/Tools/Scenes/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(SCENE_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Scenes/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(ECS_OBJS): %.o: src/Reach/ECS/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(ECS_OBJS): $(OUT_DIR)/%.o: src/Reach/ECS/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(UTIL_OBJS): %.o: src/Reach/Tools/Utils/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(UTIL_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Utils/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(LAYER_OBJS): %.o: src/Reach/Tools/Scenes/Layers/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(LAYER_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Scenes/Layers/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(ECS_COLLISION_OBJS): %.o: src/Reach/ECS/Collision/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(ECS_COLLISION_OBJS): $(OUT_DIR)/%.o: src/Reach/ECS/Collision/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(CAMERA_OBJS): %.o: src/Reach/Tools/Cameras/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(CAMERA_OBJS): $(OUT_DIR)/%.o: src/Reach/Tools/Cameras/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
 
-$(PLAYER_SYSTEM_OBJS): %.o: src/Sandbox/PlayerSystems/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(PLAYER_SYSTEM_OBJS): $(OUT_DIR)/%.o: src/Sandbox/PlayerSystems/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(GAME_SCENES_OBJS): %.o: src/Sandbox/GameScenes/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
+$(GAME_SCENES_OBJS): $(OUT_DIR)/%.o: src/Sandbox/GameScenes/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
 
-$(IMGUI_OBJS): %.o: outsourced/imgui/imgui/%.cpp
-	$(ALL_SETTINGS) -c $< -o $(OUT_DIR)/$@  
 
 
 run: $(OUT_DIR)/$(LAUNCHER_NAME).exe
