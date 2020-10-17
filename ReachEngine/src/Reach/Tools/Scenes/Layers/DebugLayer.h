@@ -48,10 +48,10 @@ namespace reach{
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                ee = addEntity(800, 500, glm::vec2(75, 75), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
-                auto eee = addEntity(300, 500, glm::vec2(75,75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
+                ee = addEntity(800, 500, 45, glm::vec2(75, 75), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                auto eee = addEntity(300, 500, 0, glm::vec2(75,75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eqweee = addEntity(500, 400, glm::vec2(50), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
-                auto eeee = addEntity(400, 20, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
+                auto eeee = addEntity(400, 20, 0, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
                 addParticleEmitter(eeee);
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
                 float m = 2.25f;
@@ -64,12 +64,12 @@ namespace reach{
                 constexpr int _WORLD_GRID_LIMIT_ROW_ = 8;
                 constexpr int _WORLD_GRID_LIMIT_COL_ = 8;
                 for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_ROW_)){
-                    addEntity(i, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                    addEntity(i, 0, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
                 }
 
                 for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
-                    addEntity(0, i, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
+                    addEntity(0, i, 0, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
                 }
                 
                 _system.init();
@@ -119,13 +119,13 @@ namespace reach{
                 REACH_DEBUG("created emitter '" << particleComp._db_name << "'");
 
             }
-            entt::entity addEntity(float x, float y, glm::vec2 s = glm::vec2(1), float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3, bool col = false){
+            entt::entity addEntity(float x, float y, float rot = 0, glm::vec2 s = glm::vec2(1), float r = 1, float g = 1, float b = 1, const char* str = "tdirt.png", int bpp = 3, bool col = false){
                 auto currentEntity = m_registry.create();
                 //REACH_DEBUG("Created entity");
                 auto &pos = m_registry.emplace<TransformComponent>(currentEntity, TransformComponent());
                 pos.position = glm::vec2(x, y);
                 pos.scale = glm::vec2(s);
-                pos.rotation = glm::vec2(45);
+                pos.rotation = rot;
                 if(col)
                     auto& collidable = m_registry.emplace<reach::CollidableComponent>(currentEntity, CollidableComponent());
 

@@ -19,7 +19,7 @@ namespace reach{
     struct TransformComponent{
 
         glm::vec2 position;
-        glm::vec2 rotation;
+        float rotation;
         glm::vec2 scale;
 
         TransformComponent(){}

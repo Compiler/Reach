@@ -81,9 +81,8 @@ ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC)
 
 main: $(ENTRY_POINT) $(OBJS)
 	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $^ $(GLAD_SRC)/glad.c $(LINKS)
-	ar ru bin/libreachengine.a $(LIB_OUT_OBJS)
-
-
+	./$(OUT_DIR)/$(LAUNCHER_NAME).exe
+	
 static_lib:
 	ar ru bin/libreachengine.a $(OUT_OBJECTS)
 

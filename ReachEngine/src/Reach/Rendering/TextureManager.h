@@ -21,6 +21,7 @@ namespace reach{
             static constexpr uint64_t _DEF_EMPTY_VALUE_ = 0;
 
              static void _populateFilePaths() {
+                 REACH_WARN(std::filesystem::current_path());
                  for (const auto& entry : std::filesystem::directory_iterator("src/Resources/Textures/")) {
                      std::string fullPath = entry.path().string();
                      REACH_LOG(fullPath);
