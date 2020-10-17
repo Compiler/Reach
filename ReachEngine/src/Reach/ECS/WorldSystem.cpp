@@ -66,59 +66,76 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 if(segment.size() >= 2){
                     //REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
+                        static constexpr glm::vec2 AXIS = glm::vec2(1, -1);
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k-1]);
                         auto&&[bodyBTransform, bodyBCollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k]);
                         assert(&bodyATransform != &bodyBTransform);
-                        TransformComponent* leftMostEntityTransform, *rightMostEntityTransform, *topMostEntityTransform, *bottomMostEntityTransform;
-                        CollidableComponent* leftMostEntityCollidable, *rightMostEntityCollidable, *topMostEntityCollidable, *bottomMostEntityCollidable;
-                        if(bodyATransform.position.x <= bodyBTransform.position.x){
-                            leftMostEntityTransform = &bodyATransform;
-                            leftMostEntityCollidable = &bodyACollidable;
-                            rightMostEntityTransform = &bodyBTransform;
-                            rightMostEntityCollidable = &bodyBCollidable;
+                        glm::vec2 midA = glm::vec2(bodyATransform.position.x + (bodyATransform.scale.x / 2.0f), bodyATransform.position.y + (bodyATransform.scale.y / 2.0f));
+                        glm::vec2 midB = glm::vec2(bodyBTransform.position.x + (bodyBTransform.scale.x / 2.0f), bodyBTransform.position.y + (bodyBTransform.scale.y / 2.0f));
+                        glm::vec2 a,b,c;
+                        if(midA.x < midB.x){
+                            c = glm::vec2(midB - midA);
+                            a = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x- midA.x, bodyATransform.position.y + bodyATransform.scale.y - midA.y);
+                            b = glm::vec2(bodyBTransform.position.x - midB.x, bodyBTransform.position.y + bodyBTransform.scale.y - midB.y);
                         }else{
-                            leftMostEntityTransform = &bodyBTransform;
-                            leftMostEntityCollidable = &bodyBCollidable;
-                            rightMostEntityTransform = &bodyATransform;
-                            rightMostEntityCollidable = &bodyACollidable;
+                            c = glm::vec2(midA - midB);
+                            a = glm::vec2(bodyATransform.position.x - midA.x, bodyATransform.position.y + bodyATransform.scale.y - midA.y);
+                            b = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x - midB.x, bodyBTransform.position.y + bodyBTransform.scale.y - midB.y);
                         }
-                        if(bodyATransform.position.y > bodyBTransform.position.y){
-                            topMostEntityTransform = &bodyATransform;
-                            topMostEntityCollidable = &bodyACollidable;
-                            bottomMostEntityTransform = &bodyBTransform;
-                            bottomMostEntityCollidable = &bodyBCollidable;
-                        }else{
-                            topMostEntityTransform = &bodyBTransform;
-                            topMostEntityCollidable = &bodyBCollidable;
-                            bottomMostEntityTransform = &bodyATransform;
-                            bottomMostEntityCollidable = &bodyACollidable;
-
-                        }
-                        glm::vec2& leftMostPosition = leftMostEntityTransform->position;
-                        glm::vec2& rightMostPosition = rightMostEntityTransform->position;
-                        glm::vec2& topMostPosition = topMostEntityTransform->position;
-                        glm::vec2& bottomMostPosition = bottomMostEntityTransform->position;
-                        glm::vec2& leftMostScale = leftMostEntityTransform->scale;
-                        glm::vec2& rightMostScale = rightMostEntityTransform->scale;
-                        glm::vec2& topMostScale = topMostEntityTransform->scale;
-                        glm::vec2& bottomMostScale = bottomMostEntityTransform->scale;
-                        
-                        static constexpr int _SEP_ = 5;
-                        bool verticalCollision = topMostPosition.y <= bottomMostPosition.y + bottomMostScale.y && topMostPosition.y >= bottomMostPosition.y;
-                        bool horizontalCollision = rightMostPosition.x <= leftMostPosition.x + leftMostScale.x && rightMostPosition.x >= leftMostPosition.x;
-                        if(verticalCollision){ //if vertical collision
-                            if(horizontalCollision){//if horizontal axis collision
-                                    if(topMostPosition.y < bottomMostPosition.y + bottomMostScale.y - _SEP_){
-                                        rightMostEntityCollidable->leftAxis = false;
-                                        leftMostEntityCollidable-> rightAxis = false;
-                                    }
-                                    if(leftMostPosition.x + leftMostScale.x - _SEP_ > rightMostPosition.x ){
-                                        topMostEntityCollidable->bottomAxis = false;
-                                        bottomMostEntityCollidable->topAxis = false;
-                                    }
-                                    
+                        glm::vec2 bodyAPoints[4], bodyBPoints[4];
+                        bodyAPoints[0] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y);
+                        bodyAPoints[1] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y + bodyATransform.scale.y);
+                        bodyAPoints[2] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y + bodyATransform.scale.y);
+                        bodyAPoints[3] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y);
+                        bodyBPoints[0] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y);
+                        bodyBPoints[1] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                        bodyBPoints[2] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                        bodyBPoints[3] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y);
+                        float curProjA = glm::dot(bodyAPoints[0], AXIS), curProjB = glm::dot(bodyBPoints[0], AXIS), minProjA, maxProjA, minProjB, maxProjB;
+                        minProjA = maxProjA = curProjA;
+                        minProjB = maxProjB = curProjB; 
+                        //REACH_DEBUG("start");
+                        for(int i = 0; i < 4; i++){
+                            curProjA = glm::dot(bodyAPoints[i], AXIS);
+                            curProjB = glm::dot(bodyBPoints[i], AXIS);
+                            //REACH_LOG("A = " << curProjA << ", B = " << curProjB);
+                            if(curProjA < minProjA){
+                                minProjA = curProjA;
+                            }
+                            else if(curProjA > maxProjA){
+                                maxProjA = curProjA;
+                            }
+                            if(curProjB < minProjB){
+                                minProjB = curProjB;
+                            }
+                            else if(curProjB > maxProjB){
+                                maxProjB = curProjB;
                             }
                         }
+                        for(int i = 0; i < 4; i++){
+                            if(minProjA > glm::dot(bodyAPoints[i], AXIS) || maxProjA < glm::dot(bodyAPoints[i], AXIS) ||
+                                minProjB > glm::dot(bodyBPoints[i], AXIS) || maxProjB < glm::dot(bodyBPoints[i], AXIS))
+                                REACH_ERROR("WRONG!");
+
+                        }
+
+                        //REACH_ERROR("chose : A = " << minProjA << ", " << maxProjA << ", B = " << minProjB << ", " << maxProjB);
+                        
+                        float projA = glm::dot(a, AXIS);
+                        float projB = glm::dot(b, AXIS);
+                        float projC = glm::dot(c, AXIS);
+                        
+                        //float length = glm::abs(bodyATransform.position.x - bodyBTransform.position.x);
+                        float gap;
+                        if(midB.x < midA.x)
+                            gap = projC - projA + projB;
+                        else
+                            gap = projC - projB + projA;
+                        bool seperated = maxProjB < minProjA || maxProjA < minProjB;
+                        if(seperated) REACH_LOG("gap " << gap);
+                        else REACH_LOG("touching " << gap);
+
+                        
                     }
 
                 }

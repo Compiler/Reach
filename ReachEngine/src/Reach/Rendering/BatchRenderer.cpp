@@ -64,26 +64,37 @@ namespace reach{
         //for(auto &&[entity, transform, renderable, texture]: registry->group<TransformComponent, RenderableComponent, TextureComponent>().proxy()){
             static glm::vec2 initScale = glm::vec2(1,1);
             unsigned int textureID = TextureManager::getSlot(texture.keyFileName);
+            glm::vec3 centroi = glm::vec3(transform.position.x + transform.scale.x / 2.0f, transform.position.y + transform.scale.y / 2.0f, 0);
+			glm::mat4 model = glm::mat4(1);
+			model = glm::translate(model, centroi);
+            model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0, 1, 0));
+			model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1, 0, 0));
+            
             VertexData t1, t2, t3, t4;
             t1.position = transform.position;
             t1.color = renderable.color;
             t1.texCoords = glm::vec3(0, 0, textureID);
+            t1.position = model * glm::vec4(t1.position.x, t1.position.y, 0, 0);
 
             t2.position = transform.position;
             t2.position.x += (initScale.x * transform.scale.x);
             t2.color = renderable.color;
             t2.texCoords = glm::vec3(1, 0, textureID);
+            t2.position = model * glm::vec4(t2.position.x, t2.position.y, 0, 0);
+
 
             t3.position = transform.position;
             t3.position.y += (initScale.y * transform.scale.y);
             t3.color = renderable.color;
             t3.texCoords = glm::vec3(0, 1, textureID);
+            t3.position = model * glm::vec4(t3.position.x, t3.position.y, 0, 0);
             
             t4.position = transform.position;
             t4.position.x += (initScale.x * transform.scale.x);
             t4.position.y += (initScale.y * transform.scale.y);
             t4.color = renderable.color;
             t4.texCoords = glm::vec3(1, 1, textureID);
+            t4.position = model * glm::vec4(t4.position.x, t4.position.y, 0, 0);
             _setBuffer(t1);_setBuffer(t2);_setBuffer(t3);_setBuffer(t4);
             glBindTextureUnit(textureID, texture.id);
             _amountSubmitted+=6;
