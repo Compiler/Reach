@@ -49,10 +49,10 @@ namespace reach{
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
                 ee = addEntity(800, 500, 0, glm::vec2(25), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
-                auto eee = addEntity(300, 500, 0, glm::vec2(75,75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
+                auto eee = addEntity(300, 500, 0, glm::vec2(75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eqweee = addEntity(500, 400, glm::vec2(50), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
-                auto eeee = addEntity(400, 20, 0, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
-                addParticleEmitter(eeee);
+                //auto eeee = addEntity(400, 20, 0, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
+                //addParticleEmitter(eeee);
                 auto& movement = m_registry.emplace<MovementComponent>(ee, MovementComponent());
                 float m = 2.25f;
                 movement.set(KeyCodes::KEY_A, glm::vec2(-m, 0 ));
