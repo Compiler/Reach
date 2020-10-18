@@ -32,6 +32,7 @@ namespace reach{
                     auto& trans = m_registry.emplace<TransformComponent>(ent);
                     trans.position = glm::vec2(0,0);
                     trans.scale = glm::vec2(100,100);
+                    trans.rotation = 0;
                     auto& renderable = m_registry.emplace<RenderableComponent>(ent);
                     renderable.color = glm::vec4(1,0,0,1);
                     
@@ -45,6 +46,8 @@ namespace reach{
                     auto& trans1 = m_registry.emplace<TransformComponent>(ent2);
                     trans1.position = glm::vec2(0);
                     trans1.scale = glm::vec2(2400,1920);
+                    trans1.rotation = 0;
+
                     auto& renderable1 = m_registry.emplace<RenderableComponent>(ent2);
                     renderable1.color = glm::vec4(1,0,0,1);
                     
