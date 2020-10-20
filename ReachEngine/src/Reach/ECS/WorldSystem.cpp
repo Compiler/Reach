@@ -72,70 +72,81 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         assert(&bodyATransform != &bodyBTransform);
                         bool allAxisCollide = true;
                         int numAxisColliding = 0;
+                        float overlap = 1000000000000;
                         for(int bodyCount = 0; bodyCount < 2; bodyCount ++){
-                            glm::vec2 bodyAPoints[4], bodyBPoints[4];
+                            int bp0 = 0;
+                            int bp1 = 1;
+                            int bp2 = 2;
+                            int bp3 = 3;
+                            glm::vec2 bodyAPoints[5], bodyBPoints[5];
                             if(bodyCount == 0){
-                                bodyAPoints[0] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y);
-                                bodyAPoints[1] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y + bodyATransform.scale.y);
-                                bodyAPoints[2] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y + bodyATransform.scale.y);
-                                bodyAPoints[3] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y);
-                                bodyBPoints[0] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y);
-                                bodyBPoints[1] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y + bodyBTransform.scale.y);
-                                bodyBPoints[2] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y + bodyBTransform.scale.y);
-                                bodyBPoints[3] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y);
+                                bodyAPoints[bp0] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y);
+                                bodyAPoints[bp1] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y + bodyATransform.scale.y);
+                                bodyAPoints[bp2] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y + bodyATransform.scale.y);
+                                bodyAPoints[bp3] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y);
+                                bodyBPoints[bp0] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y);
+                                bodyBPoints[bp1] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                                bodyBPoints[bp2] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                                bodyBPoints[bp3] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y);
                             }else{
-                                bodyBPoints[0] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y);
-                                bodyBPoints[1] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y + bodyATransform.scale.y);
-                                bodyBPoints[2] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y + bodyATransform.scale.y);
-                                bodyBPoints[3] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y);
-                                bodyAPoints[0] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y);
-                                bodyAPoints[1] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y + bodyBTransform.scale.y);
-                                bodyAPoints[2] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y + bodyBTransform.scale.y);
-                                bodyAPoints[3] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y);
+                                bodyBPoints[bp0] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y);
+                                bodyBPoints[bp1] = glm::vec2(bodyATransform.position.x, bodyATransform.position.y + bodyATransform.scale.y);
+                                bodyBPoints[bp2] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y + bodyATransform.scale.y);
+                                bodyBPoints[bp3] = glm::vec2(bodyATransform.position.x + bodyATransform.scale.x, bodyATransform.position.y);
+                                bodyAPoints[bp0] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y);
+                                bodyAPoints[bp1] = glm::vec2(bodyBTransform.position.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                                bodyAPoints[bp2] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y + bodyBTransform.scale.y);
+                                bodyAPoints[bp3] = glm::vec2(bodyBTransform.position.x + bodyBTransform.scale.x, bodyBTransform.position.y);
 
                             }
 
 
                             float minProjA = std::numeric_limits<float>::max(), maxProjA = std::numeric_limits<float>::min();
                             float minProjB = std::numeric_limits<float>::max(), maxProjB = std::numeric_limits<float>::min();
-                            
+                            auto t = bodyCount == 0 ? "A" : "B";
                             for(int axisIndex = 0; axisIndex < 4; axisIndex++){
                                 int nextIndex = (axisIndex + 1) % 4;
+                                float lengthA = glm::vec2(bodyAPoints[axisIndex] - bodyAPoints[nextIndex]).length();
                                 glm::vec2 axis = glm::vec2(-(bodyAPoints[axisIndex].y - bodyAPoints[nextIndex].y), bodyAPoints[axisIndex].x - bodyAPoints[nextIndex].x);
-                                
                                 float d = sqrtf(axis.x * axis.x + axis.y * axis.y);
                                 axis = glm::vec2(axis.x / d, axis.y / d);
+                                minProjA = std::numeric_limits<float>::max();
+                                maxProjA = std::numeric_limits<float>::min();
                                 for(int curProjIndex = 0; curProjIndex < 4; curProjIndex++){
-                                    float curProjA = glm::dot(bodyAPoints[curProjIndex], axis);//bodyAPoints[curProjIndex].x * axis.x + bodyAPoints[curProjIndex].y * axis.y;
+                                    float curProjA = bodyAPoints[curProjIndex].x * axis.x * axis.x + bodyAPoints[curProjIndex].y * axis.y* axis.y;
                                     minProjA = std::min(minProjA, curProjA);
                                     maxProjA = std::max(maxProjA, curProjA);
                                 }
-                                if(minProjA > maxProjA) REACH_ERROR("WRONG");
+                                minProjB = std::numeric_limits<float>::max();
+                                maxProjB = std::numeric_limits<float>::min();
                                 for(int curProjIndex = 0; curProjIndex < 4; curProjIndex++){
-                                    float curProjB = bodyBPoints[curProjIndex].x * axis.x + bodyBPoints[curProjIndex].y * axis.y;
+                                    float curProjB = (bodyBPoints[curProjIndex].x * axis.x * axis.x + bodyBPoints[curProjIndex].y * axis.y* axis.y);
                                     minProjB = std::min(minProjB, curProjB);
                                     maxProjB = std::max(maxProjB, curProjB);
                                 }
-                                if(minProjB > maxProjB) REACH_ERROR("WRONG");
                                 if(maxProjB < minProjA || maxProjA < minProjB){
                                     allAxisCollide = false;
-                                    //REACH_ERROR("!NO COLLISION:\nA\t'" << minProjA << "' , '" << maxProjA << "'\nB\t'" << minProjB << "' , '" << maxProjB << "'");
-                                    //REACH_ERROR("bool:\t'" << maxProjB << " < " << minProjA << " || " << maxProjA << " < " << minProjB);
                                     //REACH_WARN("num: " << numAxisColliding);
                                     break;
-                                }else{
-                                    //REACH_DEBUG("COLLISION:\nA\t'" << minProjA << "' , '" << maxProjA << "'\nB\t'" << minProjB << "' , '" << maxProjB << "'");
-                                    //REACH_DEBUG("bool:\t'" << maxProjB << " >= " << minProjA << " && " << maxProjA << " >= " << minProjB);
+                                }else{//maxB >= minA && maxA >= minB
 
                                 }
 
                                 numAxisColliding ++;
                             }
+                            overlap = std::min(std::min(maxProjA, maxProjB) - std::max(minProjA, minProjB), overlap);
+                            //REACH_ERROR("Overlap: " << overlap);
                         }
-                        if(!allAxisCollide) REACH_ERROR("gap touched: " << numAxisColliding);
-                        else REACH_LOG("TOUCHED " << numAxisColliding);
-                        //REACH_ERROR("chose : A = " << minProjA << ", " << maxProjA << ", B = " << minProjB << ", " << maxProjB);
                         
+                        
+                        if(allAxisCollide){ //REACH_ERROR("gap touched: " << numAxisColliding);
+                            //REACH_LOG("TOUCHED " << numAxisColliding);
+                            glm::vec2 d = glm::vec2(bodyBTransform.position.x - bodyATransform.position.x, bodyBTransform.position.y - bodyATransform.position.y);
+                            float s = sqrtf(d.x*d.x + d.y*d.y);
+                            bodyATransform.position.y -= overlap * d.y / s;
+                            bodyBTransform.position.x -= overlap * d.x / s;
+                        }
+                        //REACH_ERROR("chose : A = " << minProjA << ", " << maxProjA << ", B = " << minProjB << ", " << maxProjB);
 
                         
                     }
