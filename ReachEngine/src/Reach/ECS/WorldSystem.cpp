@@ -10,8 +10,8 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             camera->update();
             float rLimit = world.getRowLimit();
             float cLimit = world.getColumnLimit();
-            float segmentSizeX = (camera->getRight() - camera->getLeft()) / rLimit;
-            float segmentSizeY = (camera->getTop() - camera->getBottom()) / cLimit;
+            float segmentSizeX = (camera->getWidth()) / rLimit;
+            float segmentSizeY = (camera->getHeight()) / cLimit;
             //Debug code
             if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE))
                 REACH_WARN("SegmentDimensions: (" << segmentSizeX << ", " << segmentSizeY << ")");
@@ -26,15 +26,15 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                     //REACH_ERROR("Skipped");
                     continue;
                 }
-
                 
-                int rowIndex = abs(roundInterval(transform.position.x, segmentSizeX) / segmentSizeX);
-                int columnIndex = abs(roundInterval(transform.position.y, segmentSizeY) / segmentSizeY);
+                glm::vec2 positionMod = glm::vec2((int)(transform.position.x) % (int)(camera->getWidth()), (int)(transform.position.y) % (int)(camera->getWidth()));
+                int rowIndex = abs(roundInterval(positionMod.x, segmentSizeX) / segmentSizeX);
+                int columnIndex = abs(roundInterval(positionMod.y, segmentSizeY) / segmentSizeY);
                 int segmentIndex = (columnIndex*world.getRowLimit()) + rowIndex;
                 //world.spacialEntities[segmentIndex].entities.push_back(eCollidable);
 
-                int widthIndex = abs(roundInterval(transform.position.x + transform.scale.x, segmentSizeX) / segmentSizeX);
-                int heightIndex = abs(roundInterval(transform.position.y + transform.scale.y, segmentSizeY) / segmentSizeY);
+                int widthIndex = abs(roundInterval(positionMod.x + transform.scale.x, segmentSizeX) / segmentSizeX);
+                int heightIndex = abs(roundInterval(positionMod.y + transform.scale.y, segmentSizeY) / segmentSizeY);
 
                 //REACH_LOG("Added " << rowIndex<< ", " << columnIndex );
 
@@ -53,18 +53,18 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                 if(InputManager::isKeyPressed(KeyCodes::KEY_SPACE)){
                     if(transform.position.x == 300 && transform.position.y == 500){
                         REACH_ERROR("Position: (" << transform.position.x << ", " << transform.position.y << ")");
-                        REACH_ERROR("RoundIntervalPosition: (" << roundInterval(transform.position.x, segmentSizeX) / segmentSizeX << ", " << roundInterval(transform.position.y, segmentSizeY) / segmentSizeY << ")");
+                        REACH_ERROR("RoundIntervalPosition: (" << roundInterval(positionMod.x, segmentSizeX) / segmentSizeX << ", " << roundInterval(positionMod.y, segmentSizeY) / segmentSizeY << ")");
                     }
                     else{
-                        REACH_DEBUG("Position: (" << transform.position.x << ", " << transform.position.y << ")");
-                        REACH_DEBUG("RoundIntervalPosition: (" << roundInterval(transform.position.x, segmentSizeX) / segmentSizeX << ", " << roundInterval(transform.position.y, segmentSizeY) / segmentSizeY << ")");
+                        REACH_DEBUG("Position: (" << positionMod.x << ", " << positionMod.y << ")");
+                        REACH_DEBUG("RoundIntervalPosition: (" << roundInterval(positionMod.x, segmentSizeX) / segmentSizeX << ", " << roundInterval(positionMod.y, segmentSizeY) / segmentSizeY << ")");
                     }
                 }
             }
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    //REACH_LOG("2 is same sector");
+                    REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         static constexpr glm::vec2 AXIS = glm::vec2(1, -1);
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k-1]);

@@ -4,21 +4,18 @@ namespace reach{
 
 
     OrthographicCamera::OrthographicCamera(){
-        _setBounds();
         update();
         
 
     }
     
     OrthographicCamera::OrthographicCamera(glm::vec2& position, float width, float height):_position(position), _dimensions(glm::vec2(width, height)){
-        _setBounds();
         update();
 
 
     }
     
     OrthographicCamera::OrthographicCamera(float xPos, float yPos, float width, float height): _position(glm::vec2(xPos, yPos)), _dimensions(glm::vec2(width, height)){
-        _setBounds();
         update();
     }
 
