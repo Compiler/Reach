@@ -49,6 +49,8 @@ namespace reach{
 		
 		inline Scene& getCurrentScene() { return *_scenes[_currentScene]; }
 		inline uint8_t getCurrentSceneIndex()const { return _currentScene; }
+
+
 	};
 
 
