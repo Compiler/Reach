@@ -41,8 +41,13 @@ namespace reach{
             //Assumes texture component has a filepath 
             static void registerTexture(TextureComponent& texture){
                 if(texture.keyFileName == -1){
-                    FileLoaderFactory::loadOpenGLTexture(&texture);
-                    //REACH_LOG("Was forced to load texture for user");
+                    texture.keyFileName = hash_name(texture.fileName);
+                    if(_hashToGLID.find(texture.keyFileName) != _hashToGLID.end()){
+                        texture.id = _hashToGLID[texture.keyFileName];
+                    }else{
+                        FileLoaderFactory::loadOpenGLTexture(&texture);
+                        REACH_LOG("Was forced to load texture for '" << texture.fileName << "'");
+                    }
                 }
                 if(_hashToGLID.find(texture.keyFileName) == _hashToGLID.end()){
                     _hashToGLID[texture.keyFileName] = texture.id;

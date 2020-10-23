@@ -50,7 +50,7 @@ namespace reach{
                 _particleShader.use();
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
-                ee = addEntity(800, 500, 45, glm::vec2(25), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
+                ee = addEntity(800, 500, 0, glm::vec2(5), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
                 //auto eee = addEntity(300, 500, 0, glm::vec2(75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eqweee = addEntity(500, 400, glm::vec2(50), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eeee = addEntity(400, 20, 0, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
@@ -95,14 +95,11 @@ namespace reach{
             }
             void initChunk(){
                 constexpr float SZ = 25;
-                std::random_device rd;
-                std::mt19937 mt(rd());
-                std::uniform_int_distribution<int> dist(0, 256);
                 for(int x = cam.getLeft(); x < cam.getRight(); x+=SZ){
                     for(int y = cam.getBottom(); y < cam.getTop(); y+= SZ){
                         int seed = x << 16 | y;
-                        mt.seed(seed);
-                        if(dist(mt) > 32)
+                        Random::nLehmer = seed;
+                        if(Random::GenerateLehmer32()%256 > 32)
                             addEntity(x, y, 0, glm::vec2(SZ), 1, 1, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4);
                         else
                             addEntity(x, y, 0, glm::vec2(SZ), 1, 1, 1, REACH_INTERNAL_TEXTURE("pixelcobble.png"), 4);
@@ -156,14 +153,11 @@ namespace reach{
                 rend.color = glm::vec4(r,g,b,1.0f);
 
                 auto &texComp= m_registry.emplace<TextureComponent>(currentEntity, TextureComponent());
-                static bool flip = true;
                 texComp.bitsPerPixel = bpp;
                 texComp.fileName = str;
-                flip = !flip;
-
+                TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                
 
-                TextureManager::registerTexture(texComp);//TODO: THIS IS RELOADING A TEXTURE EVERY CALL
                 return currentEntity;
 
 
@@ -184,7 +178,16 @@ namespace reach{
                 // if(InputManager::isKeyPressed(KeyCodes::KEY_UP)) cam.translate(glm::vec2(0, _SPEED_));
                 
                 //cam.setPositionCenteredOn(m_registry.get<TransformComponent>(ee).position);
+                if(InputManager::isKeyPressed(KeyCodes::KEY_ENTER)){
+                    reach::TransformComponent& pos = m_registry.get<TransformComponent>(ee);
+                    int seed = (int)pos.position.x << 16 | (int)pos.position.y;
+                    Random::nLehmer = seed;
+                    if(Random::GenerateLehmer32()%256 > 32)
+                        REACH_LOG("(" << (int)pos.position.x << ", " << (int)pos.position.y << ") is Standing on a DIRT");
+                    else    
+                        REACH_LOG("(" << (int)pos.position.x << ", " << (int)pos.position.y << ") is Standing on a COBBLE");
 
+                }
                 m_systemManager->update(&m_registry);
             }
 
