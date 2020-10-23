@@ -64,7 +64,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
             for(int i = 0; i < world.spacialEntities.size(); i++){
                 auto& segment = world.spacialEntities[i].entities;
                 if(segment.size() >= 2){
-                    REACH_LOG("2 is same sector");
+                    //REACH_LOG("2 is same sector");
                     for(int k = 1; k < segment.size(); k++){
                         static constexpr glm::vec2 AXIS = glm::vec2(1, -1);
                         auto&&[bodyATransform, bodyACollidable] = collidables.get<TransformComponent, CollidableComponent>(segment[k-1]);
@@ -72,7 +72,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         assert(&bodyATransform != &bodyBTransform);
                         bool allAxisCollide = true;
                         int numAxisColliding = 0;
-                        float overlap = 1000000000000;
+                        float overlap = std::numeric_limits<float>::max();
                         for(int bodyCount = 0; bodyCount < 2; bodyCount ++){
                             int bp0 = 0;
                             int bp1 = 1;
@@ -141,10 +141,10 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         
                         if(allAxisCollide){ //REACH_ERROR("gap touched: " << numAxisColliding);
                             //REACH_LOG("TOUCHED " << numAxisColliding);
-                            glm::vec2 d = glm::vec2(bodyBTransform.position.x - bodyATransform.position.x, bodyBTransform.position.y - bodyATransform.position.y);
-                            float s = sqrtf(d.x*d.x + d.y*d.y);
-                            bodyATransform.position.y -= overlap * d.y / s;
-                            bodyBTransform.position.x -= overlap * d.x / s;
+                            // glm::vec2 d = glm::vec2(bodyBTransform.position.x - bodyATransform.position.x, bodyBTransform.position.y - bodyATransform.position.y);
+                            // float s = sqrtf(d.x*d.x + d.y*d.y);
+                            // bodyATransform.position.y -= overlap * d.y / s;
+                            // bodyBTransform.position.x -= overlap * d.x / s;
                         }
                         //REACH_ERROR("chose : A = " << minProjA << ", " << maxProjA << ", B = " << minProjB << ", " << maxProjB);
 

@@ -13,6 +13,9 @@ namespace reach{
             static float GenerateFloat(){
                 return(float)_DISTRIBUTION(_RANDOM_ENGINE) / (float)std::numeric_limits<uint32_t>::max();
             }    
+            static float seed(int seed){
+                _RANDOM_ENGINE.seed(seed);
+            }
         private:
 
             static std::mt19937 _RANDOM_ENGINE;

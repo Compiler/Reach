@@ -13,6 +13,8 @@
 #include <Reach/ECS/PhysicsSystem.h>
 #include <Reach/ECS/WorldSystem.h>
 #include <Reach/ECS/MovementSystem.h>
+
+#include <random>
 namespace reach{
 
 
@@ -49,7 +51,7 @@ namespace reach{
                 _particleShader.uniform_set1Mat4("u_cameraMatrix", &cam.getCombined()[0][0]);
                 constexpr float _SZ_ = 50;
                 ee = addEntity(800, 500, 45, glm::vec2(25), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3, true);
-                auto eee = addEntity(300, 500, 0, glm::vec2(75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
+                //auto eee = addEntity(300, 500, 0, glm::vec2(75), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eqweee = addEntity(500, 400, glm::vec2(50), 0, 0, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4, true);
                 //auto eeee = addEntity(400, 20, 0, glm::vec2(1), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3, true);
                 //addParticleEmitter(eeee);
@@ -63,14 +65,14 @@ namespace reach{
 
                 constexpr int _WORLD_GRID_LIMIT_ROW_ = 8;
                 constexpr int _WORLD_GRID_LIMIT_COL_ = 8;
-                for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_ROW_)){
-                    addEntity(i, 0, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
+                // for(int i = 0; i < cam.getWidth(); i += ((cam.getRight() - cam.getLeft()) / _WORLD_GRID_LIMIT_ROW_)){
+                //     addEntity(i, 0, 0, glm::vec2(1, 100000), 0, 0, 1, "src/Resources/Textures/wall.jpg", 3);
 
-                }
+                // }
 
-                for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
-                    addEntity(0, i, 0, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
-                }
+                // for(int i = 0; i < cam.getHeight(); i += ((cam.getTop() - cam.getBottom()) / _WORLD_GRID_LIMIT_COL_)){
+                //     addEntity(0, i, 0, glm::vec2(1000000, 1), 0, 0, 1, REACH_INTERNAL_TEXTURE("wall.jpg"), 3);
+                // }
                 
                 _system.init();
 
@@ -86,6 +88,27 @@ namespace reach{
                 w.worldCamera = &cam;
                 w.setLimits(_WORLD_GRID_LIMIT_ROW_, _WORLD_GRID_LIMIT_COL_);
                 _world = w;
+
+
+                initChunk();
+
+            }
+            void initChunk(){
+                constexpr float SZ = 25;
+                std::random_device rd;
+                std::mt19937 mt(rd());
+                std::uniform_int_distribution<int> dist(0, 256);
+                for(int x = cam.getLeft(); x < cam.getRight(); x+=SZ){
+                    for(int y = cam.getBottom(); y < cam.getTop(); y+= SZ){
+                        int seed = x << 16 | y;
+                        mt.seed(seed);
+                        if(dist(mt) > 32)
+                            addEntity(x, y, 0, glm::vec2(SZ), 1, 1, 1, REACH_INTERNAL_TEXTURE("pixeldirt.png"), 4);
+                        else
+                            addEntity(x, y, 0, glm::vec2(SZ), 1, 1, 1, REACH_INTERNAL_TEXTURE("pixelcobble.png"), 4);
+                        
+                    }
+                }
 
             }
             void addParticleEmitter(entt::entity e){
@@ -160,7 +183,7 @@ namespace reach{
                 // if(InputManager::isKeyPressed(KeyCodes::KEY_DOWN)) cam.translate(glm::vec2(0, -_SPEED_));
                 // if(InputManager::isKeyPressed(KeyCodes::KEY_UP)) cam.translate(glm::vec2(0, _SPEED_));
                 
-                cam.setPositionCenteredOn(m_registry.get<TransformComponent>(ee).position);
+                //cam.setPositionCenteredOn(m_registry.get<TransformComponent>(ee).position);
 
                 m_systemManager->update(&m_registry);
             }
