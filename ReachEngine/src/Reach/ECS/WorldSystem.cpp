@@ -76,7 +76,7 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                         for(int bodyCount = 0; bodyCount < 2; bodyCount ++){
                             int bp0 = 0;
                             int bp1 = 1;
-                            int bp2 = 2;
+                            int bp2 = 2;//
                             int bp3 = 3;
                             glm::vec2 bodyAPoints[5], bodyBPoints[5];
                             if(bodyCount == 0){
@@ -126,7 +126,6 @@ void reach::WorldSystem::update(entt::basic_registry<entt::entity>* registry){
                                 }
                                 if(maxProjB < minProjA || maxProjA < minProjB){
                                     allAxisCollide = false;
-                                    //REACH_WARN("num: " << numAxisColliding);
                                     break;
                                 }else{//maxB >= minA && maxA >= minB
 
